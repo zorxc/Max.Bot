@@ -103,5 +103,100 @@ public class MessageTests
         json.Should().NotContain("\"text\"");
         json.Should().NotContain("\"type\"");
     }
+
+    [Fact]
+    public void Deserialize_ShouldDeserializeMessageWithNewFields()
+    {
+        // Arrange
+        var json = """{"id":123,"sender":{"id":789,"username":"testuser"},"recipient":{"id":456,"type":"private"},"timestamp":1609459200,"body":{"text":"Hello","attachments":[]},"stat":{"readCount":5},"url":"https://max.ru/message/123"}""";
+
+        // Act
+        var result = MaxJsonSerializer.Deserialize<Message>(json);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.Id.Should().Be(123);
+        result.Sender.Should().NotBeNull();
+        result.Sender!.Id.Should().Be(789);
+        result.Timestamp.Should().Be(1609459200);
+        result.Body.Should().NotBeNull();
+        result.Body!.Text.Should().Be("Hello");
+        result.Stat.Should().NotBeNull();
+        result.Stat!.ReadCount.Should().Be(5);
+        result.Url.Should().Be("https://max.ru/message/123");
+    }
+
+    [Fact]
+    public void Deserialize_ShouldDeserializeMessageWithLink()
+    {
+        // Arrange
+        var json = """{"id":123,"timestamp":1609459200,"link":{"id":456,"timestamp":1609362800,"text":"Original message"}}""";
+
+        // Act
+        var result = MaxJsonSerializer.Deserialize<Message>(json);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.Link.Should().NotBeNull();
+        result.Link!.Id.Should().Be(456);
+        result.Link.Text.Should().Be("Original message");
+    }
+
+    [Fact]
+    public void Serialize_ShouldSerializeMessageWithNewFields()
+    {
+        // Arrange
+        var message = new Message
+        {
+            Id = 123,
+            Sender = new User { Id = 789, Username = "testuser" },
+            Timestamp = 1609459200,
+            Body = new MessageBody { Text = "Hello", Attachments = Array.Empty<Attachment>() },
+            Stat = new MessageStat { ReadCount = 5 },
+            Url = "https://max.ru/message/123"
+        };
+
+        // Act
+        var json = MaxJsonSerializer.Serialize(message);
+
+        // Assert
+        json.Should().NotBeNullOrEmpty();
+        json.Should().Contain("\"id\":123");
+        json.Should().Contain("\"sender\"");
+        json.Should().Contain("\"timestamp\":1609459200");
+        json.Should().Contain("\"body\"");
+        json.Should().Contain("\"stat\"");
+        json.Should().Contain("\"url\":\"https://max.ru/message/123\"");
+    }
+
+    [Fact]
+    public void MessageBody_ShouldDeserialize()
+    {
+        // Arrange
+        var json = """{"text":"Hello","attachments":[{"type":"image","photo":{"id":1,"fileId":"photo1","width":100,"height":100}}]}""";
+
+        // Act
+        var result = MaxJsonSerializer.Deserialize<MessageBody>(json);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.Text.Should().Be("Hello");
+        result.Attachments.Should().NotBeNull();
+        result.Attachments!.Length.Should().Be(1);
+    }
+
+    [Fact]
+    public void MessageStat_ShouldDeserialize()
+    {
+        // Arrange
+        var json = """{"readCount":10}""";
+
+        // Act
+        var result = MaxJsonSerializer.Deserialize<MessageStat>(json);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.ReadCount.Should().Be(10);
+    }
 }
 

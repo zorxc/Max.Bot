@@ -35,5 +35,12 @@ public class Update
     /// <value>The message in this update, or null if not available.</value>
     [JsonPropertyName("message")]
     public Message? Message { get; set; }
+
+    /// <summary>
+    /// Gets or sets the callback query in this update (if type is CallbackQuery).
+    /// </summary>
+    /// <value>The callback query in this update, or null if not available.</value>
+    [JsonPropertyName("callbackQuery")]
+    public CallbackQuery? CallbackQuery { get; set; }
 }
 

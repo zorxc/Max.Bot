@@ -35,7 +35,7 @@ public class UpdateTests
     public void Deserialize_ShouldDeserializeUpdateWithCallbackQuery()
     {
         // Arrange
-        var json = """{"updateId":2,"type":"callback_query","message":null}""";
+        var json = """{"updateId":2,"type":"callback_query","callbackQuery":{"id":"callback123","from":{"id":123,"username":"user123","isBot":false},"data":"callbackData123"}}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Update>(json);
@@ -44,7 +44,10 @@ public class UpdateTests
         result.Should().NotBeNull();
         result!.UpdateId.Should().Be(2);
         result.Type.Should().Be(UpdateType.CallbackQuery);
-        result.Message.Should().BeNull();
+        result.CallbackQuery.Should().NotBeNull();
+        result.CallbackQuery!.Id.Should().Be("callback123");
+        result.CallbackQuery.From.Id.Should().Be(123);
+        result.CallbackQuery.Data.Should().Be("callbackData123");
     }
 
     [Fact]
@@ -75,6 +78,33 @@ public class UpdateTests
     }
 
     [Fact]
+    public void Serialize_ShouldSerializeUpdateWithCallbackQuery()
+    {
+        // Arrange
+        var update = new Update
+        {
+            UpdateId = 2,
+            Type = UpdateType.CallbackQuery,
+            CallbackQuery = new CallbackQuery
+            {
+                Id = "callback123",
+                From = new User { Id = 123, Username = "user123", IsBot = false },
+                Data = "callbackData123"
+            }
+        };
+
+        // Act
+        var json = MaxJsonSerializer.Serialize(update);
+
+        // Assert
+        json.Should().NotBeNullOrEmpty();
+        json.Should().Contain("\"updateId\":2");
+        json.Should().Contain("\"type\":\"callback_query\"");
+        json.Should().Contain("\"callbackQuery\"");
+        json.Should().Contain("\"id\":\"callback123\"");
+    }
+
+    [Fact]
     public void Serialize_ShouldNotIncludeNullMessage()
     {
         // Arrange
@@ -82,7 +112,8 @@ public class UpdateTests
         {
             UpdateId = 2,
             Type = UpdateType.CallbackQuery,
-            Message = null
+            Message = null,
+            CallbackQuery = null
         };
 
         // Act
@@ -93,6 +124,7 @@ public class UpdateTests
         json.Should().Contain("\"updateId\":2");
         json.Should().Contain("\"type\":\"callback_query\"");
         json.Should().NotContain("\"message\"");
+        json.Should().NotContain("\"callbackQuery\"");
     }
 }
 

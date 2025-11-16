@@ -29,7 +29,8 @@ public static class MaxJsonSerializer
         Converters =
         {
             new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower),
-            new UnixTimestampJsonConverter()
+            new UnixTimestampJsonConverter(),
+            new Types.Converters.AttachmentJsonConverter()
         }
     };
 
