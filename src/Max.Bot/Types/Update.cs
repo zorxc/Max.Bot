@@ -55,13 +55,14 @@ public class Update
             // * Infer type from update_type field or from presence of message/callbackQuery
             if (!string.IsNullOrEmpty(UpdateTypeRaw))
             {
-                if (UpdateTypeRaw.Contains("message", StringComparison.OrdinalIgnoreCase))
-                {
-                    return UpdateType.Message;
-                }
+                // Check for callback first, as "message_callback" contains both "message" and "callback"
                 if (UpdateTypeRaw.Contains("callback", StringComparison.OrdinalIgnoreCase))
                 {
                     return UpdateType.CallbackQuery;
+                }
+                if (UpdateTypeRaw.Contains("message", StringComparison.OrdinalIgnoreCase))
+                {
+                    return UpdateType.Message;
                 }
             }
 
