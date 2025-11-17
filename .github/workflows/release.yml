@@ -63,6 +63,7 @@ jobs:
           dotnet pack src/Max.Bot/Max.Bot.csproj
           --configuration Release
           --no-build
+          --output ./nupkgs
           /p:ContinuousIntegrationBuild=true
           /p:Version=${{ steps.version.outputs.value }}
           /p:PackageVersion=${{ steps.version.outputs.value }}
@@ -72,8 +73,8 @@ jobs:
         with:
           name: nuget-release
           path: |
-            src/Max.Bot/bin/Release/**/*.nupkg
-            src/Max.Bot/bin/Release/**/*.snupkg
+            ./nupkgs/*.nupkg
+            ./nupkgs/*.snupkg
 
       - name: Publish to NuGet
         env:
@@ -84,24 +85,35 @@ jobs:
             exit 1
           fi
 
-          echo "Looking for packages in src/Max.Bot/bin/Release/"
-          ls -la src/Max.Bot/bin/Release/**/*.nupkg || echo "No .nupkg files found"
-          ls -la src/Max.Bot/bin/Release/**/*.snupkg || echo "No .snupkg files found"
+          echo "Looking for packages in ./nupkgs/"
+          ls -la ./nupkgs/ || echo "nupkgs directory not found"
+          find ./nupkgs -name "*.nupkg" -type f || echo "No .nupkg files found"
+          find ./nupkgs -name "*.snupkg" -type f || echo "No .snupkg files found"
 
-          shopt -s nullglob
-          for package in src/Max.Bot/bin/Release/**/*.nupkg; do
-            echo "Pushing package: $package"
-            dotnet nuget push "$package" --api-key "$NUGET_API_KEY" --source "$NUGET_SOURCE" --skip-duplicate || {
-              echo "::error::Failed to push $package"
-              exit 1
-            }
-            echo "Successfully pushed: $package"
+          PACKAGE_COUNT=0
+          for package in ./nupkgs/*.nupkg; do
+            if [ -f "$package" ]; then
+              echo "Pushing package: $package"
+              dotnet nuget push "$package" --api-key "$NUGET_API_KEY" --source "$NUGET_SOURCE" --skip-duplicate || {
+                echo "::error::Failed to push $package"
+                exit 1
+              }
+              echo "Successfully pushed: $package"
+              PACKAGE_COUNT=$((PACKAGE_COUNT + 1))
+            fi
           done
 
-          for symbols in src/Max.Bot/bin/Release/**/*.snupkg; do
-            echo "Pushing symbols: $symbols"
-            dotnet nuget push "$symbols" --api-key "$NUGET_API_KEY" --source "$NUGET_SOURCE" --skip-duplicate || {
-              echo "::warning::Failed to push symbols $symbols (non-critical)"
-            }
+          if [ $PACKAGE_COUNT -eq 0 ]; then
+            echo "::error::No packages found to publish"
+            exit 1
+          fi
+
+          for symbols in ./nupkgs/*.snupkg; do
+            if [ -f "$symbols" ]; then
+              echo "Pushing symbols: $symbols"
+              dotnet nuget push "$symbols" --api-key "$NUGET_API_KEY" --source "$NUGET_SOURCE" --skip-duplicate || {
+                echo "::warning::Failed to push symbols $symbols (non-critical)"
+              }
+            fi
           done
 
