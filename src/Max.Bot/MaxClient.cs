@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [MaxClient] - Р вЂњР В»Р В°Р Р†Р Р…РЎвЂ№Р в„– Р С”Р В»Р С‘Р ВµР Р…РЎвЂљ Р В±Р С‘Р В±Р В»Р С‘Р С•РЎвЂљР ВµР С”Р С‘ Max Messenger Bot API
-// СЂСџР‹Р‡ Core function: Р СћР С•РЎвЂЎР С”Р В° Р Р†РЎвЂ¦Р С•Р Т‘Р В° Р Т‘Р В»РЎРЏ Р Р†Р В·Р В°Р С‘Р СР С•Р Т‘Р ВµР в„–РЎРѓРЎвЂљР Р†Р С‘РЎРЏ РЎРѓ Max Messenger Bot API
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Api, Max.Bot.Configuration, Max.Bot.Networking, Max.Bot.Polling
-// СЂСџвЂ™РЋ Usage: Р С›РЎРѓР Р…Р С•Р Р†Р Р…Р С•Р в„– Р С”Р В»Р В°РЎРѓРЎРѓ Р Т‘Р В»РЎРЏ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ РЎРѓ Max Messenger Bot API
-
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;

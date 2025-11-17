@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [Attachment] - Р СљР С•Р Т‘Р ВµР В»РЎРЉ Р Р†Р В»Р С•Р В¶Р ВµР Р…Р С‘РЎРЏ Р Р† Max Messenger
-// СЂСџР‹Р‡ Core function: Р СџРЎР‚Р ВµР Т‘РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎвЂљ Р Р†Р В»Р С•Р В¶Р ВµР Р…Р С‘Р Вµ РЎРѓР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘РЎРЏ (Р С—Р С•Р В»Р С‘Р СР С•РЎР‚РЎвЂћР Р…Р В°РЎРЏ Р СР С•Р Т‘Р ВµР В»РЎРЉ)
-// СЂСџвЂќвЂ” Key dependencies: System.Text.Json.Serialization, System.ComponentModel.DataAnnotations, Max.Bot.Types.Enums
-// СЂСџвЂ™РЋ Usage: Р ВРЎРѓР С—Р С•Р В»РЎРЉР В·РЎС“Р ВµРЎвЂљРЎРѓРЎРЏ Р Р† Message Р Т‘Р В»РЎРЏ Р С—РЎР‚Р ВµР Т‘РЎРѓРЎвЂљР В°Р Р†Р В»Р ВµР Р…Р С‘РЎРЏ Р Р†Р В»Р С•Р В¶Р ВµР Р…Р С‘Р в„– РЎРѓР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘РЎРЏ
-
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Max.Bot.Types.Enums;

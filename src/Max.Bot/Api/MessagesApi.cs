@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [MessagesApi] - Р В Р ВµР В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘РЎРЏ Р СР ВµРЎвЂљР С•Р Т‘Р С•Р Р† РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ РЎРѓ РЎРѓР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘РЎРЏР СР С‘
-// СЂСџР‹Р‡ Core function: Р В Р ВµР В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘РЎРЏ Р СР ВµРЎвЂљР С•Р Т‘Р С•Р Р† IMessagesApi (SendMessageAsync, GetMessagesAsync, EditMessageAsync, DeleteMessageAsync, GetMessageAsync, GetVideoAsync, AnswerCallbackQueryAsync)
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Api, Max.Bot.Configuration, Max.Bot.Networking, Max.Bot.Types, Max.Bot.Types.Requests
-// СЂСџвЂ™РЋ Usage: Р ВРЎРѓР С—Р С•Р В»РЎРЉР В·РЎС“Р ВµРЎвЂљРЎРѓРЎРЏ Р Р† MaxClient Р Т‘Р В»РЎРЏ Р С—РЎР‚Р ВµР Т‘Р С•РЎРѓРЎвЂљР В°Р Р†Р В»Р ВµР Р…Р С‘РЎРЏ Р СР ВµРЎвЂљР С•Р Т‘Р С•Р Р† РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ РЎРѓ РЎРѓР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘РЎРЏР СР С‘
-
 using System.Net.Http;
 using Max.Bot.Configuration;
 using Max.Bot.Networking;

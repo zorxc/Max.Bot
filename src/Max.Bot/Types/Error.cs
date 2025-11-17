@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [Error] - Р СљР С•Р Т‘Р ВµР В»РЎРЉ Р С•РЎв‚¬Р С‘Р В±Р С”Р С‘ Max Bot API
-// СЂСџР‹Р‡ Core function: Р СџРЎР‚Р ВµР Т‘РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎвЂљ Р С‘Р Р…РЎвЂћР С•РЎР‚Р СР В°РЎвЂ Р С‘РЎР‹ Р С•Р В± Р С•РЎв‚¬Р С‘Р В±Р С”Р Вµ API
-// СЂСџвЂќвЂ” Key dependencies: System.Text.Json.Serialization, System.ComponentModel.DataAnnotations
-// СЂСџвЂ™РЋ Usage: Р ВРЎРѓР С—Р С•Р В»РЎРЉР В·РЎС“Р ВµРЎвЂљРЎРѓРЎРЏ Р Р† ErrorResponse Р Т‘Р В»РЎРЏ Р С—РЎР‚Р ВµР Т‘РЎРѓРЎвЂљР В°Р Р†Р В»Р ВµР Р…Р С‘РЎРЏ Р С•РЎв‚¬Р С‘Р В±Р С•Р С” API
-
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
