@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [BotApiTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ BotApi
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ Р СР ВµРЎвЂљР С•Р Т‘Р С•Р Р† BotApi (GetMeAsync, GetBotInfoAsync)
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Api, Max.Bot.Configuration, Max.Bot.Networking, Max.Bot.Types, Moq, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ BotApi
-
 using System.Net;
 using System.Net.Http;
 using FluentAssertions;
@@ -16,6 +11,7 @@ using Xunit;
 
 namespace Max.Bot.Tests.Unit.Api;
 
+#pragma warning disable CS0618 // Type or member is obsolete
 public class BotApiTests
 {
     private readonly Mock<IMaxHttpClient> _mockHttpClient;
@@ -49,16 +45,17 @@ public class BotApiTests
             Result = expectedUser
         };
 
+        var responseJson = MaxJsonSerializer.Serialize(response);
         _mockHttpClient
-            .Setup(x => x.SendAsync<Response<User>>(
+            .Setup(x => x.SendAsyncRaw(
                 It.Is<MaxApiRequest>(req =>
                     req.Method == HttpMethod.Get &&
-                    req.Endpoint == "/test-token-123/me" &&
+                    req.Endpoint == "/me" &&
                     req.Headers != null &&
                     req.Headers.ContainsKey("Authorization") &&
-                    req.Headers["Authorization"] == "Bearer test-token-123"),
+                    req.Headers["Authorization"] == "test-token-123"),
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(response);
+            .ReturnsAsync(responseJson);
 
         var botApi = new BotApi(_mockHttpClient.Object, _options);
 
@@ -73,7 +70,7 @@ public class BotApiTests
         result.IsBot.Should().BeTrue();
 
         _mockHttpClient.Verify(
-            x => x.SendAsync<Response<User>>(
+            x => x.SendAsyncRaw(
                 It.IsAny<MaxApiRequest>(),
                 It.IsAny<CancellationToken>()),
             Times.Once);
@@ -122,16 +119,17 @@ public class BotApiTests
             Result = expectedUser
         };
 
+        var responseJson = MaxJsonSerializer.Serialize(response);
         _mockHttpClient
-            .Setup(x => x.SendAsync<Response<User>>(
+            .Setup(x => x.SendAsyncRaw(
                 It.Is<MaxApiRequest>(req =>
                     req.Method == HttpMethod.Get &&
-                    req.Endpoint == "/test-token-123/bot/info" &&
+                    req.Endpoint == "/bot/info" &&
                     req.Headers != null &&
                     req.Headers.ContainsKey("Authorization") &&
-                    req.Headers["Authorization"] == "Bearer test-token-123"),
+                    req.Headers["Authorization"] == "test-token-123"),
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(response);
+            .ReturnsAsync(responseJson);
 
         var botApi = new BotApi(_mockHttpClient.Object, _options);
 
@@ -146,7 +144,7 @@ public class BotApiTests
         result.IsBot.Should().BeTrue();
 
         _mockHttpClient.Verify(
-            x => x.SendAsync<Response<User>>(
+            x => x.SendAsyncRaw(
                 It.IsAny<MaxApiRequest>(),
                 It.IsAny<CancellationToken>()),
             Times.Once);
@@ -182,7 +180,7 @@ public class BotApiTests
     {
         // Arrange
         _mockHttpClient
-            .Setup(x => x.SendAsync<Response<User>>(
+            .Setup(x => x.SendAsyncRaw(
                 It.IsAny<MaxApiRequest>(),
                 It.IsAny<CancellationToken>()))
             .ThrowsAsync(new MaxUnauthorizedException("Unauthorized", "INVALID_TOKEN", HttpStatusCode.Unauthorized));
@@ -201,7 +199,7 @@ public class BotApiTests
     {
         // Arrange
         _mockHttpClient
-            .Setup(x => x.SendAsync<Response<User>>(
+            .Setup(x => x.SendAsyncRaw(
                 It.IsAny<MaxApiRequest>(),
                 It.IsAny<CancellationToken>()))
             .ThrowsAsync(new MaxUnauthorizedException("Unauthorized", "INVALID_TOKEN", HttpStatusCode.Unauthorized));

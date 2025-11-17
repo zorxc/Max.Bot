@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [MaxClient] - Р вЂњР В»Р В°Р Р†Р Р…РЎвЂ№Р в„– Р С”Р В»Р С‘Р ВµР Р…РЎвЂљ Р В±Р С‘Р В±Р В»Р С‘Р С•РЎвЂљР ВµР С”Р С‘ Max Messenger Bot API
-// СЂСџР‹Р‡ Core function: Р СћР С•РЎвЂЎР С”Р В° Р Р†РЎвЂ¦Р С•Р Т‘Р В° Р Т‘Р В»РЎРЏ Р Р†Р В·Р В°Р С‘Р СР С•Р Т‘Р ВµР в„–РЎРѓРЎвЂљР Р†Р С‘РЎРЏ РЎРѓ Max Messenger Bot API
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Api, Max.Bot.Configuration, Max.Bot.Networking, Max.Bot.Polling
-// СЂСџвЂ™РЋ Usage: Р С›РЎРѓР Р…Р С•Р Р†Р Р…Р С•Р в„– Р С”Р В»Р В°РЎРѓРЎРѓ Р Т‘Р В»РЎРЏ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ РЎРѓ Max Messenger Bot API
-
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
@@ -92,12 +87,15 @@ public class MaxClient : IMaxBotApi, IUpdatePipeline
         // Create or use provided HttpClient
         var client = httpClient ?? new HttpClient();
 
-        // Configure MaxBotClientOptions with token in BaseUrl
+        // Configure MaxBotClientOptions - token is passed via Authorization header, not in URL
+        // * HttpClient.Timeout must be greater than maximum long polling timeout (90s) + buffer for network delays
+        // This prevents HttpClient from timing out before long polling requests complete
         var clientOptions = new MaxBotClientOptions
         {
-            BaseUrl = $"{_options.BaseUrl.TrimEnd('/')}/{_options.Token}",
-            Timeout = TimeSpan.FromSeconds(30),
-            RetryCount = 3
+            BaseUrl = _options.BaseUrl,
+            Timeout = TimeSpan.FromSeconds(100), // 90s max polling + 10s buffer
+            RetryCount = 3,
+            EnableDetailedLogging = true // * Enable detailed logging for debugging
         };
         clientOptions.Validate();
 
@@ -179,7 +177,13 @@ public class MaxClient : IMaxBotApi, IUpdatePipeline
     /// <summary>
     /// Configures the webhook endpoint by calling <c>POST /subscriptions</c>.
     /// </summary>
-    public async Task<Response> ConfigureWebhookAsync(string url, bool dropPendingUpdates = false, CancellationToken cancellationToken = default)
+    /// <param name="url">The webhook URL where updates will be sent.</param>
+    /// <param name="updateTypes">Optional list of update types to receive. If null, all update types will be received.</param>
+    /// <param name="secret">Optional secret that will be sent in the X-Max-Bot-Api-Secret header.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the response with success status.</returns>
+    /// <exception cref="ArgumentException">Thrown when url is null, empty, or invalid.</exception>
+    public async Task<Response> ConfigureWebhookAsync(string url, List<string>? updateTypes = null, string? secret = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(url))
         {
@@ -202,7 +206,8 @@ public class MaxClient : IMaxBotApi, IUpdatePipeline
         var request = new SetWebhookRequest
         {
             Url = url,
-            DropPendingUpdates = dropPendingUpdates
+            UpdateTypes = updateTypes,
+            Secret = secret
         };
 
         _options.Webhook.Endpoint = url;
@@ -212,10 +217,15 @@ public class MaxClient : IMaxBotApi, IUpdatePipeline
     /// <summary>
     /// Deletes the webhook subscription by calling <c>DELETE /subscriptions</c>.
     /// </summary>
-    public Task<Response> DeleteWebhookAsync(bool dropPendingUpdates = false, CancellationToken cancellationToken = default)
+    /// <param name="url">The webhook URL to remove from subscriptions.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the response with success status.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when url is null or empty.</exception>
+    public Task<Response> DeleteWebhookAsync(string url, CancellationToken cancellationToken = default)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(url);
         return Subscriptions.DeleteWebhookAsync(
-            new DeleteWebhookRequest { DropPendingUpdates = dropPendingUpdates },
+            new DeleteWebhookRequest { Url = url },
             cancellationToken);
     }
 }

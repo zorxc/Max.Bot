@@ -30,9 +30,20 @@ internal class SubscriptionsApi : BaseApi, ISubscriptionsApi
     {
         // Response structure: { "subscriptions": [...] }
         // Different from standard Response<T> wrapper
-        var response = await HttpClient.SendAsync<SubscriptionsResponse>(
+        // Use SendAsyncRaw for GET requests to avoid duplicate HTTP calls
+        var responseBody = await HttpClient.SendAsyncRaw(
             CreateRequest(HttpMethod.Get, "/subscriptions", null),
             cancellationToken).ConfigureAwait(false);
+
+        if (string.IsNullOrWhiteSpace(responseBody))
+        {
+            throw new Exceptions.MaxApiException(
+                "API request returned empty response body.",
+                null,
+                System.Net.HttpStatusCode.BadRequest);
+        }
+
+        var response = MaxJsonSerializer.Deserialize<SubscriptionsResponse>(responseBody);
 
         if (response == null || response.Subscriptions == null)
         {
@@ -50,39 +61,19 @@ internal class SubscriptionsApi : BaseApi, ISubscriptionsApi
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        var queryParams = new Dictionary<string, string?>
-        {
-            { "url", request.Url }
-        };
-
-        if (request.DropPendingUpdates.HasValue)
-        {
-            queryParams["drop_pending_updates"] = request.DropPendingUpdates.Value.ToString().ToLowerInvariant();
-        }
-
-        var apiRequest = CreateRequest(HttpMethod.Post, "/subscriptions", null, queryParams);
+        // POST /subscriptions expects JSON body with url, update_types, secret
+        var apiRequest = CreateRequest(HttpMethod.Post, "/subscriptions", request);
         return await ExecuteRequestAsync<Response>(apiRequest, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
-    public async Task<Response> DeleteWebhookAsync(DeleteWebhookRequest? request = null, CancellationToken cancellationToken = default)
+    public async Task<Response> DeleteWebhookAsync(DeleteWebhookRequest request, CancellationToken cancellationToken = default)
     {
-        var queryParams = new Dictionary<string, string?>();
+        ArgumentNullException.ThrowIfNull(request);
 
-        if (request?.DropPendingUpdates.HasValue == true)
-        {
-            queryParams["drop_pending_updates"] = request.DropPendingUpdates.Value.ToString().ToLowerInvariant();
-        }
-
-        var apiRequest = CreateRequest(HttpMethod.Delete, "/subscriptions", null, queryParams.Count > 0 ? queryParams : null);
+        // DELETE /subscriptions expects JSON body with url parameter
+        var apiRequest = CreateRequest(HttpMethod.Delete, "/subscriptions", request);
         return await ExecuteRequestAsync<Response>(apiRequest, cancellationToken).ConfigureAwait(false);
-    }
-
-    /// <inheritdoc />
-    public async Task<WebhookInfo> GetWebhookInfoAsync(CancellationToken cancellationToken = default)
-    {
-        var request = CreateRequest(HttpMethod.Get, "/subscriptions", null);
-        return await ExecuteRequestAsync<WebhookInfo>(request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />

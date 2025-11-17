@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [MaxClientUpdatePipelineTests] - Tests for MaxClient update pipeline helpers
-// СЂСџР‹Р‡ Core function: Verifies ProcessWebhookAsync applies filters and dispatches handlers
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot, Max.Bot.Configuration, Max.Bot.Polling, Max.Bot.Types, Moq, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Ensures webhook processing respects username/type filters
-
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,7 +38,7 @@ public class MaxClientUpdatePipelineTests
         var update = new Update
         {
             UpdateId = 1,
-            Type = UpdateType.Message,
+            UpdateTypeRaw = "message_created",
             Message = new Message { From = new User { Username = "tester" } }
         };
 
@@ -51,7 +46,7 @@ public class MaxClientUpdatePipelineTests
         await client.ProcessWebhookAsync(update, handlerMock.Object, null, CancellationToken.None);
 
         // Assert
-        handlerMock.Verify(h => h.HandleUpdateAsync(It.IsAny<UpdateContext>(), It.IsAny<CancellationToken>()), Times.Once);
+        handlerMock.Verify(h => h.HandleMessageAsync(It.IsAny<UpdateContext>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -66,7 +61,7 @@ public class MaxClientUpdatePipelineTests
         var update = new Update
         {
             UpdateId = 2,
-            Type = UpdateType.Message,
+            UpdateTypeRaw = "message_created",
             Message = new Message { From = new User { Username = "ignored" } }
         };
 

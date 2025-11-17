@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [MaxBotOptions] - Р вЂР В°Р В·Р С•Р Р†РЎвЂ№Р Вµ Р С•Р С—РЎвЂ Р С‘Р С‘ Р В±Р С•РЎвЂљР В° Max Messenger
-// СЂСџР‹Р‡ Core function: Р С™Р С•Р Р…РЎвЂћР С‘Р С–РЎС“РЎР‚Р В°РЎвЂ Р С‘РЎРЏ Р В±Р С•РЎвЂљР В° (РЎвЂљР С•Р С”Р ВµР Р…, Р В±Р В°Р В·Р С•Р Р†РЎвЂ№Р в„– URL API)
-// СЂСџвЂќвЂ” Key dependencies: System
-// СЂСџвЂ™РЋ Usage: Р СњР В°РЎРѓРЎвЂљРЎР‚Р С•Р в„–Р С”Р В° MaxClient РЎвЂЎР ВµРЎР‚Р ВµР В· MaxBotOptions Р Т‘Р В»РЎРЏ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ РЎРѓ Max Messenger Bot API
-
 using System;
 
 namespace Max.Bot.Configuration;
@@ -21,8 +16,8 @@ public class MaxBotOptions
     /// <summary>
     /// Gets or sets the base URL of the Max Bot API.
     /// </summary>
-    /// <value>The base URL of the API. Default is "https://api.max.ru/bot".</value>
-    public string BaseUrl { get; set; } = "https://api.max.ru/bot";
+    /// <value>The base URL of the API. Default is "https://platform-api.max.ru".</value>
+    public string BaseUrl { get; set; } = "https://platform-api.max.ru";
 
     /// <summary>
     /// Gets or sets polling-specific settings that map to <c>GET /updates</c> parameters described in the MAX docs.

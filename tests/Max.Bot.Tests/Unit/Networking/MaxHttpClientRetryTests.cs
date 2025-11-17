@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [MaxHttpClientRetryTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ retry Р СР ВµРЎвЂ¦Р В°Р Р…Р С‘Р В·Р СР В° HTTP Р С”Р В»Р С‘Р ВµР Р…РЎвЂљР В°
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ retry Р СР ВµРЎвЂ¦Р В°Р Р…Р С‘Р В·Р СР В° РЎРѓ exponential backoff Р Р† MaxHttpClient
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Networking, Max.Bot.Configuration, Max.Bot.Exceptions, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ retry Р СР ВµРЎвЂ¦Р В°Р Р…Р С‘Р В·Р СР В°
-
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;

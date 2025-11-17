@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [Program] - Entry point for sample bots
-// СЂСџР‹Р‡ Core function: Selects and runs one of the demo bots
-// СЂСџвЂќвЂ” Key dependencies: System, Max.Bot.Examples infrastructure
-// СЂСџвЂ™РЋ Usage: dotnet run --project examples/Max.Bot.Examples -- [sample]
-
 using System;
 using System.Linq;
 using System.Threading;

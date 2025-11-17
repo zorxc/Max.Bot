@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [UserTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ User Р СР С•Р Т‘Р ВµР В»Р С‘
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ РЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘/Р Т‘Р ВµРЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘ User
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Types, Max.Bot.Networking, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ User
-
 using FluentAssertions;
 using Max.Bot.Networking;
 using Max.Bot.Types;
@@ -16,7 +11,7 @@ public class UserTests
     public void Deserialize_ShouldDeserializeUser()
     {
         // Arrange
-        var json = """{"id":123,"username":"testuser","firstName":"Test","lastName":"User","isBot":false}""";
+        var json = """{"user_id":123,"username":"testuser","first_name":"Test","last_name":"User","is_bot":false}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<User>(json);
@@ -34,7 +29,7 @@ public class UserTests
     public void Deserialize_ShouldDeserializeUserWithNullFields()
     {
         // Arrange
-        var json = """{"id":123,"isBot":true}""";
+        var json = """{"user_id":123,"is_bot":true}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<User>(json);
@@ -66,11 +61,11 @@ public class UserTests
 
         // Assert
         json.Should().NotBeNullOrEmpty();
-        json.Should().Contain("\"id\":123");
+        json.Should().Contain("\"user_id\":123");
         json.Should().Contain("\"username\":\"testuser\"");
-        json.Should().Contain("\"firstName\":\"Test\"");
-        json.Should().Contain("\"lastName\":\"User\"");
-        json.Should().Contain("\"isBot\":false");
+        json.Should().Contain("\"first_name\":\"Test\"");
+        json.Should().Contain("\"last_name\":\"User\"");
+        json.Should().Contain("\"is_bot\":false");
     }
 
     [Fact]
@@ -88,8 +83,8 @@ public class UserTests
 
         // Assert
         json.Should().NotBeNullOrEmpty();
-        json.Should().Contain("\"id\":123");
-        json.Should().Contain("\"isBot\":true");
+        json.Should().Contain("\"user_id\":123");
+        json.Should().Contain("\"is_bot\":true");
         json.Should().NotContain("\"username\"");
         json.Should().NotContain("\"firstName\"");
         json.Should().NotContain("\"lastName\"");

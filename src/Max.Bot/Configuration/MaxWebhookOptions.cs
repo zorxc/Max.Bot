@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [MaxWebhookOptions] - Р СњР В°РЎРѓРЎвЂљРЎР‚Р С•Р в„–Р С”Р С‘ Webhook Р С—Р С•Р Т‘Р С—Р С‘РЎРѓР С•Р С” MAX
-// СЂСџР‹Р‡ Core function: Р Р€Р С—РЎР‚Р В°Р Р†Р В»РЎРЏР ВµРЎвЂљ POST/DELETE /subscriptions Р С‘ Webhook Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р В°Р СР С‘
-// СЂСџвЂќвЂ” Key dependencies: System
-// СЂСџвЂ™РЋ Usage: Р С™Р С•Р Р…РЎвЂћР С‘Р С–РЎС“РЎР‚Р В°РЎвЂ Р С‘РЎРЏ MaxClient webhook Р С•Р В±РЎР‚Р В°Р В±Р С•РЎвЂљР С”Р С‘ Р С‘ Р В±Р ВµР В·Р С•Р С—Р В°РЎРѓР Р…Р С•РЎРѓРЎвЂљР С‘
-
 using System;
 
 namespace Max.Bot.Configuration;

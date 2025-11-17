@@ -69,9 +69,17 @@ await client.Messages.SendMessageAsync(
 
 - Автогенерируемый XML-файл: `src/Max.Bot/bin/Debug/net9.0/Max.Bot.xml` (включён в NuGet).
 - Официальный Max Messenger API: [dev.max.ru/docs-api](https://dev.max.ru/docs-api) (локальная копия — `docs/max-api-docs/`).
-- Другие реализации для сравнения:
+- Другие реализации для сравнения и проверки совместимости:
   - TypeScript — [max-bot-api-client-ts](https://github.com/max-messenger/max-bot-api-client-ts)
   - Go — [max-bot-api-client-go](https://github.com/max-messenger/max-bot-api-client-go)
+
+### 🔐 Аутентификация
+
+Библиотека использует заголовок `Authorization: <token>` для аутентификации, как указано в официальной документации MAX API. Токен передаётся через заголовок, а не через query-параметры (старый способ больше не поддерживается API).
+
+### ✅ Совместимость
+
+Реализация проверена на соответствие официальной документации MAX API и поддерживает совместимость с реализациями на TypeScript и Go. Все модели типов используют snake_case для JSON-полей, соответствующих API, а query-параметры также используют snake_case согласно документации.
 
 ## 🧩 Примеры
 

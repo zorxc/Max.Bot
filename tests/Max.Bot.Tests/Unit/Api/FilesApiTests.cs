@@ -50,7 +50,7 @@ public class FilesApiTests
             .Setup(x => x.SendAsync<Response<UploadResponse>>(
                 It.Is<MaxApiRequest>(req =>
                     req.Method == HttpMethod.Post &&
-                    req.Endpoint == "/test-token-123/uploads" &&
+                    req.Endpoint == "/uploads" &&
                     req.QueryParameters != null &&
                     req.QueryParameters.ContainsKey("type") &&
                     req.QueryParameters["type"] == "video"),

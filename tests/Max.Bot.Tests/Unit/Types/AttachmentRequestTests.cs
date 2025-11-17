@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [AttachmentRequestTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ AttachmentRequest
-// СЂСџР‹Р‡ Core function: Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р В° Р Р†Р В°Р В»Р С‘Р Т‘Р В°РЎвЂ Р С‘Р С‘ Р С‘ РЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘ AttachmentRequest
-// СЂСџвЂќвЂ” Key dependencies: xUnit, FluentAssertions, Max.Bot.Types.Requests
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ РЎвЂљР С‘Р С—Р В° AttachmentRequest
-
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using FluentAssertions;

@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [InlineKeyboardButtonTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р СР С•Р Т‘Р ВµР В»Р С‘ InlineKeyboardButton
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ РЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘/Р Т‘Р ВµРЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘ InlineKeyboardButton
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Types, Max.Bot.Networking, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ Р СР С•Р Т‘Р ВµР В»Р С‘ InlineKeyboardButton
-
 using FluentAssertions;
 using Max.Bot.Networking;
 using Max.Bot.Types;
@@ -16,7 +11,7 @@ public class InlineKeyboardButtonTests
     public void InlineKeyboardButton_ShouldDeserialize_FromJson_WithCallbackData()
     {
         // Arrange
-        var json = """{"text":"Button Text","callbackData":"callback123"}""";
+        var json = """{"text":"Button Text","callback_data":"callback123"}""";
 
         // Act
         var button = MaxJsonSerializer.Deserialize<InlineKeyboardButton>(json);
@@ -59,7 +54,7 @@ public class InlineKeyboardButtonTests
 
         // Assert
         json.Should().Contain("\"text\":\"Button Text\"");
-        json.Should().Contain("\"callbackData\":\"callback123\"");
+        json.Should().Contain("\"callback_data\":\"callback123\"");
     }
 
     [Fact]

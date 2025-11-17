@@ -35,23 +35,14 @@ public interface ISubscriptionsApi
     /// <summary>
     /// Unsubscribes from updates (deletes the webhook).
     /// </summary>
-    /// <param name="request">The delete webhook request (optional).</param>
+    /// <param name="request">The delete webhook request containing the URL to remove.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the response with success status.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when request is null.</exception>
     /// <exception cref="Max.Bot.Exceptions.MaxApiException">Thrown when the API returns an error response.</exception>
     /// <exception cref="Max.Bot.Exceptions.MaxNetworkException">Thrown when a network error occurs.</exception>
     /// <exception cref="Max.Bot.Exceptions.MaxUnauthorizedException">Thrown when authentication fails.</exception>
-    Task<Response> DeleteWebhookAsync(DeleteWebhookRequest? request = null, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Gets information about the current webhook.
-    /// </summary>
-    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the webhook information.</returns>
-    /// <exception cref="Max.Bot.Exceptions.MaxApiException">Thrown when the API returns an error response.</exception>
-    /// <exception cref="Max.Bot.Exceptions.MaxNetworkException">Thrown when a network error occurs.</exception>
-    /// <exception cref="Max.Bot.Exceptions.MaxUnauthorizedException">Thrown when authentication fails.</exception>
-    Task<WebhookInfo> GetWebhookInfoAsync(CancellationToken cancellationToken = default);
+    Task<Response> DeleteWebhookAsync(DeleteWebhookRequest request, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets updates using long polling (if bot is not subscribed to webhook).

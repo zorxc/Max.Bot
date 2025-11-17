@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [MessageTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Message Р СР С•Р Т‘Р ВµР В»Р С‘
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ РЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘/Р Т‘Р ВµРЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘ Message
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Types, Max.Bot.Networking, Max.Bot.Types.Enums, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ Message
-
 using FluentAssertions;
 using Max.Bot.Networking;
 using Max.Bot.Types;
@@ -17,7 +12,7 @@ public class MessageTests
     public void Deserialize_ShouldDeserializeMessage()
     {
         // Arrange
-        var json = """{"id":123,"chat":{"id":456,"type":"private"},"from":{"id":789,"username":"testuser","isBot":false},"text":"Hello","date":1609459200,"type":"text"}""";
+        var json = """{"id":123,"chat":{"id":456,"type":"private"},"from":{"user_id":789,"username":"testuser","is_bot":false},"text":"Hello","date":1609459200,"type":"text"}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Message>(json);
@@ -108,7 +103,7 @@ public class MessageTests
     public void Deserialize_ShouldDeserializeMessageWithNewFields()
     {
         // Arrange
-        var json = """{"id":123,"sender":{"id":789,"username":"testuser"},"recipient":{"id":456,"type":"private"},"timestamp":1609459200,"body":{"text":"Hello","attachments":[]},"stat":{"readCount":5},"url":"https://max.ru/message/123"}""";
+        var json = """{"id":123,"sender":{"user_id":789,"username":"testuser"},"recipient":{"id":456,"type":"private"},"timestamp":1609459200,"body":{"text":"Hello","attachments":[]},"stat":{"read_count":5},"url":"https://max.ru/message/123"}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Message>(json);
@@ -173,7 +168,7 @@ public class MessageTests
     public void MessageBody_ShouldDeserialize()
     {
         // Arrange
-        var json = """{"text":"Hello","attachments":[{"type":"image","photo":{"id":1,"fileId":"photo1","width":100,"height":100}}]}""";
+        var json = """{"text":"Hello","attachments":[{"type":"image","photo":{"id":1,"file_id":"photo1","width":100,"height":100}}]}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<MessageBody>(json);
@@ -189,7 +184,7 @@ public class MessageTests
     public void MessageStat_ShouldDeserialize()
     {
         // Arrange
-        var json = """{"readCount":10}""";
+        var json = """{"read_count":10}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<MessageStat>(json);

@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [UpdateTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Update Р СР С•Р Т‘Р ВµР В»Р С‘
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ РЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘/Р Т‘Р ВµРЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘ Update
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Types, Max.Bot.Networking, Max.Bot.Types.Enums, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ Update
-
 using FluentAssertions;
 using Max.Bot.Networking;
 using Max.Bot.Types;
@@ -17,7 +12,7 @@ public class UpdateTests
     public void Deserialize_ShouldDeserializeUpdateWithMessage()
     {
         // Arrange
-        var json = """{"updateId":1,"type":"message","message":{"id":123,"chat":{"id":456,"type":"private"},"from":{"id":789,"username":"testuser","isBot":false},"text":"Hello","date":1609459200}}""";
+        var json = """{"update_id":1,"update_type":"message_created","message":{"id":123,"chat":{"id":456,"type":"private"},"from":{"user_id":789,"username":"testuser","is_bot":false},"text":"Hello","date":1609459200}}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Update>(json);
@@ -35,7 +30,7 @@ public class UpdateTests
     public void Deserialize_ShouldDeserializeUpdateWithCallbackQuery()
     {
         // Arrange
-        var json = """{"updateId":2,"type":"callback_query","callbackQuery":{"id":"callback123","from":{"id":123,"username":"user123","isBot":false},"data":"callbackData123"}}""";
+        var json = """{"update_id":2,"update_type":"message_callback","callback_query":{"id":"callback123","from":{"user_id":123,"username":"user123","is_bot":false},"data":"callbackData123"}}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Update>(json);
@@ -57,7 +52,7 @@ public class UpdateTests
         var update = new Update
         {
             UpdateId = 1,
-            Type = UpdateType.Message,
+            UpdateTypeRaw = "message_created",
             Message = new Message
             {
                 Id = 123,
@@ -71,8 +66,8 @@ public class UpdateTests
 
         // Assert
         json.Should().NotBeNullOrEmpty();
-        json.Should().Contain("\"updateId\":1");
-        json.Should().Contain("\"type\":\"message\"");
+        json.Should().Contain("\"update_id\":1");
+        json.Should().Contain("\"update_type\":\"message_created\"");
         json.Should().Contain("\"message\"");
         json.Should().Contain("\"id\":123");
     }
@@ -84,7 +79,7 @@ public class UpdateTests
         var update = new Update
         {
             UpdateId = 2,
-            Type = UpdateType.CallbackQuery,
+            UpdateTypeRaw = "message_callback",
             CallbackQuery = new CallbackQuery
             {
                 Id = "callback123",
@@ -98,9 +93,9 @@ public class UpdateTests
 
         // Assert
         json.Should().NotBeNullOrEmpty();
-        json.Should().Contain("\"updateId\":2");
-        json.Should().Contain("\"type\":\"callback_query\"");
-        json.Should().Contain("\"callbackQuery\"");
+        json.Should().Contain("\"update_id\":2");
+        json.Should().Contain("\"update_type\":\"message_callback\"");
+        json.Should().Contain("\"callback_query\"");
         json.Should().Contain("\"id\":\"callback123\"");
     }
 
@@ -111,7 +106,7 @@ public class UpdateTests
         var update = new Update
         {
             UpdateId = 2,
-            Type = UpdateType.CallbackQuery,
+            UpdateTypeRaw = "message_callback",
             Message = null,
             CallbackQuery = null
         };
@@ -121,10 +116,10 @@ public class UpdateTests
 
         // Assert
         json.Should().NotBeNullOrEmpty();
-        json.Should().Contain("\"updateId\":2");
-        json.Should().Contain("\"type\":\"callback_query\"");
+        json.Should().Contain("\"update_id\":2");
+        json.Should().Contain("\"update_type\":\"message_callback\"");
         json.Should().NotContain("\"message\"");
-        json.Should().NotContain("\"callbackQuery\"");
+        json.Should().NotContain("\"callback_query\"");
     }
 }
 

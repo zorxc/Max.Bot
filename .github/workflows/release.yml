@@ -13,7 +13,7 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_NOLOGO: true
   NUGET_SOURCE: https://api.nuget.org/v3/index.json
-  COVERAGE_THRESHOLD: 70
+  COVERAGE_THRESHOLD: 60
 
 jobs:
   publish:

@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [UsersApiTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ UsersApi
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ Р СР ВµРЎвЂљР С•Р Т‘Р С•Р Р† UsersApi (GetUserAsync)
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Api, Max.Bot.Configuration, Max.Bot.Networking, Max.Bot.Types, Moq, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ UsersApi
-
 using System.Net.Http;
 using FluentAssertions;
 using Max.Bot.Api;
@@ -14,6 +9,7 @@ using Xunit;
 
 namespace Max.Bot.Tests.Unit.Api;
 
+#pragma warning disable CS0618 // Type or member is obsolete
 public class UsersApiTests
 {
     private readonly Mock<IMaxHttpClient> _mockHttpClient;
@@ -49,13 +45,14 @@ public class UsersApiTests
             Result = expectedUser
         };
 
+        var responseJson = MaxJsonSerializer.Serialize(response);
         _mockHttpClient
-            .Setup(x => x.SendAsync<Response<User>>(
+            .Setup(x => x.SendAsyncRaw(
                 It.Is<MaxApiRequest>(req =>
                     req.Method == HttpMethod.Get &&
-                    req.Endpoint == $"/test-token-123/users/{userId}"),
+                    req.Endpoint == $"/users/{userId}"),
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(response);
+            .ReturnsAsync(responseJson);
 
         var usersApi = new UsersApi(_mockHttpClient.Object, _options);
 

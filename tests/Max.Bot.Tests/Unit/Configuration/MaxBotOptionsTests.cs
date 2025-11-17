@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [MaxBotOptionsTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р В±Р В°Р В·Р С•Р Р†РЎвЂ№РЎвЂ¦ Р С•Р С—РЎвЂ Р С‘Р в„– Р В±Р С•РЎвЂљР В°
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ Р Р†Р В°Р В»Р С‘Р Т‘Р В°РЎвЂ Р С‘Р С‘ Р С‘ РЎРѓР С•Р В·Р Т‘Р В°Р Р…Р С‘РЎРЏ MaxBotOptions
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Configuration, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ MaxBotOptions
-
 using FluentAssertions;
 using Max.Bot.Configuration;
 using Xunit;
@@ -19,7 +14,7 @@ public class MaxBotOptionsTests
 
         // Assert
         options.Token.Should().BeEmpty();
-        options.BaseUrl.Should().Be("https://api.max.ru/bot");
+        options.BaseUrl.Should().Be("https://platform-api.max.ru");
     }
 
     [Fact]

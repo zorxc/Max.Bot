@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [VideoTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р СР С•Р Т‘Р ВµР В»Р С‘ Video
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ РЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘/Р Т‘Р ВµРЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘ Video
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Types, Max.Bot.Networking, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ Р СР С•Р Т‘Р ВµР В»Р С‘ Video
-
 using FluentAssertions;
 using Max.Bot.Networking;
 using Max.Bot.Types;
@@ -16,7 +11,7 @@ public class VideoTests
     public void Video_ShouldDeserialize_FromJson()
     {
         // Arrange
-        var json = """{"id":123,"fileId":"video123","width":1280,"height":720,"duration":120,"fileSize":1048576,"mimeType":"video/mp4","url":"https://example.com/video.mp4"}""";
+        var json = """{"id":123,"file_id":"video123","width":1280,"height":720,"duration":120,"file_size":1048576,"mime_type":"video/mp4","url":"https://example.com/video.mp4"}""";
 
         // Act
         var video = MaxJsonSerializer.Deserialize<Video>(json);
@@ -37,7 +32,7 @@ public class VideoTests
     public void Video_ShouldDeserialize_WithNullableFields()
     {
         // Arrange
-        var json = """{"id":123,"fileId":"video123"}""";
+        var json = """{"id":123,"file_id":"video123"}""";
 
         // Act
         var video = MaxJsonSerializer.Deserialize<Video>(json);
@@ -75,12 +70,12 @@ public class VideoTests
 
         // Assert
         json.Should().Contain("\"id\":123");
-        json.Should().Contain("\"fileId\":\"video123\"");
+        json.Should().Contain("\"file_id\":\"video123\"");
         json.Should().Contain("\"width\":1280");
         json.Should().Contain("\"height\":720");
         json.Should().Contain("\"duration\":120");
-        json.Should().Contain("\"fileSize\":1048576");
-        json.Should().Contain("\"mimeType\":\"video/mp4\"");
+        json.Should().Contain("\"file_size\":1048576");
+        json.Should().Contain("\"mime_type\":\"video/mp4\"");
         json.Should().Contain("\"url\":\"https://example.com/video.mp4\"");
     }
 }

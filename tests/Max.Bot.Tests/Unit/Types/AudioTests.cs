@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [AudioTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р СР С•Р Т‘Р ВµР В»Р С‘ Audio
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ РЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘/Р Т‘Р ВµРЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘ Audio
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Types, Max.Bot.Networking, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ Р СР С•Р Т‘Р ВµР В»Р С‘ Audio
-
 using FluentAssertions;
 using Max.Bot.Networking;
 using Max.Bot.Types;
@@ -16,7 +11,7 @@ public class AudioTests
     public void Audio_ShouldDeserialize_FromJson()
     {
         // Arrange
-        var json = """{"id":123,"fileId":"audio123","duration":180,"fileSize":512000,"mimeType":"audio/mpeg","url":"https://example.com/audio.mp3"}""";
+        var json = """{"id":123,"file_id":"audio123","duration":180,"file_size":512000,"mime_type":"audio/mpeg","url":"https://example.com/audio.mp3"}""";
 
         // Act
         var audio = MaxJsonSerializer.Deserialize<Audio>(json);
@@ -35,7 +30,7 @@ public class AudioTests
     public void Audio_ShouldDeserialize_WithNullableFields()
     {
         // Arrange
-        var json = """{"id":123,"fileId":"audio123"}""";
+        var json = """{"id":123,"file_id":"audio123"}""";
 
         // Act
         var audio = MaxJsonSerializer.Deserialize<Audio>(json);
@@ -69,10 +64,10 @@ public class AudioTests
 
         // Assert
         json.Should().Contain("\"id\":123");
-        json.Should().Contain("\"fileId\":\"audio123\"");
+        json.Should().Contain("\"file_id\":\"audio123\"");
         json.Should().Contain("\"duration\":180");
-        json.Should().Contain("\"fileSize\":512000");
-        json.Should().Contain("\"mimeType\":\"audio/mpeg\"");
+        json.Should().Contain("\"file_size\":512000");
+        json.Should().Contain("\"mime_type\":\"audio/mpeg\"");
         json.Should().Contain("\"url\":\"https://example.com/audio.mp3\"");
     }
 }

@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [MessagesApiTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ MessagesApi
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ Р СР ВµРЎвЂљР С•Р Т‘Р С•Р Р† MessagesApi (SendMessageAsync, GetMessagesAsync)
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Api, Max.Bot.Configuration, Max.Bot.Networking, Max.Bot.Types, Moq, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ MessagesApi
-
 using System.Net;
 using System.Net.Http;
 using FluentAssertions;
@@ -46,17 +41,16 @@ public class MessagesApiTests
             Chat = new Chat { Id = chatId }
         };
 
-        var response = new Response<Message>
+        var response = new MessageResponse
         {
-            Ok = true,
-            Result = expectedMessage
+            Message = expectedMessage
         };
 
         _mockHttpClient
-            .Setup(x => x.SendAsync<Response<Message>>(
+            .Setup(x => x.SendAsync<MessageResponse>(
                 It.Is<MaxApiRequest>(req =>
                     req.Method == HttpMethod.Post &&
-                    req.Endpoint == "/test-token-123/messages" &&
+                    req.Endpoint == "/messages" &&
                     req.Body != null),
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(response);
@@ -124,16 +118,17 @@ public class MessagesApiTests
             Result = expectedMessages
         };
 
+        var responseJson = MaxJsonSerializer.Serialize(response);
         _mockHttpClient
-            .Setup(x => x.SendAsync<Response<Message[]>>(
+            .Setup(x => x.SendAsyncRaw(
                 It.Is<MaxApiRequest>(req =>
                     req.Method == HttpMethod.Get &&
-                    req.Endpoint == "/test-token-123/messages" &&
+                    req.Endpoint == "/messages" &&
                     req.QueryParameters != null &&
-                    req.QueryParameters.ContainsKey("chatId") &&
-                    req.QueryParameters["chatId"] == chatId.ToString()),
+                    req.QueryParameters.ContainsKey("chat_id") &&
+                    req.QueryParameters["chat_id"] == chatId.ToString()),
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(response);
+            .ReturnsAsync(responseJson);
 
         var messagesApi = new MessagesApi(_mockHttpClient.Object, _options);
 
@@ -184,7 +179,7 @@ public class MessagesApiTests
             .Setup(x => x.SendAsync<Response>(
                 It.Is<MaxApiRequest>(req =>
                     req.Method == HttpMethod.Put &&
-                    req.Endpoint == "/test-token-123/messages" &&
+                    req.Endpoint == "/messages" &&
                     req.QueryParameters != null &&
                     req.QueryParameters.ContainsKey("message_id") &&
                     req.QueryParameters["message_id"] == messageId &&
@@ -250,7 +245,7 @@ public class MessagesApiTests
             .Setup(x => x.SendAsync<Response>(
                 It.Is<MaxApiRequest>(req =>
                     req.Method == HttpMethod.Delete &&
-                    req.Endpoint == "/test-token-123/messages" &&
+                    req.Endpoint == "/messages" &&
                     req.QueryParameters != null &&
                     req.QueryParameters.ContainsKey("message_id") &&
                     req.QueryParameters["message_id"] == messageId),
@@ -303,13 +298,14 @@ public class MessagesApiTests
             Result = expectedMessage
         };
 
+        var responseJson = MaxJsonSerializer.Serialize(response);
         _mockHttpClient
-            .Setup(x => x.SendAsync<Response<Message>>(
+            .Setup(x => x.SendAsyncRaw(
                 It.Is<MaxApiRequest>(req =>
                     req.Method == HttpMethod.Get &&
-                    req.Endpoint == $"/test-token-123/messages/{messageId}"),
+                    req.Endpoint == $"/messages/{messageId}"),
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(response);
+            .ReturnsAsync(responseJson);
 
         var messagesApi = new MessagesApi(_mockHttpClient.Object, _options);
 
@@ -361,13 +357,14 @@ public class MessagesApiTests
             Result = expectedVideo
         };
 
+        var responseJson = MaxJsonSerializer.Serialize(response);
         _mockHttpClient
-            .Setup(x => x.SendAsync<Response<Video>>(
+            .Setup(x => x.SendAsyncRaw(
                 It.Is<MaxApiRequest>(req =>
                     req.Method == HttpMethod.Get &&
-                    req.Endpoint == $"/test-token-123/videos/{videoToken}"),
+                    req.Endpoint == $"/videos/{videoToken}"),
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(response);
+            .ReturnsAsync(responseJson);
 
         var messagesApi = new MessagesApi(_mockHttpClient.Object, _options);
 
@@ -424,7 +421,7 @@ public class MessagesApiTests
             .Setup(x => x.SendAsync<Response>(
                 It.Is<MaxApiRequest>(req =>
                     req.Method == HttpMethod.Post &&
-                    req.Endpoint == "/test-token-123/answers" &&
+                    req.Endpoint == "/answers" &&
                     req.QueryParameters != null &&
                     req.QueryParameters.ContainsKey("callback_query_id") &&
                     req.QueryParameters["callback_query_id"] == callbackQueryId &&
@@ -494,17 +491,16 @@ public class MessagesApiTests
             Chat = new Chat { Id = chatId }
         };
 
-        var response = new Response<Message>
+        var response = new MessageResponse
         {
-            Ok = true,
-            Result = expectedMessage
+            Message = expectedMessage
         };
 
         _mockHttpClient
-            .Setup(x => x.SendAsync<Response<Message>>(
+            .Setup(x => x.SendAsync<MessageResponse>(
                 It.Is<MaxApiRequest>(req =>
                     req.Method == HttpMethod.Post &&
-                    req.Endpoint == "/test-token-123/messages" &&
+                    req.Endpoint == "/messages" &&
                     req.QueryParameters != null &&
                     req.QueryParameters.ContainsKey("chat_id") &&
                     req.QueryParameters["chat_id"] == chatId.ToString() &&
@@ -585,17 +581,16 @@ public class MessagesApiTests
             Chat = new Chat { Id = chatId }
         };
 
-        var response = new Response<Message>
+        var response = new MessageResponse
         {
-            Ok = true,
-            Result = expectedMessage
+            Message = expectedMessage
         };
 
         _mockHttpClient
-            .Setup(x => x.SendAsync<Response<Message>>(
+            .Setup(x => x.SendAsync<MessageResponse>(
                 It.Is<MaxApiRequest>(req =>
                     req.Method == HttpMethod.Post &&
-                    req.Endpoint == "/test-token-123/messages" &&
+                    req.Endpoint == "/messages" &&
                     req.QueryParameters != null &&
                     req.QueryParameters.ContainsKey("chat_id") &&
                     req.Body != null),
@@ -640,17 +635,16 @@ public class MessagesApiTests
             Chat = new Chat { Id = chatId }
         };
 
-        var response = new Response<Message>
+        var response = new MessageResponse
         {
-            Ok = true,
-            Result = expectedMessage
+            Message = expectedMessage
         };
 
         _mockHttpClient
-            .Setup(x => x.SendAsync<Response<Message>>(
+            .Setup(x => x.SendAsync<MessageResponse>(
                 It.Is<MaxApiRequest>(req =>
                     req.Method == HttpMethod.Post &&
-                    req.Endpoint == "/test-token-123/messages" &&
+                    req.Endpoint == "/messages" &&
                     req.QueryParameters != null &&
                     req.QueryParameters.ContainsKey("chat_id") &&
                     req.Body != null),
@@ -696,17 +690,16 @@ public class MessagesApiTests
             Chat = new Chat { Id = chatId }
         };
 
-        var response = new Response<Message>
+        var response = new MessageResponse
         {
-            Ok = true,
-            Result = expectedMessage
+            Message = expectedMessage
         };
 
         _mockHttpClient
-            .Setup(x => x.SendAsync<Response<Message>>(
+            .Setup(x => x.SendAsync<MessageResponse>(
                 It.Is<MaxApiRequest>(req =>
                     req.Method == HttpMethod.Post &&
-                    req.Endpoint == "/test-token-123/messages" &&
+                    req.Endpoint == "/messages" &&
                     req.QueryParameters != null &&
                     req.QueryParameters.ContainsKey("chat_id") &&
                     req.Body != null),

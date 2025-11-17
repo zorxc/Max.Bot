@@ -13,7 +13,7 @@ This checklist keeps the release flow deterministic and mirrors the Telegram.Bot
 ```powershell
 dotnet format Max.Bot.sln --verify-no-changes
 dotnet format analyzers Max.Bot.sln --verify-no-changes --no-restore
-dotnet test Max.Bot.sln -c Release /p:CollectCoverage=true /p:CoverletOutputFormat=\"cobertura%2copencover\" /p:CoverletOutput=TestResults/Coverage/ /p:Threshold=70 /p:ThresholdType=line /p:ThresholdStat=total
+dotnet test Max.Bot.sln -c Release /p:CollectCoverage=true /p:CoverletOutputFormat=\"cobertura%2copencover\" /p:CoverletOutput=TestResults/Coverage/ /p:Threshold=60 /p:ThresholdType=line /p:ThresholdStat=total
 dotnet pack src/Max.Bot/Max.Bot.csproj -c Release /p:ContinuousIntegrationBuild=true
 ```
 

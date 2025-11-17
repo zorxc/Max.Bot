@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [BaseApi] - Р вЂР В°Р В·Р С•Р Р†РЎвЂ№Р в„– Р С”Р В»Р В°РЎРѓРЎРѓ Р Т‘Р В»РЎРЏ API Р С”Р В»Р В°РЎРѓРЎРѓР С•Р Р†
-// СЂСџР‹Р‡ Core function: Р С›Р В±РЎвЂ°Р В°РЎРЏ Р В»Р С•Р С–Р С‘Р С”Р В° Р Т‘Р В»РЎРЏ Р Р†РЎРѓР ВµРЎвЂ¦ API Р С”Р В»Р В°РЎРѓРЎРѓР С•Р Р† (Р С—Р С•РЎРѓРЎвЂљРЎР‚Р С•Р ВµР Р…Р С‘Р Вµ URL, Р В·Р В°Р С–Р С•Р В»Р С•Р Р†Р С”Р С‘, Р С•Р В±РЎР‚Р В°Р В±Р С•РЎвЂљР С”Р В° Response<T>)
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Networking, Max.Bot.Configuration, Max.Bot.Types, Max.Bot.Exceptions
-// СЂСџвЂ™РЋ Usage: Р вЂР В°Р В·Р С•Р Р†РЎвЂ№Р в„– Р С”Р В»Р В°РЎРѓРЎРѓ Р Т‘Р В»РЎРЏ BotApi, MessagesApi, ChatsApi, UsersApi
-
 using System.Net;
 using System.Net.Http;
 using Max.Bot.Configuration;
@@ -40,10 +35,10 @@ internal abstract class BaseApi
     }
 
     /// <summary>
-    /// Builds the endpoint URL with token included in the path.
+    /// Builds the endpoint URL path.
     /// </summary>
     /// <param name="path">The endpoint path (e.g., "/me", "/messages").</param>
-    /// <returns>The full endpoint path with token (e.g., "/{token}/me").</returns>
+    /// <returns>The normalized endpoint path (e.g., "/me", "/messages").</returns>
     /// <exception cref="ArgumentException">Thrown when path is null or empty.</exception>
     protected string BuildEndpoint(string path)
     {
@@ -53,11 +48,8 @@ internal abstract class BaseApi
         }
 
         // Ensure path starts with '/'
-        var normalizedPath = path.StartsWith('/') ? path : $"/{path}";
-
-        // Build endpoint with token: /{token}{path}
-        // Example: /{token}/me, /{token}/messages
-        return $"/{Options.Token}{normalizedPath}";
+        // Token is passed via Authorization header, not in URL path
+        return path.StartsWith('/') ? path : $"/{path}";
     }
 
     /// <summary>
@@ -82,9 +74,9 @@ internal abstract class BaseApi
             QueryParameters = queryParams
         };
 
-        // Add Authorization header
+        // Add Authorization header with token (format: "Authorization: <token>" as per Max API docs)
         request.Headers ??= new Dictionary<string, string?>();
-        request.Headers["Authorization"] = $"Bearer {Options.Token}";
+        request.Headers["Authorization"] = Options.Token;
 
         return request;
     }
@@ -117,17 +109,114 @@ internal abstract class BaseApi
             return (T)(object)simpleResponse;
         }
 
-        var wrappedResponse = await HttpClient.SendAsync<Response<T>>(request, cancellationToken).ConfigureAwait(false);
-
-        if (!wrappedResponse.Ok || wrappedResponse.Result == null)
+        // * For GET requests: use SendAsyncRaw to get the response body once, then try both deserialization strategies
+        // This prevents making multiple HTTP calls and losing updates (especially important for /updates endpoint)
+        // For POST/PUT/PATCH: use normal SendAsync to avoid duplicate actions
+        if (request.Method == HttpMethod.Get)
         {
+            // Get raw response body once
+            var responseBody = await HttpClient.SendAsyncRaw(request, cancellationToken).ConfigureAwait(false);
+
+            if (string.IsNullOrWhiteSpace(responseBody))
+            {
+                throw new MaxApiException(
+                    "API request returned empty response body.",
+                    null,
+                    HttpStatusCode.BadRequest);
+            }
+
+            // Try deserializing as Response<T> first
+            try
+            {
+                var wrappedResponse = MaxJsonSerializer.Deserialize<Response<T>>(responseBody);
+                if (wrappedResponse != null && wrappedResponse.Ok && wrappedResponse.Result != null)
+                {
+                    return wrappedResponse.Result;
+                }
+            }
+            catch
+            {
+                // Response<T> format doesn't match, try direct deserialization
+            }
+
+            // Try direct deserialization as T (for endpoints like /me, /updates that return data directly)
+            try
+            {
+                var directResponse = MaxJsonSerializer.Deserialize<T>(responseBody);
+                if (directResponse != null)
+                {
+                    return directResponse;
+                }
+            }
+            catch
+            {
+                throw new MaxApiException(
+                    $"API request failed. The response could not be deserialized as Response<T> or T. Response body: {responseBody}",
+                    null,
+                    HttpStatusCode.BadRequest);
+            }
+
             throw new MaxApiException(
-                "API request failed. The response indicates an error or contains no data.",
+                "API request failed. The response could not be deserialized as Response<T> or T.",
                 null,
                 HttpStatusCode.BadRequest);
         }
 
-        return wrappedResponse.Result;
+        // For POST/PUT/PATCH: use normal SendAsync (only one attempt to avoid duplicate actions)
+        try
+        {
+            // First try: deserialize as Response<T>
+            var wrappedResponse = await HttpClient.SendAsync<Response<T>>(request, cancellationToken).ConfigureAwait(false);
+            if (wrappedResponse == null)
+            {
+                throw new MaxApiException(
+                    "API request returned null response.",
+                    null,
+                    HttpStatusCode.BadRequest);
+            }
+            if (wrappedResponse.Ok && wrappedResponse.Result != null)
+            {
+                return wrappedResponse.Result;
+            }
+
+            // If Response<T> deserialized but ok=false or result=null, this is an API error
+            throw new MaxApiException(
+                $"API request returned unsuccessful response. Ok={wrappedResponse.Ok}, Result is null.",
+                null,
+                HttpStatusCode.BadRequest);
+        }
+        catch (Exceptions.MaxNetworkException ex) when (ex.Message.Contains("Failed to deserialize"))
+        {
+            // For POST/PUT/PATCH, if Response<T> format doesn't match, try direct deserialization
+            // But only if we can extract the response body from the exception
+            // This is a fallback for endpoints that return data directly (like POST /messages)
+            try
+            {
+                var directResponse = await HttpClient.SendAsync<T>(request, cancellationToken).ConfigureAwait(false);
+                if (directResponse != null)
+                {
+                    return directResponse;
+                }
+            }
+            catch
+            {
+                // If direct deserialization also fails, rethrow original exception
+                throw new MaxApiException(
+                    "API request failed. The response could not be deserialized as Response<T> or T.",
+                    null,
+                    HttpStatusCode.BadRequest);
+            }
+
+            throw new MaxApiException(
+                "API request failed. The response could not be deserialized as Response<T> or T.",
+                null,
+                HttpStatusCode.BadRequest);
+        }
+        catch (Exceptions.MaxApiException)
+        {
+            // Re-throw API exceptions as-is
+            throw;
+        }
     }
 
     /// <summary>

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -18,11 +19,18 @@ public class SetWebhookRequest
     public string Url { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets a value indicating whether to drop pending updates when setting the webhook.
+    /// Gets or sets the list of update types to receive.
     /// </summary>
-    /// <value>True to drop pending updates; otherwise, false.</value>
-    [JsonPropertyName("drop_pending_updates")]
-    public bool? DropPendingUpdates { get; set; }
+    /// <value>List of update types (e.g., "message_created", "bot_started").</value>
+    [JsonPropertyName("update_types")]
+    public List<string>? UpdateTypes { get; set; }
+
+    /// <summary>
+    /// Gets or sets the secret that will be sent in the X-Max-Bot-Api-Secret header.
+    /// </summary>
+    /// <value>The secret string (5-256 characters, A-Z, a-z, 0-9, hyphen, underscore).</value>
+    [JsonPropertyName("secret")]
+    public string? Secret { get; set; }
 }
 
 

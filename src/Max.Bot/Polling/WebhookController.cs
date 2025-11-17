@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [WebhookController] - ASP.NET Core controller for MAX webhooks
-// СЂСџР‹Р‡ Core function: Validates webhook requests and dispatches updates to handlers
-// СЂСџвЂќвЂ” Key dependencies: Microsoft.AspNetCore.Mvc, Max.Bot.MaxClient, Max.Bot.Polling
-// СЂСџвЂ™РЋ Usage: Register in ASP.NET Core app to receive MAX webhook callbacks
-
 using System;
 using System.Security.Cryptography;
 using System.Text;

@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [DocumentTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р СР С•Р Т‘Р ВµР В»Р С‘ Document
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ РЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘/Р Т‘Р ВµРЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘ Document
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Types, Max.Bot.Networking, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ Р СР С•Р Т‘Р ВµР В»Р С‘ Document
-
 using FluentAssertions;
 using Max.Bot.Networking;
 using Max.Bot.Types;
@@ -16,7 +11,7 @@ public class DocumentTests
     public void Document_ShouldDeserialize_FromJson()
     {
         // Arrange
-        var json = """{"id":123,"fileId":"doc123","fileName":"document.pdf","fileSize":2097152,"mimeType":"application/pdf","url":"https://example.com/document.pdf"}""";
+        var json = """{"id":123,"file_id":"doc123","file_name":"document.pdf","file_size":2097152,"mime_type":"application/pdf","url":"https://example.com/document.pdf"}""";
 
         // Act
         var document = MaxJsonSerializer.Deserialize<Document>(json);
@@ -35,7 +30,7 @@ public class DocumentTests
     public void Document_ShouldDeserialize_WithNullableFields()
     {
         // Arrange
-        var json = """{"id":123,"fileId":"doc123"}""";
+        var json = """{"id":123,"file_id":"doc123"}""";
 
         // Act
         var document = MaxJsonSerializer.Deserialize<Document>(json);
@@ -69,10 +64,10 @@ public class DocumentTests
 
         // Assert
         json.Should().Contain("\"id\":123");
-        json.Should().Contain("\"fileId\":\"doc123\"");
-        json.Should().Contain("\"fileName\":\"document.pdf\"");
-        json.Should().Contain("\"fileSize\":2097152");
-        json.Should().Contain("\"mimeType\":\"application/pdf\"");
+        json.Should().Contain("\"file_id\":\"doc123\"");
+        json.Should().Contain("\"file_name\":\"document.pdf\"");
+        json.Should().Contain("\"file_size\":2097152");
+        json.Should().Contain("\"mime_type\":\"application/pdf\"");
         json.Should().Contain("\"url\":\"https://example.com/document.pdf\"");
     }
 }

@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [MaxBotClientOptions] - Р С›Р С—РЎвЂ Р С‘Р С‘ Р Т‘Р В»РЎРЏ HTTP Р С”Р В»Р С‘Р ВµР Р…РЎвЂљР В°
-// СЂСџР‹Р‡ Core function: Р С™Р С•Р Р…РЎвЂћР С‘Р С–РЎС“РЎР‚Р В°РЎвЂ Р С‘РЎРЏ HTTP Р С”Р В»Р С‘Р ВµР Р…РЎвЂљР В° (retry policy, РЎвЂљР В°Р в„–Р СР В°РЎС“РЎвЂљРЎвЂ№, Р В»Р С•Р С–Р С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ)
-// СЂСџвЂќвЂ” Key dependencies: System
-// СЂСџвЂ™РЋ Usage: Р СњР В°РЎРѓРЎвЂљРЎР‚Р С•Р в„–Р С”Р В° Р С—Р С•Р Р†Р ВµР Т‘Р ВµР Р…Р С‘РЎРЏ MaxHttpClient РЎвЂЎР ВµРЎР‚Р ВµР В· MaxBotClientOptions
-
 namespace Max.Bot.Configuration;
 
 /// <summary>
@@ -19,8 +14,11 @@ public class MaxBotClientOptions
     /// <summary>
     /// Gets or sets the timeout for HTTP requests.
     /// </summary>
-    /// <value>The timeout for requests. Default is 30 seconds.</value>
-    public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(30);
+    /// <value>
+    /// The timeout for requests. Default is 100 seconds to accommodate long polling requests
+    /// (which can take up to 90 seconds) plus network delay buffer.
+    /// </value>
+    public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(100);
 
     /// <summary>
     /// Gets or sets the number of retry attempts for failed requests.

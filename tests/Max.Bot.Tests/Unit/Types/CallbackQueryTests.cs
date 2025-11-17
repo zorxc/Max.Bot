@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [CallbackQueryTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р СР С•Р Т‘Р ВµР В»Р С‘ CallbackQuery
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ РЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘/Р Т‘Р ВµРЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘ CallbackQuery
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Types, Max.Bot.Networking, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ Р СР С•Р Т‘Р ВµР В»Р С‘ CallbackQuery
-
 using FluentAssertions;
 using Max.Bot.Networking;
 using Max.Bot.Types;
@@ -16,7 +11,7 @@ public class CallbackQueryTests
     public void CallbackQuery_ShouldDeserialize_FromJson()
     {
         // Arrange
-        var json = """{"id":"callback123","from":{"id":123,"username":"user123","isBot":false},"message":{"id":456,"text":"Test message","date":1234567890},"data":"callbackData123"}""";
+        var json = """{"id":"callback123","from":{"user_id":123,"username":"user123","is_bot":false},"message":{"id":456,"text":"Test message","date":1234567890},"data":"callbackData123"}""";
 
         // Act
         var callbackQuery = MaxJsonSerializer.Deserialize<CallbackQuery>(json);
@@ -37,7 +32,7 @@ public class CallbackQueryTests
     public void CallbackQuery_ShouldDeserialize_WithNullableFields()
     {
         // Arrange
-        var json = """{"id":"callback123","from":{"id":123,"username":"user123","isBot":false}}""";
+        var json = """{"id":"callback123","from":{"user_id":123,"username":"user123","is_bot":false}}""";
 
         // Act
         var callbackQuery = MaxJsonSerializer.Deserialize<CallbackQuery>(json);

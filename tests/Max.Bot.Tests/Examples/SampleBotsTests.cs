@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [SampleBotsTests] - Tests for example bots
-// СЂСџР‹Р‡ Core function: Validates wiring of sample bots without hitting real API
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Examples, Moq, xUnit
-// СЂСџвЂ™РЋ Usage: Guards against regressions in documentation samples
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -89,7 +84,7 @@ public class SampleBotsTests
                 var callbackUpdate = new Update
                 {
                     UpdateId = 2,
-                    Type = UpdateType.CallbackQuery,
+                    UpdateTypeRaw = "message_callback",
                     CallbackQuery = new CallbackQuery
                     {
                         Id = "cb-1",
@@ -159,7 +154,7 @@ public class SampleBotsTests
         return new Update
         {
             UpdateId = 1,
-            Type = UpdateType.Message,
+            UpdateTypeRaw = "message_created",
             Message = new Message
             {
                 Chat = new Chat { Id = 1337, Title = "SampleChat" },

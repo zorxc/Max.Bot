@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [Message] - Р СљР С•Р Т‘Р ВµР В»РЎРЉ РЎРѓР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘РЎРЏ Max Messenger
-// СЂСџР‹Р‡ Core function: Р СџРЎР‚Р ВµР Т‘РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎвЂљ Р С‘Р Р…РЎвЂћР С•РЎР‚Р СР В°РЎвЂ Р С‘РЎР‹ Р С• РЎРѓР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘Р С‘
-// СЂСџвЂќвЂ” Key dependencies: System.Text.Json.Serialization, System.ComponentModel.DataAnnotations, Max.Bot.Types, Max.Bot.Types.Enums, Max.Bot.Types.Converters
-// СЂСџвЂ™РЋ Usage: Р ВРЎРѓР С—Р С•Р В»РЎРЉР В·РЎС“Р ВµРЎвЂљРЎРѓРЎРЏ Р Р† Update Р Т‘Р В»РЎРЏ Р С—РЎР‚Р ВµР Т‘РЎРѓРЎвЂљР В°Р Р†Р В»Р ВµР Р…Р С‘РЎРЏ РЎРѓР С•Р С•Р В±РЎвЂ°Р ВµР Р…Р С‘РЎРЏ
-
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Max.Bot.Types.Converters;
@@ -47,9 +42,9 @@ public class Message
     /// <summary>
     /// Gets or sets the recipient of the message. Can be a user or a chat.
     /// </summary>
-    /// <value>The recipient of the message (User or Chat), or null if not available.</value>
+    /// <value>The recipient of the message, or null if not available.</value>
     [JsonPropertyName("recipient")]
-    public object? Recipient { get; set; }
+    public MessageRecipient? Recipient { get; set; }
 
     /// <summary>
     /// Gets or sets the text content of the message.
@@ -118,6 +113,21 @@ public class Message
 public class MessageBody
 {
     /// <summary>
+    /// Gets or sets the message ID.
+    /// </summary>
+    /// <value>The unique identifier of the message.</value>
+    [JsonPropertyName("mid")]
+    public string? Mid { get; set; }
+
+    /// <summary>
+    /// Gets or sets the sequence number of the message.
+    /// </summary>
+    /// <value>The sequence number for ordering messages.</value>
+    [Range(0, long.MaxValue, ErrorMessage = "Sequence number cannot be negative.")]
+    [JsonPropertyName("seq")]
+    public long? Seq { get; set; }
+
+    /// <summary>
     /// Gets or sets the text content of the message.
     /// </summary>
     [JsonPropertyName("text")]
@@ -139,7 +149,7 @@ public class MessageStat
     /// Gets or sets the number of times the message was read.
     /// </summary>
     [Range(0, int.MaxValue, ErrorMessage = "ReadCount cannot be negative.")]
-    [JsonPropertyName("readCount")]
+    [JsonPropertyName("read_count")]
     public int? ReadCount { get; set; }
 }
 

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Max.Bot.Types.Requests;
@@ -8,11 +9,12 @@ namespace Max.Bot.Types.Requests;
 public class DeleteWebhookRequest
 {
     /// <summary>
-    /// Gets or sets a value indicating whether to drop pending updates when deleting the webhook.
+    /// Gets or sets the URL to remove from webhook subscriptions.
     /// </summary>
-    /// <value>True to drop pending updates; otherwise, false.</value>
-    [JsonPropertyName("drop_pending_updates")]
-    public bool? DropPendingUpdates { get; set; }
+    /// <value>The webhook URL to delete.</value>
+    [Required]
+    [JsonPropertyName("url")]
+    public string Url { get; set; } = default!;
 }
 
 

@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [InlineKeyboardTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р СР С•Р Т‘Р ВµР В»Р С‘ InlineKeyboard
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ РЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘/Р Т‘Р ВµРЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘ InlineKeyboard
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Types, Max.Bot.Networking, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ Р СР С•Р Т‘Р ВµР В»Р С‘ InlineKeyboard
-
 using FluentAssertions;
 using Max.Bot.Networking;
 using Max.Bot.Types;
@@ -16,7 +11,7 @@ public class InlineKeyboardTests
     public void InlineKeyboard_ShouldDeserialize_FromJson()
     {
         // Arrange
-        var json = """{"inlineKeyboard":[[{"text":"Button 1","callbackData":"callback1"}],[{"text":"Button 2","url":"https://example.com"}]]}""";
+        var json = """{"inline_keyboard":[[{"text":"Button 1","callback_data":"callback1"}],[{"text":"Button 2","url":"https://example.com"}]]}""";
 
         // Act
         var keyboard = MaxJsonSerializer.Deserialize<InlineKeyboard>(json);
@@ -36,7 +31,7 @@ public class InlineKeyboardTests
     public void InlineKeyboard_ShouldDeserialize_WithEmptyButtons()
     {
         // Arrange
-        var json = """{"inlineKeyboard":[]}""";
+        var json = """{"inline_keyboard":[]}""";
 
         // Act
         var keyboard = MaxJsonSerializer.Deserialize<InlineKeyboard>(json);
@@ -69,9 +64,9 @@ public class InlineKeyboardTests
         var json = MaxJsonSerializer.Serialize(keyboard);
 
         // Assert
-        json.Should().Contain("\"inlineKeyboard\"");
+        json.Should().Contain("\"inline_keyboard\"");
         json.Should().Contain("\"text\":\"Button 1\"");
-        json.Should().Contain("\"callbackData\":\"callback1\"");
+        json.Should().Contain("\"callback_data\":\"callback1\"");
         json.Should().Contain("\"text\":\"Button 2\"");
         json.Should().Contain("\"url\":\"https://example.com\"");
     }
@@ -89,7 +84,7 @@ public class InlineKeyboardTests
         var json = MaxJsonSerializer.Serialize(keyboard);
 
         // Assert
-        json.Should().Contain("\"inlineKeyboard\":[]");
+        json.Should().Contain("\"inline_keyboard\":[]");
     }
 }
 

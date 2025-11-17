@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [DelegatingUpdateHandlerTests] - Tests for delegate-based handler adapter
-// СЂСџР‹Р‡ Core function: Validates that delegating handler routes calls correctly
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Polling, Max.Bot.Configuration, Max.Bot.Types, Moq, xUnit
-// СЂСџвЂ™РЋ Usage: Ensures handler convenience layer behaves as expected
-
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -55,7 +50,7 @@ public class DelegatingUpdateHandlerTests
         var update = new Update
         {
             UpdateId = 1,
-            Type = type,
+            UpdateTypeRaw = type == UpdateType.Message ? "message_created" : "message_callback",
             Message = type == UpdateType.Message ? new Message() : null,
             CallbackQuery = type == UpdateType.CallbackQuery ? new CallbackQuery { Id = "cb", From = new User { Id = 1 } } : null
         };

@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [Photo] - Р СљР С•Р Т‘Р ВµР В»РЎРЉ РЎвЂћР С•РЎвЂљР С• Р Р† Max Messenger
-// СЂСџР‹Р‡ Core function: Р СџРЎР‚Р ВµР Т‘РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎвЂљ Р С‘Р Р…РЎвЂћР С•РЎР‚Р СР В°РЎвЂ Р С‘РЎР‹ Р С• РЎвЂћР С•РЎвЂљР С•
-// СЂСџвЂќвЂ” Key dependencies: System.Text.Json.Serialization, System.ComponentModel.DataAnnotations
-// СЂСџвЂ™РЋ Usage: Р ВРЎРѓР С—Р С•Р В»РЎРЉР В·РЎС“Р ВµРЎвЂљРЎРѓРЎРЏ Р Р† Message Р Т‘Р В»РЎРЏ Р С—РЎР‚Р ВµР Т‘РЎРѓРЎвЂљР В°Р Р†Р В»Р ВµР Р…Р С‘РЎРЏ РЎвЂћР С•РЎвЂљР С• Р Р†Р В»Р С•Р В¶Р ВµР Р…Р С‘Р в„–
-
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -27,7 +22,7 @@ public class Photo
     /// <value>The file identifier of the photo.</value>
     [Required(ErrorMessage = "File ID is required.")]
     [StringLength(256, MinimumLength = 1, ErrorMessage = "File ID must be between 1 and 256 characters.")]
-    [JsonPropertyName("fileId")]
+    [JsonPropertyName("file_id")]
     public string FileId { get; set; } = string.Empty;
 
     /// <summary>
@@ -51,7 +46,7 @@ public class Photo
     /// </summary>
     /// <value>The size of the photo file in bytes, or null if not available.</value>
     [Range(1, long.MaxValue, ErrorMessage = "File size must be greater than zero if provided.")]
-    [JsonPropertyName("fileSize")]
+    [JsonPropertyName("file_size")]
     public long? FileSize { get; set; }
 
     /// <summary>

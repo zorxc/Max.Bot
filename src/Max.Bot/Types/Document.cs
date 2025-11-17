@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [Document] - Р СљР С•Р Т‘Р ВµР В»РЎРЉ Р Т‘Р С•Р С”РЎС“Р СР ВµР Р…РЎвЂљР В° Р Р† Max Messenger
-// СЂСџР‹Р‡ Core function: Р СџРЎР‚Р ВµР Т‘РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎвЂљ Р С‘Р Р…РЎвЂћР С•РЎР‚Р СР В°РЎвЂ Р С‘РЎР‹ Р С• Р Т‘Р С•Р С”РЎС“Р СР ВµР Р…РЎвЂљР Вµ
-// СЂСџвЂќвЂ” Key dependencies: System.Text.Json.Serialization, System.ComponentModel.DataAnnotations
-// СЂСџвЂ™РЋ Usage: Р ВРЎРѓР С—Р С•Р В»РЎРЉР В·РЎС“Р ВµРЎвЂљРЎРѓРЎРЏ Р Р† Message Р Т‘Р В»РЎРЏ Р С—РЎР‚Р ВµР Т‘РЎРѓРЎвЂљР В°Р Р†Р В»Р ВµР Р…Р С‘РЎРЏ Р Т‘Р С•Р С”РЎС“Р СР ВµР Р…РЎвЂљР В° Р Р†Р В»Р С•Р В¶Р ВµР Р…Р С‘Р в„–
-
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -27,7 +22,7 @@ public class Document
     /// <value>The file identifier of the document.</value>
     [Required(ErrorMessage = "File ID is required.")]
     [StringLength(256, MinimumLength = 1, ErrorMessage = "File ID must be between 1 and 256 characters.")]
-    [JsonPropertyName("fileId")]
+    [JsonPropertyName("file_id")]
     public string FileId { get; set; } = string.Empty;
 
     /// <summary>
@@ -35,7 +30,7 @@ public class Document
     /// </summary>
     /// <value>The name of the document file, or null if not available.</value>
     [StringLength(256, ErrorMessage = "File name must not exceed 256 characters.")]
-    [JsonPropertyName("fileName")]
+    [JsonPropertyName("file_name")]
     public string? FileName { get; set; }
 
     /// <summary>
@@ -43,7 +38,7 @@ public class Document
     /// </summary>
     /// <value>The size of the document file in bytes, or null if not available.</value>
     [Range(1, long.MaxValue, ErrorMessage = "File size must be greater than zero if provided.")]
-    [JsonPropertyName("fileSize")]
+    [JsonPropertyName("file_size")]
     public long? FileSize { get; set; }
 
     /// <summary>
@@ -51,7 +46,7 @@ public class Document
     /// </summary>
     /// <value>The MIME type of the document (e.g., "application/pdf"), or null if not available.</value>
     [StringLength(64, ErrorMessage = "MIME type must not exceed 64 characters.")]
-    [JsonPropertyName("mimeType")]
+    [JsonPropertyName("mime_type")]
     public string? MimeType { get; set; }
 
     /// <summary>

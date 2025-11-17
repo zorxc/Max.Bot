@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [InlineKeyboardButton] - Р СљР С•Р Т‘Р ВµР В»РЎРЉ Р С”Р Р…Р С•Р С—Р С”Р С‘ inline Р С”Р В»Р В°Р Р†Р С‘Р В°РЎвЂљРЎС“РЎР‚РЎвЂ№ Р Р† Max Messenger
-// СЂСџР‹Р‡ Core function: Р СџРЎР‚Р ВµР Т‘РЎРѓРЎвЂљР В°Р Р†Р В»РЎРЏР ВµРЎвЂљ Р С”Р Р…Р С•Р С—Р С”РЎС“ inline Р С”Р В»Р В°Р Р†Р С‘Р В°РЎвЂљРЎС“РЎР‚РЎвЂ№
-// СЂСџвЂќвЂ” Key dependencies: System.Text.Json.Serialization, System.ComponentModel.DataAnnotations
-// СЂСџвЂ™РЋ Usage: Р ВРЎРѓР С—Р С•Р В»РЎРЉР В·РЎС“Р ВµРЎвЂљРЎРѓРЎРЏ Р Р† InlineKeyboard Р Т‘Р В»РЎРЏ РЎРѓР С•Р В·Р Т‘Р В°Р Р…Р С‘РЎРЏ Р С”Р Р…Р С•Р С—Р С•Р С”
-
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -27,7 +22,7 @@ public class InlineKeyboardButton
     /// </summary>
     /// <value>The callback data, or null if not available.</value>
     [StringLength(64, ErrorMessage = "Callback data must not exceed 64 characters.")]
-    [JsonPropertyName("callbackData")]
+    [JsonPropertyName("callback_data")]
     public string? CallbackData { get; set; }
 
     /// <summary>

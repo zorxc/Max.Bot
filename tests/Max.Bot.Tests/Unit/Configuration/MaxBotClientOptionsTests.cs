@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [MaxBotClientOptionsTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С”Р С•Р Р…РЎвЂћР С‘Р С–РЎС“РЎР‚Р В°РЎвЂ Р С‘Р С‘ HTTP Р С”Р В»Р С‘Р ВµР Р…РЎвЂљР В°
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ Р Р†Р В°Р В»Р С‘Р Т‘Р В°РЎвЂ Р С‘Р С‘ Р С‘ РЎРѓР С•Р В·Р Т‘Р В°Р Р…Р С‘РЎРЏ MaxBotClientOptions
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Configuration, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ MaxBotClientOptions
-
 using FluentAssertions;
 using Max.Bot.Configuration;
 using Xunit;
@@ -19,7 +14,7 @@ public class MaxBotClientOptionsTests
 
         // Assert
         options.BaseUrl.Should().BeEmpty();
-        options.Timeout.Should().Be(TimeSpan.FromSeconds(30));
+        options.Timeout.Should().Be(TimeSpan.FromSeconds(100));
         options.RetryCount.Should().Be(3);
         options.RetryBaseDelay.Should().Be(TimeSpan.FromSeconds(1));
         options.MaxRetryDelay.Should().Be(TimeSpan.FromSeconds(30));

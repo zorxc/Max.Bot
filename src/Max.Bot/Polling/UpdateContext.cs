@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [UpdateContext] - Р С™Р С•Р Р…РЎвЂљР ВµР С”РЎРѓРЎвЂљ Р С—Р ВµРЎР‚Р ВµР Т‘Р В°РЎвЂЎР С‘ Р С•Р В±Р Р…Р С•Р Р†Р В»Р ВµР Р…Р С‘РЎРЏ Р С•Р В±РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂЎР С‘Р С”РЎС“
-// СЂСџР‹Р‡ Core function: Р ВР Р…Р С”Р В°Р С—РЎРѓРЎС“Р В»Р С‘РЎР‚РЎС“Р ВµРЎвЂљ Update, API, Р С•Р С—РЎвЂ Р С‘Р С‘ Р С‘ РЎРѓР ВµРЎР‚Р Р†Р С‘РЎРѓРЎвЂ№
-// СЂСџвЂќвЂ” Key dependencies: System, System.Collections.Generic, Microsoft.Extensions.Logging, Max.Bot.Api, Max.Bot.Configuration, Max.Bot.Types
-// СЂСџвЂ™РЋ Usage: Р СџР ВµРЎР‚Р ВµР Т‘Р В°Р ВµРЎвЂљРЎРѓРЎРЏ Р Р† IUpdateHandler Р Т‘Р В»РЎРЏ Р С•Р В±РЎР‚Р В°Р В±Р С•РЎвЂљР С”Р С‘ РЎРѓР С•Р В±РЎвЂ№РЎвЂљР С‘Р в„–
-
 using System;
 using System.Collections.Generic;
 using Max.Bot.Api;

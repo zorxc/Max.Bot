@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [SubscriptionsApiFixtureTests] - Validates subscriptions API via recorded fixtures
-// СЂСџР‹Р‡ Core function: Ensures SubscriptionsApi handles webhook/update flows deterministically
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Api, Max.Bot.Types, FixtureHttpClientFactory
-// СЂСџвЂ™РЋ Usage: Prevents regressions in webhook/setup logic without real HTTP calls
-
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -25,7 +20,7 @@ public class SubscriptionsApiFixtureTests
         var api = FixtureHttpClientFactory.CreateSubscriptionsApi(
             "subscriptions/get_subscriptions_success.json",
             HttpMethod.Get,
-            "/bot/TEST_TOKEN/subscriptions");
+            "/bot/subscriptions");
 
         var subscriptions = await api.GetSubscriptionsAsync();
 
@@ -39,7 +34,7 @@ public class SubscriptionsApiFixtureTests
         var api = FixtureHttpClientFactory.CreateSubscriptionsApi(
             "updates/get_updates_success.json",
             HttpMethod.Get,
-            "/bot/TEST_TOKEN/updates?limit=25&timeout=30&marker=9001&types=Message%2CCallbackQuery");
+            "/bot/updates?limit=25&timeout=30&marker=9001&types=Message%2CCallbackQuery");
 
         var request = new GetUpdatesRequest
         {

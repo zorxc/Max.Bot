@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [FileTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р СР С•Р Т‘Р ВµР В»Р С‘ File
-// СЂСџР‹Р‡ Core function: Р СћР ВµРЎРѓРЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ РЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘/Р Т‘Р ВµРЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘ File
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Types, Max.Bot.Networking, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ Р С—РЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р С‘ Р С”Р С•РЎР‚РЎР‚Р ВµР С”РЎвЂљР Р…Р С•РЎРѓРЎвЂљР С‘ РЎР‚Р В°Р В±Р С•РЎвЂљРЎвЂ№ Р СР С•Р Т‘Р ВµР В»Р С‘ File
-
 using FluentAssertions;
 using Max.Bot.Networking;
 using Xunit;
@@ -16,7 +11,7 @@ public class FileTests
     public void File_ShouldDeserialize_FromJson()
     {
         // Arrange
-        var json = """{"fileId":"file123","fileSize":1024,"filePath":"/path/to/file"}""";
+        var json = """{"file_id":"file123","file_size":1024,"file_path":"/path/to/file"}""";
 
         // Act
         var file = MaxJsonSerializer.Deserialize<MaxBotFile>(json);
@@ -32,7 +27,7 @@ public class FileTests
     public void File_ShouldDeserialize_WithNullableFields()
     {
         // Arrange
-        var json = """{"fileId":"file123"}""";
+        var json = """{"file_id":"file123"}""";
 
         // Act
         var file = MaxJsonSerializer.Deserialize<MaxBotFile>(json);
@@ -59,9 +54,9 @@ public class FileTests
         var json = MaxJsonSerializer.Serialize(file);
 
         // Assert
-        json.Should().Contain("\"fileId\":\"file123\"");
-        json.Should().Contain("\"fileSize\":1024");
-        json.Should().Contain("\"filePath\":\"/path/to/file\"");
+        json.Should().Contain("\"file_id\":\"file123\"");
+        json.Should().Contain("\"file_size\":1024");
+        json.Should().Contain("\"file_path\":\"/path/to/file\"");
     }
 }
 

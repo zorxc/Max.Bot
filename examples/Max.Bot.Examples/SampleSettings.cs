@@ -1,8 +1,3 @@
-// Р РЋР вЂљР РЋРЎСџР Р†Р вЂљРЎС™Р В РЎвЂњ [SampleSettings] - Configuration loader for sample bots
-// Р РЋР вЂљР РЋРЎСџР В РІР‚в„–Р В РІР‚РЋ Core function: Reads environment variables for examples
-// Р РЋР вЂљР РЋРЎСџР Р†Р вЂљРЎСљР Р†Р вЂљРІР‚Сњ Key dependencies: System
-// Р РЋР вЂљР РЋРЎСџР Р†Р вЂљРІвЂћСћР В Р вЂ№ Usage: Provides tokens/chat ids for running sample bots
-
 using System;
 using System.IO;
 

@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [FixtureHttpClientFactory] - Builds HTTP clients backed by JSON fixtures
-// СЂСџР‹Р‡ Core function: Provides deterministic responses for integration tests
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Networking, Max.Bot.Configuration
-// СЂСџвЂ™РЋ Usage: Replays recorded fixtures to validate API surface without real HTTP
-
 using System;
 using System.IO;
 using System.Net;

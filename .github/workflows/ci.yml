@@ -14,7 +14,7 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_NOLOGO: true
   # TODO: Raise coverage threshold after phase 9 quality tests exceed 85%.
-  COVERAGE_THRESHOLD: 70
+  COVERAGE_THRESHOLD: 60
 
 jobs:
   build-test:

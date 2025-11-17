@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [CommandBotSample] - Command router demo
-// СЂСџР‹Р‡ Core function: Shows simple command parsing and API fan-out
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Polling, Max.Bot.Types
-// СЂСџвЂ™РЋ Usage: Demonstrates how to build Telegram.Bot-like command handlers
-
 using System;
 using System.Collections.Generic;
 using System.Threading;

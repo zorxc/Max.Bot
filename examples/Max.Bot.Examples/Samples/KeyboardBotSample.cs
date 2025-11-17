@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [KeyboardBotSample] - Inline keyboard & callback demo
-// СЂСџР‹Р‡ Core function: Sends inline keyboards and handles callbacks
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Polling, Max.Bot.Types, Max.Bot.Types.Requests
-// СЂСџвЂ™РЋ Usage: Demonstrates interactive flows (buttons + answer callback)
-
 using System;
 using System.Threading;
 using System.Threading.Tasks;

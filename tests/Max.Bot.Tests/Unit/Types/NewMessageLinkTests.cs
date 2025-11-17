@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [NewMessageLinkTests] - Р СћР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ NewMessageLink
-// СЂСџР‹Р‡ Core function: Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р В° Р Р†Р В°Р В»Р С‘Р Т‘Р В°РЎвЂ Р С‘Р С‘ Р С‘ РЎРѓР ВµРЎР‚Р С‘Р В°Р В»Р С‘Р В·Р В°РЎвЂ Р С‘Р С‘ NewMessageLink
-// СЂСџвЂќвЂ” Key dependencies: xUnit, FluentAssertions, Max.Bot.Types.Requests
-// СЂСџвЂ™РЋ Usage: Unit РЎвЂљР ВµРЎРѓРЎвЂљРЎвЂ№ Р Т‘Р В»РЎРЏ РЎвЂљР С‘Р С—Р В° NewMessageLink
-
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using FluentAssertions;
@@ -82,7 +77,7 @@ public class NewMessageLinkTests
 
         // Assert
         json.Should().Contain("\"id\":12345");
-        json.Should().Contain("\"chatId\":67890");
+        json.Should().Contain("\"chat_id\":67890");
     }
 
     [Fact]
@@ -100,7 +95,7 @@ public class NewMessageLinkTests
 
         // Assert
         json.Should().Contain("\"id\":12345");
-        json.Should().Contain("\"chatId\":null");
+        json.Should().Contain("\"chat_id\":null");
     }
 
     private static List<ValidationResult> ValidateModel(object model)

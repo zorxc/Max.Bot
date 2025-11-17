@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [SampleRegistry] - Registry of available bot samples
-// СЂСџР‹Р‡ Core function: Maps CLI arguments to IBotSample implementations
-// СЂСџвЂќвЂ” Key dependencies: System.Collections.Generic
-// СЂСџвЂ™РЋ Usage: Consumed by Program to locate requested sample
-
 using System;
 using System.Collections.Generic;
 using Max.Bot.Examples.Samples;

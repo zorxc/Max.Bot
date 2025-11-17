@@ -1,8 +1,3 @@
-// СЂСџвЂњРѓ [UpdateFilterUtilitiesTests] - Tests for update filtering helpers
-// СЂСџР‹Р‡ Core function: Ensures filters honor type and username restrictions
-// СЂСџвЂќвЂ” Key dependencies: Max.Bot.Configuration, Max.Bot.Polling, Max.Bot.Types, FluentAssertions, xUnit
-// СЂСџвЂ™РЋ Usage: Validates reusable filtering logic used by poller/webhook
-
 using FluentAssertions;
 using Max.Bot.Configuration;
 using Max.Bot.Polling;
@@ -21,7 +16,7 @@ public class UpdateFilterUtilitiesTests
         var options = CreateOptions();
         var typeFilter = UpdateFilterUtilities.BuildTypeFilter(options);
         var userFilter = UpdateFilterUtilities.BuildAllowedUsernames(options);
-        var update = new Update { Type = UpdateType.Message, Message = new Message { From = new User { Username = "tester" } } };
+        var update = new Update { UpdateTypeRaw = "message_created", Message = new Message { From = new User { Username = "tester" } } };
 
         // Act
         var result = UpdateFilterUtilities.ShouldDispatch(update, typeFilter, userFilter);
@@ -37,7 +32,7 @@ public class UpdateFilterUtilitiesTests
         var options = CreateOptions();
         options.Handling.AllowedUpdateTypes.Add(UpdateType.CallbackQuery);
         var typeFilter = UpdateFilterUtilities.BuildTypeFilter(options);
-        var update = new Update { Type = UpdateType.Message, Message = new Message { From = new User { Username = "tester" } } };
+        var update = new Update { UpdateTypeRaw = "message_created", Message = new Message { From = new User { Username = "tester" } } };
 
         // Act
         var result = UpdateFilterUtilities.ShouldDispatch(update, typeFilter, null);
@@ -53,7 +48,7 @@ public class UpdateFilterUtilitiesTests
         var options = CreateOptions();
         options.Handling.AllowedUsernames.Add("allowedUser");
         var userFilter = UpdateFilterUtilities.BuildAllowedUsernames(options);
-        var update = new Update { Type = UpdateType.Message, Message = new Message { From = new User { Username = "otherUser" } } };
+        var update = new Update { UpdateTypeRaw = "message_created", Message = new Message { From = new User { Username = "otherUser" } } };
 
         // Act
         var result = UpdateFilterUtilities.ShouldDispatch(update, null, userFilter);
