@@ -84,12 +84,24 @@ jobs:
             exit 1
           fi
 
+          echo "Looking for packages in src/Max.Bot/bin/Release/"
+          ls -la src/Max.Bot/bin/Release/**/*.nupkg || echo "No .nupkg files found"
+          ls -la src/Max.Bot/bin/Release/**/*.snupkg || echo "No .snupkg files found"
+
           shopt -s nullglob
           for package in src/Max.Bot/bin/Release/**/*.nupkg; do
-            dotnet nuget push "$package" --api-key "$NUGET_API_KEY" --source "$NUGET_SOURCE" --skip-duplicate
+            echo "Pushing package: $package"
+            dotnet nuget push "$package" --api-key "$NUGET_API_KEY" --source "$NUGET_SOURCE" --skip-duplicate || {
+              echo "::error::Failed to push $package"
+              exit 1
+            }
+            echo "Successfully pushed: $package"
           done
 
           for symbols in src/Max.Bot/bin/Release/**/*.snupkg; do
-            dotnet nuget push "$symbols" --api-key "$NUGET_API_KEY" --source "$NUGET_SOURCE" --skip-duplicate
+            echo "Pushing symbols: $symbols"
+            dotnet nuget push "$symbols" --api-key "$NUGET_API_KEY" --source "$NUGET_SOURCE" --skip-duplicate || {
+              echo "::warning::Failed to push symbols $symbols (non-critical)"
+            }
           done
 
