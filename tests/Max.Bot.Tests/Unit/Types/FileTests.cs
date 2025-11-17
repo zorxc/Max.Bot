@@ -11,7 +11,7 @@ public class FileTests
     public void File_ShouldDeserialize_FromJson()
     {
         // Arrange
-        var json = """{"fileId":"file123","fileSize":1024,"filePath":"/path/to/file"}""";
+        var json = """{"file_id":"file123","file_size":1024,"file_path":"/path/to/file"}""";
 
         // Act
         var file = MaxJsonSerializer.Deserialize<MaxBotFile>(json);
@@ -27,7 +27,7 @@ public class FileTests
     public void File_ShouldDeserialize_WithNullableFields()
     {
         // Arrange
-        var json = """{"fileId":"file123"}""";
+        var json = """{"file_id":"file123"}""";
 
         // Act
         var file = MaxJsonSerializer.Deserialize<MaxBotFile>(json);
@@ -54,9 +54,9 @@ public class FileTests
         var json = MaxJsonSerializer.Serialize(file);
 
         // Assert
-        json.Should().Contain("\"fileId\":\"file123\"");
-        json.Should().Contain("\"fileSize\":1024");
-        json.Should().Contain("\"filePath\":\"/path/to/file\"");
+        json.Should().Contain("\"file_id\":\"file123\"");
+        json.Should().Contain("\"file_size\":1024");
+        json.Should().Contain("\"file_path\":\"/path/to/file\"");
     }
 }
 

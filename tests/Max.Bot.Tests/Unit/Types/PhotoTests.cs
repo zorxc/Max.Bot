@@ -11,7 +11,7 @@ public class PhotoTests
     public void Photo_ShouldDeserialize_FromJson()
     {
         // Arrange
-        var json = """{"id":123,"fileId":"file123","width":640,"height":480,"fileSize":1024,"url":"https://example.com/photo.jpg"}""";
+        var json = """{"id":123,"file_id":"file123","width":640,"height":480,"file_size":1024,"url":"https://example.com/photo.jpg"}""";
 
         // Act
         var photo = MaxJsonSerializer.Deserialize<Photo>(json);
@@ -30,7 +30,7 @@ public class PhotoTests
     public void Photo_ShouldDeserialize_WithNullableFields()
     {
         // Arrange
-        var json = """{"id":123,"fileId":"file123","width":640,"height":480}""";
+        var json = """{"id":123,"file_id":"file123","width":640,"height":480}""";
 
         // Act
         var photo = MaxJsonSerializer.Deserialize<Photo>(json);
@@ -64,10 +64,10 @@ public class PhotoTests
 
         // Assert
         json.Should().Contain("\"id\":123");
-        json.Should().Contain("\"fileId\":\"file123\"");
+        json.Should().Contain("\"file_id\":\"file123\"");
         json.Should().Contain("\"width\":640");
         json.Should().Contain("\"height\":480");
-        json.Should().Contain("\"fileSize\":1024");
+        json.Should().Contain("\"file_size\":1024");
         json.Should().Contain("\"url\":\"https://example.com/photo.jpg\"");
     }
 

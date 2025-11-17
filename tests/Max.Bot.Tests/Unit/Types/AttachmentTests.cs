@@ -12,7 +12,7 @@ public class AttachmentTests
     public void PhotoAttachment_ShouldDeserialize_FromJson()
     {
         // Arrange
-        var json = """{"type":"image","photo":{"id":123,"fileId":"file123","width":640,"height":480}}""";
+        var json = """{"type":"image","photo":{"id":123,"file_id":"file123","width":640,"height":480}}""";
 
         // Act
         var attachment = MaxJsonSerializer.Deserialize<Attachment>(json);
@@ -33,7 +33,7 @@ public class AttachmentTests
     public void VideoAttachment_ShouldDeserialize_FromJson()
     {
         // Arrange
-        var json = """{"type":"file","video":{"id":123,"fileId":"video123","width":1280,"height":720}}""";
+        var json = """{"type":"file","video":{"id":123,"file_id":"video123","width":1280,"height":720}}""";
 
         // Act
         var attachment = MaxJsonSerializer.Deserialize<Attachment>(json);
@@ -52,7 +52,7 @@ public class AttachmentTests
     public void AudioAttachment_ShouldDeserialize_FromJson()
     {
         // Arrange
-        var json = """{"type":"file","audio":{"id":123,"fileId":"audio123","duration":180}}""";
+        var json = """{"type":"file","audio":{"id":123,"file_id":"audio123","duration":180}}""";
 
         // Act
         var attachment = MaxJsonSerializer.Deserialize<Attachment>(json);
@@ -71,7 +71,7 @@ public class AttachmentTests
     public void DocumentAttachment_ShouldDeserialize_FromJson()
     {
         // Arrange
-        var json = """{"type":"file","document":{"id":123,"fileId":"doc123","fileName":"document.pdf"}}""";
+        var json = """{"type":"file","document":{"id":123,"file_id":"doc123","file_name":"document.pdf"}}""";
 
         // Act
         var attachment = MaxJsonSerializer.Deserialize<Attachment>(json);
@@ -108,7 +108,7 @@ public class AttachmentTests
         // Assert
         json.Should().Contain("\"type\":\"image\"");
         json.Should().Contain("\"photo\"");
-        json.Should().Contain("\"fileId\":\"file123\"");
+        json.Should().Contain("\"file_id\":\"file123\"");
     }
 
     [Fact]
@@ -132,7 +132,7 @@ public class AttachmentTests
         // Assert
         json.Should().Contain("\"type\":\"file\"");
         json.Should().Contain("\"video\"");
-        json.Should().Contain("\"fileId\":\"video123\"");
+        json.Should().Contain("\"file_id\":\"video123\"");
     }
 }
 

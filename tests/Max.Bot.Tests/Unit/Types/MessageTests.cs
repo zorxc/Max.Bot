@@ -103,7 +103,7 @@ public class MessageTests
     public void Deserialize_ShouldDeserializeMessageWithNewFields()
     {
         // Arrange
-        var json = """{"id":123,"sender":{"id":789,"username":"testuser"},"recipient":{"id":456,"type":"private"},"timestamp":1609459200,"body":{"text":"Hello","attachments":[]},"stat":{"readCount":5},"url":"https://max.ru/message/123"}""";
+        var json = """{"id":123,"sender":{"id":789,"username":"testuser"},"recipient":{"id":456,"type":"private"},"timestamp":1609459200,"body":{"text":"Hello","attachments":[]},"stat":{"read_count":5},"url":"https://max.ru/message/123"}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Message>(json);
@@ -184,7 +184,7 @@ public class MessageTests
     public void MessageStat_ShouldDeserialize()
     {
         // Arrange
-        var json = """{"readCount":10}""";
+        var json = """{"read_count":10}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<MessageStat>(json);

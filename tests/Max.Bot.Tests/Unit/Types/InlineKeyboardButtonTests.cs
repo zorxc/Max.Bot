@@ -11,7 +11,7 @@ public class InlineKeyboardButtonTests
     public void InlineKeyboardButton_ShouldDeserialize_FromJson_WithCallbackData()
     {
         // Arrange
-        var json = """{"text":"Button Text","callbackData":"callback123"}""";
+        var json = """{"text":"Button Text","callback_data":"callback123"}""";
 
         // Act
         var button = MaxJsonSerializer.Deserialize<InlineKeyboardButton>(json);
@@ -54,7 +54,7 @@ public class InlineKeyboardButtonTests
 
         // Assert
         json.Should().Contain("\"text\":\"Button Text\"");
-        json.Should().Contain("\"callbackData\":\"callback123\"");
+        json.Should().Contain("\"callback_data\":\"callback123\"");
     }
 
     [Fact]

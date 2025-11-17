@@ -11,7 +11,7 @@ public class DocumentTests
     public void Document_ShouldDeserialize_FromJson()
     {
         // Arrange
-        var json = """{"id":123,"fileId":"doc123","fileName":"document.pdf","fileSize":2097152,"mimeType":"application/pdf","url":"https://example.com/document.pdf"}""";
+        var json = """{"id":123,"file_id":"doc123","file_name":"document.pdf","file_size":2097152,"mime_type":"application/pdf","url":"https://example.com/document.pdf"}""";
 
         // Act
         var document = MaxJsonSerializer.Deserialize<Document>(json);
@@ -30,7 +30,7 @@ public class DocumentTests
     public void Document_ShouldDeserialize_WithNullableFields()
     {
         // Arrange
-        var json = """{"id":123,"fileId":"doc123"}""";
+        var json = """{"id":123,"file_id":"doc123"}""";
 
         // Act
         var document = MaxJsonSerializer.Deserialize<Document>(json);
@@ -64,10 +64,10 @@ public class DocumentTests
 
         // Assert
         json.Should().Contain("\"id\":123");
-        json.Should().Contain("\"fileId\":\"doc123\"");
-        json.Should().Contain("\"fileName\":\"document.pdf\"");
-        json.Should().Contain("\"fileSize\":2097152");
-        json.Should().Contain("\"mimeType\":\"application/pdf\"");
+        json.Should().Contain("\"file_id\":\"doc123\"");
+        json.Should().Contain("\"file_name\":\"document.pdf\"");
+        json.Should().Contain("\"file_size\":2097152");
+        json.Should().Contain("\"mime_type\":\"application/pdf\"");
         json.Should().Contain("\"url\":\"https://example.com/document.pdf\"");
     }
 }
