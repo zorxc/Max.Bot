@@ -88,7 +88,7 @@ public class PhotoTests
 
         // Assert
         json.Should().Contain("\"id\":123");
-        json.Should().Contain("\"fileId\":\"file123\"");
+        json.Should().Contain("\"file_id\":\"file123\"");
         json.Should().Contain("\"width\":640");
         json.Should().Contain("\"height\":480");
         json.Should().NotContain("\"fileSize\"");

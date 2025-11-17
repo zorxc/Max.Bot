@@ -14,7 +14,7 @@ public class MaxBotOptionsTests
 
         // Assert
         options.Token.Should().BeEmpty();
-        options.BaseUrl.Should().Be("https://api.max.ru/bot");
+        options.BaseUrl.Should().Be("https://platform-api.max.ru");
     }
 
     [Fact]

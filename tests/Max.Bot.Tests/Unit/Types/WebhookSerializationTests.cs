@@ -85,7 +85,7 @@ public class WebhookSerializationTests
     public void Subscription_ShouldDeserialize_WithAllFields()
     {
         // Arrange
-        var json = """{"url":"https://example.com/webhook","update_types":["message_created"],"secret":"my-secret","created_at":"2024-01-01T00:00:00Z","updated_at":"2024-01-02T00:00:00Z"}""";
+        var json = """{"url":"https://example.com/webhook","update_types":["message_created"],"secret":"my-secret","created_at":1704067200,"updated_at":1704153600}""";
 
         // Act
         var subscription = MaxJsonSerializer.Deserialize<Subscription>(json);

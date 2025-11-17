@@ -12,7 +12,7 @@ public class MessageTests
     public void Deserialize_ShouldDeserializeMessage()
     {
         // Arrange
-        var json = """{"id":123,"chat":{"id":456,"type":"private"},"from":{"id":789,"username":"testuser","isBot":false},"text":"Hello","date":1609459200,"type":"text"}""";
+        var json = """{"id":123,"chat":{"id":456,"type":"private"},"from":{"user_id":789,"username":"testuser","is_bot":false},"text":"Hello","date":1609459200,"type":"text"}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Message>(json);
@@ -103,7 +103,7 @@ public class MessageTests
     public void Deserialize_ShouldDeserializeMessageWithNewFields()
     {
         // Arrange
-        var json = """{"id":123,"sender":{"id":789,"username":"testuser"},"recipient":{"id":456,"type":"private"},"timestamp":1609459200,"body":{"text":"Hello","attachments":[]},"stat":{"read_count":5},"url":"https://max.ru/message/123"}""";
+        var json = """{"id":123,"sender":{"user_id":789,"username":"testuser"},"recipient":{"id":456,"type":"private"},"timestamp":1609459200,"body":{"text":"Hello","attachments":[]},"stat":{"read_count":5},"url":"https://max.ru/message/123"}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Message>(json);

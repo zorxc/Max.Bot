@@ -15,9 +15,10 @@ public class IMaxHttpClientTests
         var methods = typeof(IMaxHttpClient).GetMethods();
 
         // Assert
-        methods.Should().HaveCount(2);
+        methods.Should().HaveCount(3);
         methods.Should().Contain(m => m.Name == "SendAsync" && m.IsGenericMethod);
         methods.Should().Contain(m => m.Name == "SendAsync" && !m.IsGenericMethod);
+        methods.Should().Contain(m => m.Name == "SendAsyncRaw");
     }
 
     [Fact]

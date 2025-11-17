@@ -12,7 +12,7 @@ public class ChatTests
     public void Deserialize_ShouldDeserializeChat()
     {
         // Arrange
-        var json = """{"id":123,"type":"private","title":"Test Chat","username":"testchat","firstName":"Test","lastName":"Chat"}""";
+        var json = """{"id":123,"type":"private","title":"Test Chat","username":"testchat","first_name":"Test","last_name":"Chat"}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Chat>(json);

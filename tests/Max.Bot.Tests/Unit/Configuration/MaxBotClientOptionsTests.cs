@@ -14,7 +14,7 @@ public class MaxBotClientOptionsTests
 
         // Assert
         options.BaseUrl.Should().BeEmpty();
-        options.Timeout.Should().Be(TimeSpan.FromSeconds(30));
+        options.Timeout.Should().Be(TimeSpan.FromSeconds(100));
         options.RetryCount.Should().Be(3);
         options.RetryBaseDelay.Should().Be(TimeSpan.FromSeconds(1));
         options.MaxRetryDelay.Should().Be(TimeSpan.FromSeconds(30));

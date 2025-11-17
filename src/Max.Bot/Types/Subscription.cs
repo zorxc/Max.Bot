@@ -35,6 +35,7 @@ public class Subscription
     /// </summary>
     /// <value>The creation timestamp.</value>
     [JsonPropertyName("created_at")]
+    [JsonConverter(typeof(Converters.UnixTimestampJsonConverter))]
     public DateTime? CreatedAt { get; set; }
 
     /// <summary>
@@ -42,6 +43,7 @@ public class Subscription
     /// </summary>
     /// <value>The last update timestamp.</value>
     [JsonPropertyName("updated_at")]
+    [JsonConverter(typeof(Converters.UnixTimestampJsonConverter))]
     public DateTime? UpdatedAt { get; set; }
 }
 

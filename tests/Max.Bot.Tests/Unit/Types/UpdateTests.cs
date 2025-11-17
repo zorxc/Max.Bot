@@ -12,7 +12,7 @@ public class UpdateTests
     public void Deserialize_ShouldDeserializeUpdateWithMessage()
     {
         // Arrange
-        var json = """{"update_id":1,"type":"message_created","message":{"id":123,"chat":{"id":456,"type":"private"},"from":{"id":789,"username":"testuser","is_bot":false},"text":"Hello","date":1609459200}}""";
+        var json = """{"update_id":1,"type":"message_created","message":{"id":123,"chat":{"id":456,"type":"private"},"from":{"user_id":789,"username":"testuser","is_bot":false},"text":"Hello","date":1609459200}}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Update>(json);
@@ -30,7 +30,7 @@ public class UpdateTests
     public void Deserialize_ShouldDeserializeUpdateWithCallbackQuery()
     {
         // Arrange
-        var json = """{"update_id":2,"type":"message_callback","callback_query":{"id":"callback123","from":{"id":123,"username":"user123","is_bot":false},"data":"callbackData123"}}""";
+        var json = """{"update_id":2,"type":"message_callback","callback_query":{"id":"callback123","from":{"user_id":123,"username":"user123","is_bot":false},"data":"callbackData123"}}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Update>(json);

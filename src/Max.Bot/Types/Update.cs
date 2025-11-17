@@ -12,9 +12,9 @@ public class Update
     /// <summary>
     /// Gets or sets the unique identifier of the update.
     /// </summary>
-    /// <value>The unique identifier of the update. This is inferred from the update sequence, not directly from API.</value>
+    /// <value>The unique identifier of the update.</value>
     [Range(0, long.MaxValue, ErrorMessage = "Update ID cannot be negative.")]
-    [JsonIgnore]
+    [JsonPropertyName("update_id")]
     public long UpdateId { get; set; }
 
     /// <summary>
