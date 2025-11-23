@@ -23,6 +23,23 @@ public interface IMessagesApi
     Task<Message> SendMessageAsync(long chatId, string text, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Sends a text message with an optional inline keyboard to the specified chat.
+    /// </summary>
+    /// <param name="chatId">The unique identifier of the chat.</param>
+    /// <param name="text">The text of the message to send.</param>
+    /// <param name="keyboard">The inline keyboard to attach to the message. Optional.</param>
+    /// <param name="disableLinkPreview">If true, link previews will be disabled for links in the message text.</param>
+    /// <param name="notify">If false, participants will not be notified. Default is true.</param>
+    /// <param name="format">The text format (markdown or html).</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the sent message.</returns>
+    /// <exception cref="ArgumentException">Thrown when chatId is less than or equal to zero, or text is null or empty.</exception>
+    /// <exception cref="Max.Bot.Exceptions.MaxApiException">Thrown when the API returns an error response.</exception>
+    /// <exception cref="Max.Bot.Exceptions.MaxNetworkException">Thrown when a network error occurs.</exception>
+    /// <exception cref="Max.Bot.Exceptions.MaxUnauthorizedException">Thrown when authentication fails.</exception>
+    Task<Message> SendMessageAsync(long chatId, string text, InlineKeyboard? keyboard, bool? disableLinkPreview = null, bool? notify = null, TextFormat? format = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Sends a message with full support for all parameters (attachments, link, format, etc.).
     /// </summary>
     /// <param name="request">The send message request containing message content and parameters.</param>

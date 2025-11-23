@@ -54,22 +54,10 @@ public sealed class KeyboardBotSample : IBotSample
             }
         });
 
-        var request = new SendMessageRequest
-        {
-            Text = "Choose an option:",
-            Attachments = new[]
-            {
-                new AttachmentRequest
-                {
-                    Type = "inline_keyboard",
-                    Payload = keyboard
-                }
-            }
-        };
-
         await context.Api.Messages.SendMessageAsync(
-            request,
-            chatId: chatId.Value,
+            chatId.Value,
+            "Choose an option:",
+            keyboard,
             cancellationToken: cancellationToken).ConfigureAwait(false);
         sampleContext.Output.WriteLine("Inline keyboard sent.");
     }
@@ -98,6 +86,7 @@ public sealed class KeyboardBotSample : IBotSample
         sampleContext.Output.WriteLine($"Callback '{callback.Data}' processed.");
     }
 }
+
 
 
 

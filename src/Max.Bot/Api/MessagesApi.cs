@@ -56,6 +56,55 @@ internal class MessagesApi : BaseApi, IMessagesApi
     }
 
     /// <inheritdoc />
+    public async Task<Message> SendMessageAsync(long chatId, string text, InlineKeyboard? keyboard, bool? disableLinkPreview = null, bool? notify = null, TextFormat? format = null, CancellationToken cancellationToken = default)
+    {
+        ValidateChatId(chatId);
+        ValidateNotEmpty(text, nameof(text));
+
+        var sendRequest = new SendMessageRequest
+        {
+            Text = text,
+            Notify = notify,
+            Format = format
+        };
+
+        if (keyboard != null)
+        {
+            sendRequest.Attachments = new[]
+            {
+                new AttachmentRequest
+                {
+                    Type = "inline_keyboard",
+                    Payload = keyboard
+                }
+            };
+        }
+
+        var queryParams = new Dictionary<string, string?>
+        {
+            { "chat_id", chatId.ToString() }
+        };
+
+        if (disableLinkPreview.HasValue)
+        {
+            queryParams["disable_link_preview"] = disableLinkPreview.Value.ToString().ToLowerInvariant();
+        }
+
+        var request = CreateRequest(HttpMethod.Post, "/messages", sendRequest, queryParams);
+
+        var messageResponse = await HttpClient.SendAsync<MessageResponse>(request, cancellationToken).ConfigureAwait(false);
+        if (messageResponse?.Message == null)
+        {
+            throw new Exceptions.MaxApiException(
+                "API request returned null message in response.",
+                null,
+                System.Net.HttpStatusCode.BadRequest);
+        }
+        return messageResponse.Message;
+    }
+
+
+    /// <inheritdoc />
     public async Task<Message> SendMessageAsync(SendMessageRequest request, long? chatId = null, long? userId = null, bool? disableLinkPreview = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
