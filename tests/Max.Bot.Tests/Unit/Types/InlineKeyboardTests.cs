@@ -75,20 +75,20 @@ public class InlineKeyboardTests
             {
                 new[]
                 {
-                    new InlineKeyboardButton 
-                    { 
+                    new InlineKeyboardButton
+                    {
                         Type = ButtonType.Callback,
-                        Text = "Button 1", 
-                        Payload = "callback1" 
+                        Text = "Button 1",
+                        Payload = "callback1"
                     }
                 },
                 new[]
                 {
-                    new InlineKeyboardButton 
-                    { 
+                    new InlineKeyboardButton
+                    {
                         Type = ButtonType.Link,
-                        Text = "Button 2", 
-                        Url = "https://example.com" 
+                        Text = "Button 2",
+                        Url = "https://example.com"
                     }
                 }
             }
