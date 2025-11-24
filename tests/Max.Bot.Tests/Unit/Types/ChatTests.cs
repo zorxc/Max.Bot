@@ -11,16 +11,17 @@ public class ChatTests
     [Fact]
     public void Deserialize_ShouldDeserializeChat()
     {
-        // Arrange
-        var json = """{"id":123,"type":"private","title":"Test Chat","username":"testchat","first_name":"Test","last_name":"Chat"}""";
+        // Arrange - using official API field names: chat_id and type values (dialog, chat, channel)
+        var json = """{"chat_id":123,"type":"dialog","title":"Test Chat","username":"testchat","first_name":"Test","last_name":"Chat"}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Chat>(json);
 
         // Assert
         result.Should().NotBeNull();
-        result!.Id.Should().Be(123);
-        result.Type.Should().Be(ChatType.Private);
+        result!.ChatId.Should().Be(123);
+        result.Id.Should().Be(123); // Backward compatibility alias
+        result.Type.Should().Be(ChatType.Dialog);
         result.Title.Should().Be("Test Chat");
         result.Username.Should().Be("testchat");
         result.FirstName.Should().Be("Test");
@@ -30,12 +31,12 @@ public class ChatTests
     [Fact]
     public void Deserialize_ShouldDeserializeChatWithDifferentTypes()
     {
-        // Arrange
+        // Arrange - using official API type values: dialog, chat, channel
         var testCases = new[]
         {
-            ("""{"id":123,"type":"private"}""", ChatType.Private),
-            ("""{"id":456,"type":"group","title":"Group Chat"}""", ChatType.Group),
-            ("""{"id":789,"type":"channel","title":"Channel Chat"}""", ChatType.Channel)
+            ("""{"chat_id":123,"type":"dialog"}""", ChatType.Dialog),
+            ("""{"chat_id":456,"type":"chat","title":"Group Chat"}""", ChatType.Chat),
+            ("""{"chat_id":789,"type":"channel","title":"Channel Chat"}""", ChatType.Channel)
         };
 
         // Act & Assert
@@ -53,8 +54,8 @@ public class ChatTests
         // Arrange
         var chat = new Chat
         {
-            Id = 123,
-            Type = ChatType.Private,
+            ChatId = 123,
+            Type = ChatType.Dialog,
             Title = "Test Chat",
             Username = "testchat"
         };
@@ -64,8 +65,8 @@ public class ChatTests
 
         // Assert
         json.Should().NotBeNullOrEmpty();
-        json.Should().Contain("\"id\":123");
-        json.Should().Contain("\"type\":\"private\"");
+        json.Should().Contain("\"chat_id\":123");
+        json.Should().Contain("\"type\":\"dialog\"");
         json.Should().Contain("\"title\":\"Test Chat\"");
         json.Should().Contain("\"username\":\"testchat\"");
     }
@@ -76,8 +77,8 @@ public class ChatTests
         // Arrange
         var chat = new Chat
         {
-            Id = 123,
-            Type = ChatType.Private
+            ChatId = 123,
+            Type = ChatType.Dialog
         };
 
         // Act
@@ -85,8 +86,8 @@ public class ChatTests
 
         // Assert
         json.Should().NotBeNullOrEmpty();
-        json.Should().Contain("\"id\":123");
-        json.Should().Contain("\"type\":\"private\"");
+        json.Should().Contain("\"chat_id\":123");
+        json.Should().Contain("\"type\":\"dialog\"");
         json.Should().NotContain("\"title\"");
         json.Should().NotContain("\"username\"");
     }
@@ -94,16 +95,17 @@ public class ChatTests
     [Fact]
     public void Deserialize_ShouldDeserializeChatWithNewFields()
     {
-        // Arrange
-        var json = """{"id":123,"chat_id":123,"type":"group","status":"active","title":"Test Chat","last_event_time":1609459200,"participants_count":5,"owner_id":789,"is_public":true,"link":"https://max.ru/chat/123","description":"Test description"}""";
+        // Arrange - using official API field names
+        var json = """{"chat_id":123,"type":"chat","status":"active","title":"Test Chat","last_event_time":1609459200,"participants_count":5,"owner_id":789,"is_public":true,"link":"https://max.ru/chat/123","description":"Test description"}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Chat>(json);
 
         // Assert
         result.Should().NotBeNull();
-        result!.Id.Should().Be(123);
-        result.ChatId.Should().Be(123);
+        result!.ChatId.Should().Be(123);
+        result.Id.Should().Be(123); // Backward compatibility alias
+        result.Type.Should().Be(ChatType.Chat);
         result.Status.Should().Be(ChatStatus.Active);
         result.Title.Should().Be("Test Chat");
         result.LastEventTime.Should().Be(1609459200);
@@ -120,10 +122,10 @@ public class ChatTests
         // Arrange
         var testCases = new[]
         {
-            ("""{"id":123,"status":"active"}""", ChatStatus.Active),
-            ("""{"id":123,"status":"removed"}""", ChatStatus.Removed),
-            ("""{"id":123,"status":"left"}""", ChatStatus.Left),
-            ("""{"id":123,"status":"closed"}""", ChatStatus.Closed)
+            ("""{"chat_id":123,"status":"active"}""", ChatStatus.Active),
+            ("""{"chat_id":123,"status":"removed"}""", ChatStatus.Removed),
+            ("""{"chat_id":123,"status":"left"}""", ChatStatus.Left),
+            ("""{"chat_id":123,"status":"closed"}""", ChatStatus.Closed)
         };
 
         // Act & Assert
@@ -141,9 +143,8 @@ public class ChatTests
         // Arrange
         var chat = new Chat
         {
-            Id = 123,
             ChatId = 123,
-            Type = ChatType.Group,
+            Type = ChatType.Chat,
             Status = ChatStatus.Active,
             Title = "Test Chat",
             LastEventTime = 1609459200,
@@ -159,8 +160,8 @@ public class ChatTests
 
         // Assert
         json.Should().NotBeNullOrEmpty();
-        json.Should().Contain("\"id\":123");
         json.Should().Contain("\"chat_id\":123");
+        json.Should().Contain("\"type\":\"chat\"");
         json.Should().Contain("\"status\":\"active\"");
         json.Should().Contain("\"title\":\"Test Chat\"");
         json.Should().Contain("\"last_event_time\":1609459200");

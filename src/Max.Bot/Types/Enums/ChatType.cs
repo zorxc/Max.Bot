@@ -4,23 +4,42 @@ namespace Max.Bot.Types.Enums;
 
 /// <summary>
 /// Represents the type of a chat.
+/// Maps to the official Max API chat type values.
 /// </summary>
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ChatType
 {
     /// <summary>
-    /// Private chat with a user.
+    /// Group chat (type: "chat").
     /// </summary>
-    Private,
+    [JsonPropertyName("chat")]
+    Chat,
 
     /// <summary>
-    /// Group chat.
+    /// Private dialog with a user (type: "dialog").
     /// </summary>
-    Group,
+    [JsonPropertyName("dialog")]
+    Dialog,
 
     /// <summary>
-    /// Channel.
+    /// Channel (type: "channel").
     /// </summary>
-    Channel
+    [JsonPropertyName("channel")]
+    Channel,
+
+    #region Backward Compatibility Aliases
+
+    /// <summary>
+    /// Alias for Dialog. Use Dialog instead.
+    /// </summary>
+    [Obsolete("Use Dialog instead. This alias will be removed in future versions.")]
+    Private = Dialog,
+
+    /// <summary>
+    /// Alias for Chat. Use Chat instead.
+    /// </summary>
+    [Obsolete("Use Chat instead. This alias will be removed in future versions.")]
+    Group = Chat
+
+    #endregion
 }
-

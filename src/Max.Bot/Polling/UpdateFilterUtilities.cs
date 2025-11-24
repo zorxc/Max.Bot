@@ -59,9 +59,9 @@ internal static class UpdateFilterUtilities
 
     public static string? ExtractUsername(Update update)
     {
-        return update.Message?.From?.Username ??
-               update.Message?.Sender?.Username ??
-               update.CallbackQuery?.From?.Username;
+        return update.Message?.Sender?.Username ??
+               update.Callback?.User?.Username ??
+               update.User?.Username;
     }
 }
 

@@ -91,8 +91,9 @@ public class SampleBotsTests
                     UpdateTypeRaw = "message_callback",
                     CallbackQuery = new CallbackQuery
                     {
-                        Id = "cb-1",
-                        Data = "vote:approve"
+                        CallbackId = "cb-1",
+                        Payload = "vote:approve",
+                        User = new User { Id = 1 }
                     }
                 };
 

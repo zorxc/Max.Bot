@@ -1,43 +1,55 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Max.Bot.Types.Converters;
 
 namespace Max.Bot.Types;
 
 /// <summary>
 /// Represents a callback query from an inline button press.
 /// </summary>
+[JsonConverter(typeof(CallbackQueryJsonConverter))]
 public class CallbackQuery
 {
     /// <summary>
-    /// Gets or sets the unique identifier of the callback query.
+    /// Gets or sets the callback ID (current keyboard ID).
+    /// This property maps to "callback_id" field from API.
     /// </summary>
-    /// <value>The unique identifier of the callback query.</value>
-    [Required(ErrorMessage = "Callback query ID is required.")]
-    [StringLength(64, MinimumLength = 1, ErrorMessage = "Callback query ID must be between 1 and 64 characters.")]
-    [JsonPropertyName("id")]
-    public string Id { get; set; } = string.Empty;
+    /// <value>The callback ID, or null if not available.</value>
+    [StringLength(64, ErrorMessage = "Callback ID must not exceed 64 characters.")]
+    [JsonIgnore]
+    public string? CallbackId { get; set; }
 
     /// <summary>
     /// Gets or sets the user who pressed the button.
+    /// This property maps to "user" field from API.
     /// </summary>
     /// <value>The user who pressed the button.</value>
-    [Required(ErrorMessage = "From user is required.")]
-    [JsonPropertyName("from")]
-    public User From { get; set; } = null!;
+    [Required(ErrorMessage = "User is required.")]
+    [JsonIgnore]
+    public User? User { get; set; }
 
     /// <summary>
     /// Gets or sets the message with the inline button that was pressed.
     /// </summary>
     /// <value>The message with the inline button, or null if not available.</value>
-    [JsonPropertyName("message")]
+    [JsonIgnore]
     public Message? Message { get; set; }
 
     /// <summary>
-    /// Gets or sets the data associated with the callback button.
+    /// Gets or sets the payload data associated with the callback button.
+    /// This property maps to "payload" field from API.
     /// </summary>
-    /// <value>The callback data, or null if not available.</value>
-    [StringLength(64, ErrorMessage = "Callback data must not exceed 64 characters.")]
-    [JsonPropertyName("data")]
-    public string? Data { get; set; }
+    /// <value>The callback payload, or null if not available.</value>
+    [StringLength(64, ErrorMessage = "Payload must not exceed 64 characters.")]
+    [JsonIgnore]
+    public string? Payload { get; set; }
+
+    /// <summary>
+    /// Gets or sets the timestamp when the user pressed the button (Unix timestamp in milliseconds).
+    /// </summary>
+    /// <value>The timestamp when the button was pressed, or null if not available.</value>
+    [Range(0, long.MaxValue, ErrorMessage = "Timestamp cannot be negative.")]
+    [JsonIgnore]
+    public long? Timestamp { get; set; }
 }
 

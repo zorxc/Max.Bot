@@ -11,8 +11,8 @@ public class MessageTests
     [Fact]
     public void Deserialize_ShouldDeserializeMessage()
     {
-        // Arrange
-        var json = """{"id":123,"chat":{"id":456,"type":"private"},"from":{"user_id":789,"username":"testuser","is_bot":false},"text":"Hello","date":1609459200,"type":"text"}""";
+        // Arrange - using official API field names: chat_id, dialog type, sender
+        var json = """{"id":123,"chat":{"chat_id":456,"type":"dialog"},"sender":{"user_id":789,"username":"testuser","is_bot":false},"text":"Hello","date":1609459200,"type":"text"}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Message>(json);
@@ -21,11 +21,11 @@ public class MessageTests
         result.Should().NotBeNull();
         result!.Id.Should().Be(123);
         result.Chat.Should().NotBeNull();
-        result.Chat!.Id.Should().Be(456);
-        result.Chat.Type.Should().Be(ChatType.Private);
-        result.From.Should().NotBeNull();
-        result.From!.Id.Should().Be(789);
-        result.From.Username.Should().Be("testuser");
+        result.Chat!.ChatId.Should().Be(456);
+        result.Chat.Type.Should().Be(ChatType.Dialog);
+        result.Sender.Should().NotBeNull();
+        result.Sender!.Id.Should().Be(789);
+        result.Sender.Username.Should().Be("testuser");
         result.Text.Should().Be("Hello");
         result.Date.Should().BeCloseTo(new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc), TimeSpan.FromSeconds(1));
         result.Type.Should().Be(MessageType.Text);
@@ -56,8 +56,8 @@ public class MessageTests
         var message = new Message
         {
             Id = 123,
-            Chat = new Chat { Id = 456, Type = ChatType.Private },
-            From = new User { Id = 789, Username = "testuser" },
+            Chat = new Chat { ChatId = 456, Type = ChatType.Dialog },
+            Sender = new User { Id = 789, Username = "testuser" },
             Text = "Hello",
             Date = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc),
             Type = MessageType.Text
@@ -70,7 +70,7 @@ public class MessageTests
         json.Should().NotBeNullOrEmpty();
         json.Should().Contain("\"id\":123");
         json.Should().Contain("\"chat\"");
-        json.Should().Contain("\"from\"");
+        json.Should().Contain("\"sender\"");
         json.Should().Contain("\"text\":\"Hello\"");
         json.Should().Contain("\"date\":1609459200");
         json.Should().Contain("\"type\":\"text\"");
@@ -124,8 +124,8 @@ public class MessageTests
     [Fact]
     public void Deserialize_ShouldDeserializeMessageWithLink()
     {
-        // Arrange
-        var json = """{"id":123,"timestamp":1609459200,"link":{"id":456,"timestamp":1609362800,"text":"Original message"}}""";
+        // Arrange - using official API structure: link contains a nested message object
+        var json = """{"id":123,"timestamp":1609459200,"link":{"type":"reply","id":456,"message":{"body":{"text":"Original message"}}}}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Message>(json);
@@ -134,7 +134,8 @@ public class MessageTests
         result.Should().NotBeNull();
         result!.Link.Should().NotBeNull();
         result.Link!.Id.Should().Be(456);
-        result.Link.Text.Should().Be("Original message");
+        result.Link.Type.Should().Be("reply");
+        result.Link.Text.Should().Be("Original message"); // Text is computed from Message.Body.Text
     }
 
     [Fact]

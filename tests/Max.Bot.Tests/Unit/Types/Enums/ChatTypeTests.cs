@@ -9,8 +9,8 @@ namespace Max.Bot.Tests.Unit.Types.Enums;
 public class ChatTypeTests
 {
     [Theory]
-    [InlineData("private", ChatType.Private)]
-    [InlineData("group", ChatType.Group)]
+    [InlineData("dialog", ChatType.Dialog)]
+    [InlineData("chat", ChatType.Chat)]
     [InlineData("channel", ChatType.Channel)]
     public void Deserialize_ShouldParseJsonString(string jsonValue, ChatType expected)
     {
@@ -25,8 +25,8 @@ public class ChatTypeTests
     }
 
     [Theory]
-    [InlineData(ChatType.Private, "private")]
-    [InlineData(ChatType.Group, "group")]
+    [InlineData(ChatType.Dialog, "dialog")]
+    [InlineData(ChatType.Chat, "chat")]
     [InlineData(ChatType.Channel, "channel")]
     public void Serialize_ShouldConvertToJsonString(ChatType value, string expectedJsonValue)
     {

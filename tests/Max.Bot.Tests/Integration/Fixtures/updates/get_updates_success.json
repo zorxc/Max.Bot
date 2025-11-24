@@ -8,8 +8,8 @@
         "message": {
           "id": 9876,
           "chat": {
-            "id": 4242,
-            "type": "group",
+            "chat_id": 4242,
+            "type": "chat",
             "title": "QA Squad"
           },
           "text": "Fixtures keep bots honest",

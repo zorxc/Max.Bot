@@ -52,7 +52,7 @@ public class DelegatingUpdateHandlerTests
             UpdateId = 1,
             UpdateTypeRaw = type == UpdateType.Message ? "message_created" : "message_callback",
             Message = type == UpdateType.Message ? new Message() : null,
-            CallbackQuery = type == UpdateType.CallbackQuery ? new CallbackQuery { Id = "cb", From = new User { Id = 1 } } : null
+            CallbackQuery = type == UpdateType.CallbackQuery ? new CallbackQuery { CallbackId = "cb", User = new User { Id = 1 } } : null
         };
 
         var api = new Mock<IMaxBotApi>().Object;

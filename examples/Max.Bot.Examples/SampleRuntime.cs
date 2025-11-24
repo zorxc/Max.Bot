@@ -53,8 +53,8 @@ public sealed class MaxBotSampleRuntime : ISampleRuntime
 
         options.Polling.AllowedUpdateTypes = new List<Types.Enums.UpdateType>
         {
-            Types.Enums.UpdateType.Message,
-            Types.Enums.UpdateType.CallbackQuery
+            Types.Enums.UpdateType.MessageCreated,
+            Types.Enums.UpdateType.MessageCallback
         };
 
         _client = new MaxClient(options);

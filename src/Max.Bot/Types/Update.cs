@@ -1,29 +1,31 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Max.Bot.Types.Converters;
 using Max.Bot.Types.Enums;
 
 namespace Max.Bot.Types;
 
 /// <summary>
-/// Represents an update from Max Messenger.
+/// Represents an update from Max Messenger API.
+/// Different update types contain different fields.
 /// </summary>
+[JsonConverter(typeof(UpdateJsonConverter))]
 public class Update
 {
     /// <summary>
     /// Gets or sets the unique identifier of the update.
     /// </summary>
-    /// <value>The unique identifier of the update.</value>
     [Range(0, long.MaxValue, ErrorMessage = "Update ID cannot be negative.")]
     [JsonPropertyName("update_id")]
     public long UpdateId { get; set; }
 
     /// <summary>
-    /// Gets or sets the type of the update.
+    /// Gets or sets the raw update_type string from API.
     /// </summary>
-    /// <value>The type of the update (message or callback_query).</value>
     /// <remarks>
-    /// API returns "update_type" field (e.g., "message_created"), but we map it to UpdateType enum.
-    /// If update_type is not present, we infer type from presence of "message" or "callback_query" fields.
+    /// Possible values: message_created, message_callback, message_edited, message_removed,
+    /// bot_added, bot_removed, bot_started, bot_stopped, dialog_muted, dialog_unmuted,
+    /// dialog_cleared, dialog_removed, user_added, user_removed, chat_title_changed, message_chat_created.
     /// </remarks>
     [JsonPropertyName("update_type")]
     public string? UpdateTypeRaw { get; set; }
@@ -31,32 +33,86 @@ public class Update
     /// <summary>
     /// Gets or sets the timestamp of the update (Unix timestamp in milliseconds).
     /// </summary>
-    /// <value>The timestamp when the update was created.</value>
     [Range(0, long.MaxValue, ErrorMessage = "Timestamp cannot be negative.")]
     [JsonPropertyName("timestamp")]
     public long? Timestamp { get; set; }
 
     /// <summary>
     /// Gets or sets the user locale for this update.
+    /// Available only in dialogs.
     /// </summary>
-    /// <value>The locale code (e.g., "ru", "en").</value>
+    /// <value>The locale code in IETF BCP 47 format (e.g., "ru", "en").</value>
     [JsonPropertyName("user_locale")]
     public string? UserLocale { get; set; }
 
+    /// <summary>
+    /// Gets the type of the update as enum.
+    /// </summary>
+    [JsonIgnore]
+    public UpdateType Type => ParseUpdateType(UpdateTypeRaw);
 
     /// <summary>
-    /// Gets the typed message update wrapper.
+    /// Gets or sets the message in this update.
+    /// Present in: message_created, message_edited, message_removed, message_chat_created.
     /// </summary>
-    /// <value>The message update wrapper, or null if this update is not a message update.</value>
+    [JsonPropertyName("message")]
+    public Message? Message { get; set; }
+
+    /// <summary>
+    /// Gets or sets the callback query in this update.
+    /// Present in: message_callback.
+    /// Maps to "callback" field in API.
+    /// </summary>
+    [JsonIgnore]
+    public CallbackQuery? Callback { get; set; }
+
+    /// <summary>
+    /// Gets or sets the chat in this update.
+    /// Present in: bot_added, bot_removed, user_added, user_removed, chat_title_changed.
+    /// </summary>
+    [JsonIgnore]
+    public Chat? Chat { get; set; }
+
+    /// <summary>
+    /// Gets or sets the user who triggered the update.
+    /// Present in: bot_added, bot_removed, bot_started, bot_stopped, user_added, user_removed.
+    /// </summary>
+    [JsonIgnore]
+    public User? User { get; set; }
+
+    /// <summary>
+    /// Gets or sets the ID of the user who invited the bot/user.
+    /// Present in: bot_added, user_added.
+    /// </summary>
+    [JsonIgnore]
+    public long? InviterId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the chat ID.
+    /// Present in: dialog_muted, dialog_unmuted, dialog_cleared, dialog_removed.
+    /// </summary>
+    [JsonIgnore]
+    public long? ChatId { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the chat is muted.
+    /// Present in: dialog_muted, dialog_unmuted.
+    /// </summary>
+    [JsonIgnore]
+    public bool? IsMuted { get; set; }
+
+    #region Typed Update Wrappers
+
+    /// <summary>
+    /// Gets the typed message update wrapper for message_created events.
+    /// </summary>
     [JsonIgnore]
     public MessageUpdate? MessageUpdate
     {
         get
         {
-            if (Message == null)
-            {
+            if (Message == null || Type != UpdateType.MessageCreated)
                 return null;
-            }
 
             return new MessageUpdate
             {
@@ -69,80 +125,366 @@ public class Update
     }
 
     /// <summary>
-    /// Gets the typed callback query update wrapper.
+    /// Gets the typed callback query update wrapper for message_callback events.
     /// </summary>
-    /// <value>The callback query update wrapper, or null if this update is not a callback query update.</value>
     [JsonIgnore]
     public CallbackQueryUpdate? CallbackQueryUpdate
     {
         get
         {
-            if (CallbackQuery == null)
-            {
+            if (Callback == null || Type != UpdateType.MessageCallback)
                 return null;
-            }
 
             return new CallbackQueryUpdate
             {
                 UpdateId = UpdateId,
                 Timestamp = Timestamp,
                 UserLocale = UserLocale,
-                CallbackQuery = CallbackQuery
+                CallbackQuery = Callback
             };
         }
     }
 
     /// <summary>
-    /// Gets the type of the update as enum.
+    /// Gets the typed message edited update wrapper.
     /// </summary>
-    /// <value>The type of the update (message or callback_query).</value>
     [JsonIgnore]
-    public UpdateType Type
+    public MessageEditedUpdate? MessageEditedUpdate
     {
         get
         {
-            // * Infer type from update_type field or from presence of message/callbackQuery
-            if (!string.IsNullOrEmpty(UpdateTypeRaw))
-            {
-                // Check for callback first, as "message_callback" contains both "message" and "callback"
-                if (UpdateTypeRaw.Contains("callback", StringComparison.OrdinalIgnoreCase))
-                {
-                    return UpdateType.CallbackQuery;
-                }
-                if (UpdateTypeRaw.Contains("message", StringComparison.OrdinalIgnoreCase))
-                {
-                    return UpdateType.Message;
-                }
-            }
+            if (Message == null || Type != UpdateType.MessageEdited)
+                return null;
 
-            // * Fallback: infer from presence of message or callback_query fields
-            if (Message != null)
+            return new MessageEditedUpdate
             {
-                return UpdateType.Message;
-            }
-            if (CallbackQuery != null)
-            {
-                return UpdateType.CallbackQuery;
-            }
-
-            return UpdateType.Message; // Default to Message
+                UpdateId = UpdateId,
+                Timestamp = Timestamp,
+                UserLocale = UserLocale,
+                Message = Message
+            };
         }
     }
 
     /// <summary>
-    /// Gets or sets the message in this update (if type is Message).
-    /// This property is used for JSON deserialization and maintains backward compatibility.
+    /// Gets the typed message removed update wrapper.
     /// </summary>
-    /// <value>The message in this update, or null if not available.</value>
-    [JsonPropertyName("message")]
-    public Message? Message { get; set; }
+    [JsonIgnore]
+    public MessageRemovedUpdate? MessageRemovedUpdate
+    {
+        get
+        {
+            if (Message == null || Type != UpdateType.MessageRemoved)
+                return null;
+
+            return new MessageRemovedUpdate
+            {
+                UpdateId = UpdateId,
+                Timestamp = Timestamp,
+                UserLocale = UserLocale,
+                Message = Message
+            };
+        }
+    }
 
     /// <summary>
-    /// Gets or sets the callback query in this update (if type is CallbackQuery).
-    /// This property is used for JSON deserialization and maintains backward compatibility.
+    /// Gets the typed bot added update wrapper.
     /// </summary>
-    /// <value>The callback query in this update, or null if not available.</value>
-    [JsonPropertyName("callback_query")]
-    public CallbackQuery? CallbackQuery { get; set; }
-}
+    [JsonIgnore]
+    public BotAddedUpdate? BotAddedUpdate
+    {
+        get
+        {
+            if (Type != UpdateType.BotAdded)
+                return null;
 
+            return new BotAddedUpdate
+            {
+                UpdateId = UpdateId,
+                Timestamp = Timestamp,
+                Chat = Chat,
+                User = User,
+                InviterId = InviterId
+            };
+        }
+    }
+
+    /// <summary>
+    /// Gets the typed bot removed update wrapper.
+    /// </summary>
+    [JsonIgnore]
+    public BotRemovedUpdate? BotRemovedUpdate
+    {
+        get
+        {
+            if (Type != UpdateType.BotRemoved)
+                return null;
+
+            return new BotRemovedUpdate
+            {
+                UpdateId = UpdateId,
+                Timestamp = Timestamp,
+                Chat = Chat,
+                User = User
+            };
+        }
+    }
+
+    /// <summary>
+    /// Gets the typed bot started update wrapper.
+    /// </summary>
+    [JsonIgnore]
+    public BotStartedUpdate? BotStartedUpdate
+    {
+        get
+        {
+            if (Type != UpdateType.BotStarted)
+                return null;
+
+            return new BotStartedUpdate
+            {
+                UpdateId = UpdateId,
+                Timestamp = Timestamp,
+                ChatId = ChatId,
+                User = User,
+                UserLocale = UserLocale
+            };
+        }
+    }
+
+    /// <summary>
+    /// Gets the typed bot stopped update wrapper.
+    /// </summary>
+    [JsonIgnore]
+    public BotStoppedUpdate? BotStoppedUpdate
+    {
+        get
+        {
+            if (Type != UpdateType.BotStopped)
+                return null;
+
+            return new BotStoppedUpdate
+            {
+                UpdateId = UpdateId,
+                Timestamp = Timestamp,
+                ChatId = ChatId,
+                User = User
+            };
+        }
+    }
+
+    /// <summary>
+    /// Gets the typed user added update wrapper.
+    /// </summary>
+    [JsonIgnore]
+    public UserAddedUpdate? UserAddedUpdate
+    {
+        get
+        {
+            if (Type != UpdateType.UserAdded)
+                return null;
+
+            return new UserAddedUpdate
+            {
+                UpdateId = UpdateId,
+                Timestamp = Timestamp,
+                Chat = Chat,
+                User = User,
+                InviterId = InviterId
+            };
+        }
+    }
+
+    /// <summary>
+    /// Gets the typed user removed update wrapper.
+    /// </summary>
+    [JsonIgnore]
+    public UserRemovedUpdate? UserRemovedUpdate
+    {
+        get
+        {
+            if (Type != UpdateType.UserRemoved)
+                return null;
+
+            return new UserRemovedUpdate
+            {
+                UpdateId = UpdateId,
+                Timestamp = Timestamp,
+                Chat = Chat,
+                User = User
+            };
+        }
+    }
+
+    /// <summary>
+    /// Gets the typed chat title changed update wrapper.
+    /// </summary>
+    [JsonIgnore]
+    public ChatTitleChangedUpdate? ChatTitleChangedUpdate
+    {
+        get
+        {
+            if (Type != UpdateType.ChatTitleChanged)
+                return null;
+
+            return new ChatTitleChangedUpdate
+            {
+                UpdateId = UpdateId,
+                Timestamp = Timestamp,
+                Chat = Chat,
+                User = User
+            };
+        }
+    }
+
+    /// <summary>
+    /// Gets the typed dialog muted update wrapper.
+    /// </summary>
+    [JsonIgnore]
+    public DialogMutedUpdate? DialogMutedUpdate
+    {
+        get
+        {
+            if (Type != UpdateType.DialogMuted)
+                return null;
+
+            return new DialogMutedUpdate
+            {
+                UpdateId = UpdateId,
+                Timestamp = Timestamp,
+                ChatId = ChatId,
+                IsMuted = IsMuted
+            };
+        }
+    }
+
+    /// <summary>
+    /// Gets the typed dialog unmuted update wrapper.
+    /// </summary>
+    [JsonIgnore]
+    public DialogUnmutedUpdate? DialogUnmutedUpdate
+    {
+        get
+        {
+            if (Type != UpdateType.DialogUnmuted)
+                return null;
+
+            return new DialogUnmutedUpdate
+            {
+                UpdateId = UpdateId,
+                Timestamp = Timestamp,
+                ChatId = ChatId,
+                IsMuted = IsMuted
+            };
+        }
+    }
+
+    /// <summary>
+    /// Gets the typed dialog cleared update wrapper.
+    /// </summary>
+    [JsonIgnore]
+    public DialogClearedUpdate? DialogClearedUpdate
+    {
+        get
+        {
+            if (Type != UpdateType.DialogCleared)
+                return null;
+
+            return new DialogClearedUpdate
+            {
+                UpdateId = UpdateId,
+                Timestamp = Timestamp,
+                ChatId = ChatId
+            };
+        }
+    }
+
+    /// <summary>
+    /// Gets the typed dialog removed update wrapper.
+    /// </summary>
+    [JsonIgnore]
+    public DialogRemovedUpdate? DialogRemovedUpdate
+    {
+        get
+        {
+            if (Type != UpdateType.DialogRemoved)
+                return null;
+
+            return new DialogRemovedUpdate
+            {
+                UpdateId = UpdateId,
+                Timestamp = Timestamp,
+                ChatId = ChatId
+            };
+        }
+    }
+
+    /// <summary>
+    /// Gets the typed message chat created update wrapper.
+    /// </summary>
+    [JsonIgnore]
+    public MessageChatCreatedUpdate? MessageChatCreatedUpdate
+    {
+        get
+        {
+            if (Message == null || Type != UpdateType.MessageChatCreated)
+                return null;
+
+            return new MessageChatCreatedUpdate
+            {
+                UpdateId = UpdateId,
+                Timestamp = Timestamp,
+                UserLocale = UserLocale,
+                Message = Message
+            };
+        }
+    }
+
+    #endregion
+
+    #region Backward Compatibility
+
+    /// <summary>
+    /// Gets or sets the callback query (alias for Callback property).
+    /// Maintained for backward compatibility.
+    /// </summary>
+    [JsonIgnore]
+    [Obsolete("Use Callback property instead. This property will be removed in future versions.")]
+    public CallbackQuery? CallbackQuery
+    {
+        get => Callback;
+        set => Callback = value;
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Parses the raw update_type string to UpdateType enum.
+    /// </summary>
+    private static UpdateType ParseUpdateType(string? updateTypeRaw)
+    {
+        if (string.IsNullOrEmpty(updateTypeRaw))
+            return UpdateType.Unknown;
+
+        return updateTypeRaw switch
+        {
+            "message_created" => UpdateType.MessageCreated,
+            "message_callback" => UpdateType.MessageCallback,
+            "message_edited" => UpdateType.MessageEdited,
+            "message_removed" => UpdateType.MessageRemoved,
+            "bot_added" => UpdateType.BotAdded,
+            "bot_removed" => UpdateType.BotRemoved,
+            "bot_started" => UpdateType.BotStarted,
+            "bot_stopped" => UpdateType.BotStopped,
+            "dialog_muted" => UpdateType.DialogMuted,
+            "dialog_unmuted" => UpdateType.DialogUnmuted,
+            "dialog_cleared" => UpdateType.DialogCleared,
+            "dialog_removed" => UpdateType.DialogRemoved,
+            "user_added" => UpdateType.UserAdded,
+            "user_removed" => UpdateType.UserRemoved,
+            "chat_title_changed" => UpdateType.ChatTitleChanged,
+            "message_chat_created" => UpdateType.MessageChatCreated,
+            _ => UpdateType.Unknown
+        };
+    }
+}

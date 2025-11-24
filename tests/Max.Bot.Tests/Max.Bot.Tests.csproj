@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <NoWarn>$(NoWarn);CS1591;CS0618</NoWarn>
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutput>$(MSBuildProjectDirectory)\TestResults\Coverage\coverage</CoverletOutput>
     <CoverletOutputFormat>cobertura</CoverletOutputFormat>

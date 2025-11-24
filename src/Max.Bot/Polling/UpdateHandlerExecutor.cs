@@ -35,18 +35,25 @@ internal static class UpdateHandlerExecutor
             // User should implement either HandleUpdateAsync (for all) or HandleMessageAsync/HandleCallbackQueryAsync (for specific)
             switch (update.Type)
             {
-                case UpdateType.Message:
+                case UpdateType.MessageCreated:
+                case UpdateType.MessageEdited:
+                case UpdateType.MessageRemoved:
+                case UpdateType.MessageChatCreated:
                     // * Skip HandleUpdateAsync for messages - only call HandleMessageAsync to avoid double processing
                     await handler.HandleMessageAsync(context, handlerCts.Token).ConfigureAwait(false);
                     break;
-                case UpdateType.CallbackQuery:
+                case UpdateType.MessageCallback:
                     // * Skip HandleUpdateAsync for callbacks - only call HandleCallbackQueryAsync to avoid double processing
                     await handler.HandleCallbackQueryAsync(context, handlerCts.Token).ConfigureAwait(false);
                     break;
-                default:
+                case UpdateType.Unknown:
                     // * For unknown types, call HandleUpdateAsync first, then HandleUnknownUpdateAsync
                     await handler.HandleUpdateAsync(context, handlerCts.Token).ConfigureAwait(false);
                     await handler.HandleUnknownUpdateAsync(context, handlerCts.Token).ConfigureAwait(false);
+                    break;
+                default:
+                    // * For other types (bot_added, bot_removed, user_added, etc.), call HandleUpdateAsync
+                    await handler.HandleUpdateAsync(context, handlerCts.Token).ConfigureAwait(false);
                     break;
             }
         }

@@ -64,17 +64,17 @@ public sealed class KeyboardBotSample : IBotSample
 
     private static async Task HandleCallbackAsync(SampleExecutionContext sampleContext, UpdateContext context, CancellationToken cancellationToken)
     {
-        var callback = context.Update.CallbackQuery;
+        var callback = context.Update.Callback;
         if (callback == null)
         {
             return;
         }
 
-        var responseText = callback.Data switch
+        var responseText = callback.Payload switch
         {
             "vote:approve" => "РІСљвЂ¦ Approved",
             "vote:reject" => "РІСњРЉ Rejected",
-            _ => "РІвЂћв„–РїС‘РЏ Received."
+            _ => "РІвЂћв„–РїС'РЏ Received."
         };
 
         var request = new AnswerCallbackQueryRequest
@@ -82,8 +82,8 @@ public sealed class KeyboardBotSample : IBotSample
             Notification = responseText
         };
 
-        await context.Api.Messages.AnswerCallbackQueryAsync(callback.Id, request, cancellationToken).ConfigureAwait(false);
-        sampleContext.Output.WriteLine($"Callback '{callback.Data}' processed.");
+        await context.Api.Messages.AnswerCallbackQueryAsync(callback.CallbackId ?? string.Empty, request, cancellationToken).ConfigureAwait(false);
+        sampleContext.Output.WriteLine($"Callback '{callback.Payload}' processed.");
     }
 }
 

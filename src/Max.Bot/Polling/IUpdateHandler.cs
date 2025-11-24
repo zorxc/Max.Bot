@@ -15,12 +15,12 @@ public interface IUpdateHandler
     Task HandleUpdateAsync(UpdateContext context, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Invoked for <see cref="UpdateType.Message"/> events.
+    /// Invoked for <see cref="UpdateType.MessageCreated"/> and other message-related events.
     /// </summary>
     Task HandleMessageAsync(UpdateContext context, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Invoked for <see cref="UpdateType.CallbackQuery"/> events.
+    /// Invoked for <see cref="UpdateType.MessageCallback"/> events.
     /// </summary>
     Task HandleCallbackQueryAsync(UpdateContext context, CancellationToken cancellationToken);
 

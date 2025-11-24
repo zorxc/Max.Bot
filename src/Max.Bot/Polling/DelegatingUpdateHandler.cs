@@ -19,8 +19,8 @@ public sealed class DelegatingUpdateHandler : IUpdateHandler
     /// Initializes a new instance of the <see cref="DelegatingUpdateHandler"/> class.
     /// </summary>
     /// <param name="onUpdate">Delegate executed for every update prior to type dispatch.</param>
-    /// <param name="onMessage">Delegate executed for <see cref="UpdateType.Message"/> events.</param>
-    /// <param name="onCallback">Delegate executed for <see cref="UpdateType.CallbackQuery"/> events.</param>
+    /// <param name="onMessage">Delegate executed for <see cref="UpdateType.MessageCreated"/> and other message events.</param>
+    /// <param name="onCallback">Delegate executed for <see cref="UpdateType.MessageCallback"/> events.</param>
     /// <param name="onUnknown">Delegate executed for unsupported update types.</param>
     public DelegatingUpdateHandler(
         Func<UpdateContext, CancellationToken, Task>? onUpdate = null,

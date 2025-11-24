@@ -10,65 +10,69 @@ public class CallbackQueryTests
     [Fact]
     public void CallbackQuery_ShouldDeserialize_FromJson()
     {
-        // Arrange
-        var json = """{"id":"callback123","from":{"user_id":123,"username":"user123","is_bot":false},"message":{"id":456,"text":"Test message","date":1234567890},"data":"callbackData123"}""";
+        // Arrange - API format
+        var json = """{"callback_id":"cb123","user":{"user_id":123,"username":"user123","is_bot":false},"message":{"id":456,"text":"Test message","date":1234567890},"payload":"payload123","timestamp":1609459200000}""";
 
         // Act
         var callbackQuery = MaxJsonSerializer.Deserialize<CallbackQuery>(json);
 
         // Assert
         callbackQuery.Should().NotBeNull();
-        callbackQuery.Id.Should().Be("callback123");
-        callbackQuery.From.Should().NotBeNull();
-        callbackQuery.From.Id.Should().Be(123);
-        callbackQuery.From.Username.Should().Be("user123");
+        callbackQuery.CallbackId.Should().Be("cb123");
+        callbackQuery.User.Should().NotBeNull();
+        callbackQuery.User!.Id.Should().Be(123);
+        callbackQuery.User.Username.Should().Be("user123");
         callbackQuery.Message.Should().NotBeNull();
         callbackQuery.Message!.Id.Should().Be(456);
         callbackQuery.Message.Text.Should().Be("Test message");
-        callbackQuery.Data.Should().Be("callbackData123");
+        callbackQuery.Payload.Should().Be("payload123");
+        callbackQuery.Timestamp.Should().Be(1609459200000);
     }
 
     [Fact]
     public void CallbackQuery_ShouldDeserialize_WithNullableFields()
     {
-        // Arrange
-        var json = """{"id":"callback123","from":{"user_id":123,"username":"user123","is_bot":false}}""";
+        // Arrange - API format with optional fields
+        var json = """{"callback_id":"cb123","user":{"user_id":123,"username":"user123","is_bot":false}}""";
 
         // Act
         var callbackQuery = MaxJsonSerializer.Deserialize<CallbackQuery>(json);
 
         // Assert
         callbackQuery.Should().NotBeNull();
-        callbackQuery.Id.Should().Be("callback123");
-        callbackQuery.From.Should().NotBeNull();
-        callbackQuery.From.Id.Should().Be(123);
+        callbackQuery.CallbackId.Should().Be("cb123");
+        callbackQuery.User.Should().NotBeNull();
+        callbackQuery.User!.Id.Should().Be(123);
         callbackQuery.Message.Should().BeNull();
-        callbackQuery.Data.Should().BeNull();
+        callbackQuery.Payload.Should().BeNull();
+        callbackQuery.Timestamp.Should().BeNull();
     }
 
     [Fact]
     public void CallbackQuery_ShouldSerialize_ToJson()
     {
-        // Arrange
+        // Arrange - API format
         var callbackQuery = new CallbackQuery
         {
-            Id = "callback123",
-            From = new User
+            CallbackId = "cb123",
+            User = new User
             {
                 Id = 123,
                 Username = "user123",
                 IsBot = false
             },
-            Data = "callbackData123"
+            Payload = "payload123",
+            Timestamp = 1609459200000
         };
 
         // Act
         var json = MaxJsonSerializer.Serialize(callbackQuery);
 
         // Assert
-        json.Should().Contain("\"id\":\"callback123\"");
-        json.Should().Contain("\"from\"");
-        json.Should().Contain("\"data\":\"callbackData123\"");
+        json.Should().Contain("\"callback_id\":\"cb123\"");
+        json.Should().Contain("\"user\"");
+        json.Should().Contain("\"payload\":\"payload123\"");
+        json.Should().Contain("\"timestamp\":1609459200000");
     }
 }
 

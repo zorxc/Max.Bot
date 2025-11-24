@@ -31,17 +31,18 @@ public class SubscriptionsApiFixtureTests
     [Fact]
     public async Task GetUpdatesAsync_ShouldRespectQueryParameters()
     {
+        // Using API string values for update types: message_created, message_callback
         var api = FixtureHttpClientFactory.CreateSubscriptionsApi(
             "updates/get_updates_success.json",
             HttpMethod.Get,
-            "/bot/updates?limit=25&timeout=30&marker=9001&types=Message%2CCallbackQuery");
+            "/bot/updates?limit=25&timeout=30&marker=9001&types=message_created%2Cmessage_callback");
 
         var request = new GetUpdatesRequest
         {
             Limit = 25,
             Timeout = 30,
             Marker = 9001,
-            Types = new List<string> { UpdateType.Message.ToString(), UpdateType.CallbackQuery.ToString() }
+            Types = new List<string> { "message_created", "message_callback" }
         };
 
         var response = await api.GetUpdatesAsync(request);
@@ -51,11 +52,11 @@ public class SubscriptionsApiFixtureTests
 
         var update = response.Updates[0];
         update.UpdateId.Should().Be(128);
-        update.Type.Should().Be(UpdateType.Message);
+        update.Type.Should().Be(UpdateType.MessageCreated);
         update.Message.Should().NotBeNull();
         update.Message!.Text.Should().Be("Fixtures keep bots honest");
         update.Message.Chat!.Title.Should().Be("QA Squad");
-        update.Message.Chat.Id.Should().Be(4242);
+        update.Message.Chat.ChatId.Should().Be(4242);
     }
 }
 
