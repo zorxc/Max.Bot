@@ -54,13 +54,5 @@ public class User
     [Range(0, long.MaxValue, ErrorMessage = "Last activity time cannot be negative.")]
     [JsonPropertyName("last_activity_time")]
     public long? LastActivityTime { get; set; }
-
-    /// <summary>
-    /// Gets or sets the full name of the user (first name + last name).
-    /// </summary>
-    /// <value>The full name of the user, or null if not available.</value>
-    [StringLength(128, ErrorMessage = "Name must not exceed 128 characters.")]
-    [JsonPropertyName("name")]
-    public string? Name { get; set; }
 }
 

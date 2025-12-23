@@ -1,3 +1,8 @@
+// 📁 ChatType.cs - Chat type enum for API JSON
+// 🎯 Core function: Maps Max API chat type strings to enum values.
+// 🔗 Key dependencies: System.Text.Json enum converter attributes.
+// 💡 Usage: Used by Chat and other chat-related payloads.
+
 using System.Text.Json.Serialization;
 
 namespace Max.Bot.Types.Enums;
@@ -26,20 +31,4 @@ public enum ChatType
     /// </summary>
     [JsonPropertyName("channel")]
     Channel,
-
-    #region Backward Compatibility Aliases
-
-    /// <summary>
-    /// Alias for Dialog. Use Dialog instead.
-    /// </summary>
-    [Obsolete("Use Dialog instead. This alias will be removed in future versions.")]
-    Private = Dialog,
-
-    /// <summary>
-    /// Alias for Chat. Use Chat instead.
-    /// </summary>
-    [Obsolete("Use Chat instead. This alias will be removed in future versions.")]
-    Group = Chat
-
-    #endregion
 }

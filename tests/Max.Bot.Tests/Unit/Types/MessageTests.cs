@@ -1,7 +1,11 @@
+// 📁 MessageTests.cs - Unit coverage for Message DTO
+// 🎯 Core function: Verifies JSON serialization and deserialization of Message fields.
+// 🔗 Key dependencies: MaxJsonSerializer, FluentAssertions, Message types.
+// 💡 Usage: Guards Max API payload contract for updates and message objects.
+
 using FluentAssertions;
 using Max.Bot.Networking;
 using Max.Bot.Types;
-using Max.Bot.Types.Enums;
 using Xunit;
 
 namespace Max.Bot.Tests.Unit.Types;
@@ -11,42 +15,40 @@ public class MessageTests
     [Fact]
     public void Deserialize_ShouldDeserializeMessage()
     {
-        // Arrange - using official API field names: chat_id, dialog type, sender
-        var json = """{"id":123,"chat":{"chat_id":456,"type":"dialog"},"sender":{"user_id":789,"username":"testuser","is_bot":false},"text":"Hello","date":1609459200,"type":"text"}""";
+        // Arrange - API format: sender + recipient + body + timestamp(ms)
+        var json = """{"sender":{"user_id":789,"username":"testuser","is_bot":false},"recipient":{"chat_id":456,"chat_type":"dialog"},"timestamp":1609459200000,"body":{"mid":"mid.123","text":"Hello"}}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Message>(json);
 
         // Assert
         result.Should().NotBeNull();
-        result!.Id.Should().Be(123);
-        result.Chat.Should().NotBeNull();
-        result.Chat!.ChatId.Should().Be(456);
-        result.Chat.Type.Should().Be(ChatType.Dialog);
+        result!.Recipient.Should().NotBeNull();
+        result.Recipient!.ChatId.Should().Be(456);
+        result.Recipient.ChatType.Should().Be("dialog");
         result.Sender.Should().NotBeNull();
         result.Sender!.Id.Should().Be(789);
         result.Sender.Username.Should().Be("testuser");
         result.Text.Should().Be("Hello");
-        result.Date.Should().BeCloseTo(new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc), TimeSpan.FromSeconds(1));
-        result.Type.Should().Be(MessageType.Text);
+        result.Timestamp.Should().Be(1609459200000);
+        result.Body.Should().NotBeNull();
+        result.Body!.Mid.Should().Be("mid.123");
     }
 
     [Fact]
     public void Deserialize_ShouldDeserializeMessageWithNullFields()
     {
         // Arrange
-        var json = """{"id":123,"date":1609459200}""";
+        var json = """{}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Message>(json);
 
         // Assert
         result.Should().NotBeNull();
-        result!.Id.Should().Be(123);
-        result.Chat.Should().BeNull();
-        result.From.Should().BeNull();
+        result!.Recipient.Should().BeNull();
         result.Text.Should().BeNull();
-        result.Type.Should().BeNull();
+        result.Timestamp.Should().BeNull();
     }
 
     [Fact]
@@ -55,12 +57,10 @@ public class MessageTests
         // Arrange
         var message = new Message
         {
-            Id = 123,
-            Chat = new Chat { ChatId = 456, Type = ChatType.Dialog },
             Sender = new User { Id = 789, Username = "testuser" },
-            Text = "Hello",
-            Date = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-            Type = MessageType.Text
+            Recipient = new MessageRecipient { ChatId = 456, ChatType = "dialog" },
+            Body = new MessageBody { Mid = "mid.123", Text = "Hello" },
+            Timestamp = 1609459200000
         };
 
         // Act
@@ -68,12 +68,11 @@ public class MessageTests
 
         // Assert
         json.Should().NotBeNullOrEmpty();
-        json.Should().Contain("\"id\":123");
-        json.Should().Contain("\"chat\"");
         json.Should().Contain("\"sender\"");
+        json.Should().Contain("\"recipient\"");
+        json.Should().Contain("\"body\"");
+        json.Should().Contain("\"timestamp\":1609459200000");
         json.Should().Contain("\"text\":\"Hello\"");
-        json.Should().Contain("\"date\":1609459200");
-        json.Should().Contain("\"type\":\"text\"");
     }
 
     [Fact]
@@ -82,8 +81,7 @@ public class MessageTests
         // Arrange
         var message = new Message
         {
-            Id = 123,
-            Date = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+            Timestamp = 1609459200000
         };
 
         // Act
@@ -91,29 +89,26 @@ public class MessageTests
 
         // Assert
         json.Should().NotBeNullOrEmpty();
-        json.Should().Contain("\"id\":123");
-        json.Should().Contain("\"date\":1609459200");
-        json.Should().NotContain("\"chat\"");
-        json.Should().NotContain("\"from\"");
+        json.Should().Contain("\"timestamp\":1609459200000");
+        json.Should().NotContain("\"sender\"");
+        json.Should().NotContain("\"recipient\"");
         json.Should().NotContain("\"text\"");
-        json.Should().NotContain("\"type\"");
     }
 
     [Fact]
     public void Deserialize_ShouldDeserializeMessageWithNewFields()
     {
         // Arrange
-        var json = """{"id":123,"sender":{"user_id":789,"username":"testuser"},"recipient":{"id":456,"type":"private"},"timestamp":1609459200,"body":{"text":"Hello","attachments":[]},"stat":{"read_count":5},"url":"https://max.ru/message/123"}""";
+        var json = """{"sender":{"user_id":789,"username":"testuser"},"recipient":{"chat_id":456,"chat_type":"dialog"},"timestamp":1609459200000,"body":{"mid":"mid.123","text":"Hello","attachments":[]},"stat":{"read_count":5},"url":"https://max.ru/message/123"}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Message>(json);
 
         // Assert
         result.Should().NotBeNull();
-        result!.Id.Should().Be(123);
         result.Sender.Should().NotBeNull();
         result.Sender!.Id.Should().Be(789);
-        result.Timestamp.Should().Be(1609459200);
+        result.Timestamp.Should().Be(1609459200000);
         result.Body.Should().NotBeNull();
         result.Body!.Text.Should().Be("Hello");
         result.Stat.Should().NotBeNull();
@@ -125,7 +120,7 @@ public class MessageTests
     public void Deserialize_ShouldDeserializeMessageWithLink()
     {
         // Arrange - using official API structure: link contains a nested message object
-        var json = """{"id":123,"timestamp":1609459200,"link":{"type":"reply","id":456,"message":{"body":{"text":"Original message"}}}}""";
+        var json = """{"timestamp":1609459200000,"link":{"type":"reply","chat_id":456,"message":{"body":{"mid":"mid.orig.1","text":"Original message"}}}}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Message>(json);
@@ -133,7 +128,7 @@ public class MessageTests
         // Assert
         result.Should().NotBeNull();
         result!.Link.Should().NotBeNull();
-        result.Link!.Id.Should().Be(456);
+        result.Link!.ChatId.Should().Be(456);
         result.Link.Type.Should().Be("reply");
         result.Link.Text.Should().Be("Original message"); // Text is computed from Message.Body.Text
     }
@@ -144,10 +139,10 @@ public class MessageTests
         // Arrange
         var message = new Message
         {
-            Id = 123,
             Sender = new User { Id = 789, Username = "testuser" },
-            Timestamp = 1609459200,
-            Body = new MessageBody { Text = "Hello", Attachments = Array.Empty<Attachment>() },
+            Recipient = new MessageRecipient { ChatId = 456, ChatType = "dialog" },
+            Timestamp = 1609459200000,
+            Body = new MessageBody { Mid = "mid.123", Text = "Hello", Attachments = Array.Empty<Attachment>() },
             Stat = new MessageStat { ReadCount = 5 },
             Url = "https://max.ru/message/123"
         };
@@ -157,9 +152,9 @@ public class MessageTests
 
         // Assert
         json.Should().NotBeNullOrEmpty();
-        json.Should().Contain("\"id\":123");
         json.Should().Contain("\"sender\"");
-        json.Should().Contain("\"timestamp\":1609459200");
+        json.Should().Contain("\"recipient\"");
+        json.Should().Contain("\"timestamp\":1609459200000");
         json.Should().Contain("\"body\"");
         json.Should().Contain("\"stat\"");
         json.Should().Contain("\"url\":\"https://max.ru/message/123\"");

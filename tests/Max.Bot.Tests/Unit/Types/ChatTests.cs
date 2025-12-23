@@ -1,3 +1,8 @@
+// 📁 ChatTests.cs - Unit coverage for Chat DTO
+// 🎯 Core function: Validates chat JSON mapping and enum parsing.
+// 🔗 Key dependencies: MaxJsonSerializer, Chat, ChatType.
+// 💡 Usage: Guards chat payload contract for chat endpoints and updates.
+
 using FluentAssertions;
 using Max.Bot.Networking;
 using Max.Bot.Types;
@@ -12,7 +17,7 @@ public class ChatTests
     public void Deserialize_ShouldDeserializeChat()
     {
         // Arrange - using official API field names: chat_id and type values (dialog, chat, channel)
-        var json = """{"chat_id":123,"type":"dialog","title":"Test Chat","username":"testchat","first_name":"Test","last_name":"Chat"}""";
+        var json = """{"chat_id":123,"type":"dialog","title":"Test Chat"}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Chat>(json);
@@ -20,12 +25,8 @@ public class ChatTests
         // Assert
         result.Should().NotBeNull();
         result!.ChatId.Should().Be(123);
-        result.Id.Should().Be(123); // Backward compatibility alias
         result.Type.Should().Be(ChatType.Dialog);
         result.Title.Should().Be("Test Chat");
-        result.Username.Should().Be("testchat");
-        result.FirstName.Should().Be("Test");
-        result.LastName.Should().Be("Chat");
     }
 
     [Fact]
@@ -56,8 +57,7 @@ public class ChatTests
         {
             ChatId = 123,
             Type = ChatType.Dialog,
-            Title = "Test Chat",
-            Username = "testchat"
+            Title = "Test Chat"
         };
 
         // Act
@@ -68,7 +68,6 @@ public class ChatTests
         json.Should().Contain("\"chat_id\":123");
         json.Should().Contain("\"type\":\"dialog\"");
         json.Should().Contain("\"title\":\"Test Chat\"");
-        json.Should().Contain("\"username\":\"testchat\"");
     }
 
     [Fact]
@@ -89,7 +88,6 @@ public class ChatTests
         json.Should().Contain("\"chat_id\":123");
         json.Should().Contain("\"type\":\"dialog\"");
         json.Should().NotContain("\"title\"");
-        json.Should().NotContain("\"username\"");
     }
 
     [Fact]
@@ -104,7 +102,6 @@ public class ChatTests
         // Assert
         result.Should().NotBeNull();
         result!.ChatId.Should().Be(123);
-        result.Id.Should().Be(123); // Backward compatibility alias
         result.Type.Should().Be(ChatType.Chat);
         result.Status.Should().Be(ChatStatus.Active);
         result.Title.Should().Be("Test Chat");

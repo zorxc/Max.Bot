@@ -1,7 +1,10 @@
+// 📁 Message.cs - Core message DTOs for Max API payloads
+// 🎯 Core function: Models Message and nested link/body/stat objects.
+// 🔗 Key dependencies: System.Text.Json, data annotations, custom converters.
+// 💡 Usage: Used in updates, send/edit responses, and message operations.
+
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using Max.Bot.Types.Converters;
-using Max.Bot.Types.Enums;
 
 namespace Max.Bot.Types;
 
@@ -11,26 +14,12 @@ namespace Max.Bot.Types;
 /// </summary>
 public class Message
 {
-    private string? _text;
-
     /// <summary>
     /// Gets or sets the user who sent the message.
     /// Maps to "sender" field from API.
     /// </summary>
     [JsonPropertyName("sender")]
     public User? Sender { get; set; }
-
-    /// <summary>
-    /// Gets or sets the user who sent the message.
-    /// Backward compatibility property that syncs with Sender.
-    /// </summary>
-    [JsonPropertyName("from")]
-    [Obsolete("Use Sender property instead. This property will be removed in future versions.")]
-    public User? From
-    {
-        get => Sender;
-        set => Sender = value;
-    }
 
     /// <summary>
     /// Gets or sets the recipient of the message.
@@ -80,20 +69,17 @@ public class Message
 
     /// <summary>
     /// Gets or sets the text content of the message.
-    /// When getting, returns Body.Text if available, otherwise the internal text field.
-    /// When setting, sets the internal text field and Body.Text if Body exists.
+    /// This is a convenience property that accesses Body.Text.
+    /// Not part of the official API - use Body.Text for direct access.
     /// </summary>
-    [JsonPropertyName("text")]
+    [JsonIgnore]
     public string? Text
     {
-        get => Body?.Text ?? _text;
+        get => Body?.Text;
         set
         {
-            _text = value;
-            if (Body != null)
-            {
-                Body.Text = value;
-            }
+            Body ??= new MessageBody();
+            Body.Text = value;
         }
     }
 
@@ -102,42 +88,6 @@ public class Message
     /// </summary>
     [JsonIgnore]
     public string? Mid => Body?.Mid;
-
-    #region Backward Compatibility
-
-    /// <summary>
-    /// Gets or sets the unique identifier of the message.
-    /// Note: This field is not part of the official API and may be removed.
-    /// Use Body.Mid for the message ID.
-    /// </summary>
-    [Range(1, long.MaxValue, ErrorMessage = "Message ID must be greater than zero.")]
-    [JsonPropertyName("id")]
-    public long? Id { get; set; }
-
-    /// <summary>
-    /// Gets or sets the chat where the message was sent.
-    /// Note: This field is not part of the official API Message object.
-    /// Use Recipient for message recipient information.
-    /// </summary>
-    [JsonPropertyName("chat")]
-    public Chat? Chat { get; set; }
-
-    /// <summary>
-    /// Gets or sets the date when the message was sent.
-    /// Note: This field is not part of the official API. Use Timestamp instead.
-    /// </summary>
-    [JsonPropertyName("date")]
-    [JsonConverter(typeof(UnixTimestampJsonConverter))]
-    public DateTime Date { get; set; }
-
-    /// <summary>
-    /// Gets or sets the type of the message.
-    /// Note: This field is not part of the official API.
-    /// </summary>
-    [JsonPropertyName("type")]
-    public MessageType? Type { get; set; }
-
-    #endregion
 }
 
 /// <summary>
@@ -170,12 +120,6 @@ public class LinkedMessage
     /// </summary>
     [JsonPropertyName("message")]
     public Message? Message { get; set; }
-
-    /// <summary>
-    /// Gets or sets the message ID for backward compatibility.
-    /// </summary>
-    [JsonPropertyName("id")]
-    public long? Id { get; set; }
 
     /// <summary>
     /// Gets the text content of the linked message.

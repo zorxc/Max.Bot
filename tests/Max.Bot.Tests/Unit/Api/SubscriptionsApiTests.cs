@@ -256,7 +256,7 @@ public class SubscriptionsApiTests
             {
                 UpdateId = 1,
                 UpdateTypeRaw = "message_created",
-                Message = new Message { Id = 100, Text = "Test" }
+                Message = new Message { Timestamp = 1609459200000, Body = new MessageBody { Mid = "mid.100", Text = "Test" } }
             }
         };
 

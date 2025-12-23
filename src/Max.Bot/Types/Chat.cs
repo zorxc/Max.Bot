@@ -1,3 +1,8 @@
+// 📁 Chat.cs - Chat DTO aligned with Max API
+// 🎯 Core function: Models chat identity and metadata from API.
+// 🔗 Key dependencies: ChatType/ChatStatus enums, JSON attributes.
+// 💡 Usage: Appears in chat endpoints and some update types.
+
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Max.Bot.Types.Enums;
@@ -17,17 +22,6 @@ public class Chat
     /// </summary>
     [JsonPropertyName("chat_id")]
     public long ChatId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the unique identifier of the chat.
-    /// Convenience property that syncs with ChatId for backward compatibility.
-    /// </summary>
-    [JsonIgnore]
-    public long Id
-    {
-        get => ChatId;
-        set => ChatId = value;
-    }
 
     /// <summary>
     /// Gets or sets the type of the chat.
@@ -50,30 +44,6 @@ public class Chat
     [StringLength(256, ErrorMessage = "Title must not exceed 256 characters.")]
     [JsonPropertyName("title")]
     public string? Title { get; set; }
-
-    /// <summary>
-    /// Gets or sets the username (for private chats and channels).
-    /// Maintained for backward compatibility.
-    /// </summary>
-    [StringLength(64, ErrorMessage = "Username must not exceed 64 characters.")]
-    [JsonPropertyName("username")]
-    public string? Username { get; set; }
-
-    /// <summary>
-    /// Gets or sets the first name (for private chats).
-    /// Maintained for backward compatibility.
-    /// </summary>
-    [StringLength(64, ErrorMessage = "First name must not exceed 64 characters.")]
-    [JsonPropertyName("first_name")]
-    public string? FirstName { get; set; }
-
-    /// <summary>
-    /// Gets or sets the last name (for private chats).
-    /// Maintained for backward compatibility.
-    /// </summary>
-    [StringLength(64, ErrorMessage = "Last name must not exceed 64 characters.")]
-    [JsonPropertyName("last_name")]
-    public string? LastName { get; set; }
 
     /// <summary>
     /// Gets or sets the icon of the chat.

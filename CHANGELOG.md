@@ -10,6 +10,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Новые изменения появятся здесь._
 
+## [0.4.0-alpha] - 2025-12-23
+
+### Changed
+
+- **`Message.Text`**: Теперь помечено `[JsonIgnore]` - это convenience property для доступа к `Body.Text`, не сериализуется в JSON
+  - Свойство `Text` больше НЕ сериализуется в JSON при отправке сообщений
+  - В официальном MAX API текст находится в `message.body.text`, а не `message.text`
+  - При чтении сообщений `Text` продолжает работать как удобный хелпер для `Body.Text`
+  - Упрощена логика синхронизации: `Text` теперь напрямую работает с `Body.Text`
+- Обновлены примеры в `SampleRuntime.cs` для использования `Message.Recipient` вместо `Message.Chat`
+
+### Fixed
+
+- Исправлена сериализация `Message` объектов: свойство `Text` больше не создаёт дублирующее поле в JSON
+- Теперь при отправке сообщений текст корректно передаётся только в `body.text` согласно официальной документации MAX API
+
+### Removed
+
+- Удалены legacy/backward-compat поля из `Message`: `From`, `Id`, `Chat`, `Date`, `Type`
+- Удалён legacy алиас `Chat.Id` (используйте `Chat.ChatId`)
+- Удалены legacy алиасы `ChatType.Private` и `ChatType.Group` (используйте `Dialog` и `Chat`)
+- Удалён неиспользуемый enum `MessageType` (после удаления `Message.Type`)
+
 ## [0.3.9-alpha] - 2025-12-23
 
 ### Fixed

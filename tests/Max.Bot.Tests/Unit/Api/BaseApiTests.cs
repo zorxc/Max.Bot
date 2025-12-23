@@ -1,3 +1,8 @@
+// 📁 BaseApiTests.cs - Unit tests for BaseApi request/response handling
+// 🎯 Core function: Validates deserialization fallbacks and exception wrapping.
+// 🔗 Key dependencies: Moq IMaxHttpClient, MaxJsonSerializer, ChatsApi.
+// 💡 Usage: Protects shared behavior across all API clients.
+
 using System.Net.Http;
 using System.Reflection;
 using FluentAssertions;
@@ -79,8 +84,8 @@ public class BaseApiTests
         // Arrange - Test GET request where Response<T> format doesn't match, but direct T does (line 137-140, 143-149)
         var expectedChat = new Chat
         {
-            Id = 123456L,
-            Type = ChatType.Private
+            ChatId = 123456L,
+            Type = ChatType.Dialog
         };
 
         // Return direct Chat JSON, not wrapped in Response<Chat>
@@ -99,7 +104,7 @@ public class BaseApiTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Id.Should().Be(expectedChat.Id);
+        result.ChatId.Should().Be(expectedChat.ChatId);
         result.Type.Should().Be(expectedChat.Type);
     }
 

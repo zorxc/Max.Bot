@@ -54,9 +54,8 @@ public class SubscriptionsApiFixtureTests
         update.UpdateId.Should().Be(128);
         update.Type.Should().Be(UpdateType.MessageCreated);
         update.Message.Should().NotBeNull();
-        update.Message!.Text.Should().Be("Fixtures keep bots honest");
-        update.Message.Chat!.Title.Should().Be("QA Squad");
-        update.Message.Chat.ChatId.Should().Be(4242);
+        update.Message!.Body!.Text.Should().Be("Fixtures keep bots honest");
+        update.Message.Recipient!.ChatId.Should().Be(4242);
     }
 }
 

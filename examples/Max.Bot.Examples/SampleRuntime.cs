@@ -169,7 +169,7 @@ public static class SampleUtilities
     /// </summary>
     public static long? GetChatId(Types.Message? message)
     {
-        return message?.Chat?.Id;
+        return message?.Recipient?.ChatId;
     }
 }
 

@@ -6,14 +6,20 @@
         "update_id": 128,
         "update_type": "message_created",
         "message": {
-          "id": 9876,
-          "chat": {
-            "chat_id": 4242,
-            "type": "chat",
-            "title": "QA Squad"
+          "sender": {
+            "user_id": 1001,
+            "username": "fixture-user",
+            "is_bot": false
           },
-          "text": "Fixtures keep bots honest",
-          "date": 1710000000
+          "recipient": {
+            "chat_id": 4242,
+            "chat_type": "chat"
+          },
+          "timestamp": 1710000000000,
+          "body": {
+            "mid": "mid.fixture.9876",
+            "text": "Fixtures keep bots honest"
+          }
         }
       }
     ],

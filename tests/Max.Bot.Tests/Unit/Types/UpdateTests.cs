@@ -1,3 +1,8 @@
+// 📁 UpdateTests.cs - Unit coverage for Update JSON contract
+// 🎯 Core function: Validates UpdateJsonConverter and typed wrapper properties.
+// 🔗 Key dependencies: MaxJsonSerializer, UpdateJsonConverter, UpdateType enum.
+// 💡 Usage: Prevents regressions in update parsing across supported update types.
+
 using FluentAssertions;
 using Max.Bot.Networking;
 using Max.Bot.Types;
@@ -54,8 +59,7 @@ public class UpdateTests
         result!.UpdateTypeRaw.Should().Be("message_created");
         result.Type.Should().Be(UpdateType.MessageCreated);
         result.Message.Should().NotBeNull();
-        result.Message!.Id.Should().BeNull();
-        result.Message.Body.Should().NotBeNull();
+        result.Message!.Body.Should().NotBeNull();
         result.Message.Body!.Mid.Should().Be("mid.0000000004ba3a03019ab24d62566a52");
         result.Message.Body.Text.Should().Be("/start");
         result.Message.Mid.Should().Be("mid.0000000004ba3a03019ab24d62566a52"); // Convenience property
@@ -561,22 +565,7 @@ public class UpdateTests
 
     #region Backward Compatibility Tests
 
-    [Fact]
-    public void BackwardCompatibility_LegacyMessageFormat_ShouldWork()
-    {
-        // Arrange - legacy format with id and chat fields
-        var json = """{"update_id":1,"update_type":"message_created","message":{"id":123,"chat":{"chat_id":456,"type":"chat"},"text":"Hello","date":1609459200}}""";
-
-        // Act
-        var result = MaxJsonSerializer.Deserialize<Update>(json);
-
-        // Assert
-        result.Should().NotBeNull();
-        result!.Message.Should().NotBeNull();
-        result.Message!.Id.Should().Be(123);
-        result.Message.Chat.Should().NotBeNull();
-        result.Message.Chat!.ChatId.Should().Be(456);
-    }
+    // Legacy update formats are intentionally not supported (strict API mode).
 
     #endregion
 }

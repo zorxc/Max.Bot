@@ -1,3 +1,8 @@
+// 📁 MessagesApiTests.cs - Unit tests for MessagesApi endpoints
+// 🎯 Core function: Verifies request building and response mapping for messages.
+// 🔗 Key dependencies: Moq IMaxHttpClient, MaxJsonSerializer, MessagesApi.
+// 💡 Usage: Ensures strict Max API message structure (recipient/body/timestamp).
+
 using System.Net;
 using System.Net.Http;
 using FluentAssertions;
@@ -36,9 +41,9 @@ public class MessagesApiTests
         var text = "Hello, World!";
         var expectedMessage = new Message
         {
-            Id = 789,
-            Text = text,
-            Chat = new Chat { Id = chatId }
+            Timestamp = 1609459200000,
+            Recipient = new MessageRecipient { ChatId = chatId, ChatType = "chat" },
+            Body = new MessageBody { Mid = "mid.789", Text = text }
         };
 
         var response = new MessageResponse
@@ -62,10 +67,9 @@ public class MessagesApiTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Id.Should().Be(expectedMessage.Id);
-        result.Text.Should().Be(expectedMessage.Text);
-        result.Chat.Should().NotBeNull();
-        result.Chat!.Id.Should().Be(chatId);
+        result.Mid.Should().Be("mid.789");
+        result.Text.Should().Be(text);
+        result.Recipient!.ChatId.Should().Be(chatId);
     }
 
     [Theory]
@@ -92,8 +96,8 @@ public class MessagesApiTests
         var chatId = 123456L;
         var expectedMessages = new[]
         {
-            new Message { Id = 1, Text = "Message 1", Chat = new Chat { Id = chatId } },
-            new Message { Id = 2, Text = "Message 2", Chat = new Chat { Id = chatId } }
+            new Message { Timestamp = 1609459200000, Recipient = new MessageRecipient { ChatId = chatId, ChatType = "chat" }, Body = new MessageBody { Mid = "mid.1", Text = "Message 1" } },
+            new Message { Timestamp = 1609459200000, Recipient = new MessageRecipient { ChatId = chatId, ChatType = "chat" }, Body = new MessageBody { Mid = "mid.2", Text = "Message 2" } }
         };
 
         var response = new Response<Message[]>
@@ -122,8 +126,8 @@ public class MessagesApiTests
         // Assert
         result.Should().NotBeNull();
         result.Should().HaveCount(2);
-        result[0].Id.Should().Be(1);
-        result[1].Id.Should().Be(2);
+        result[0].Mid.Should().Be("mid.1");
+        result[1].Mid.Should().Be("mid.2");
     }
 
     [Fact]
@@ -205,11 +209,11 @@ public class MessagesApiTests
         var messageId = "msg-123";
         var currentMessage = new Message
         {
-            Id = 123,
             Text = "Test message",
-            Chat = new Chat { Id = 456 },
+            Recipient = new MessageRecipient { ChatId = 456, ChatType = "chat" },
             Body = new MessageBody
             {
+                Mid = "mid.current.123",
                 Attachments = Array.Empty<Attachment>()
             }
         };
@@ -272,11 +276,11 @@ public class MessagesApiTests
         });
         var currentMessage = new Message
         {
-            Id = 123,
             Text = "Test message",
-            Chat = new Chat { Id = 456 },
+            Recipient = new MessageRecipient { ChatId = 456, ChatType = "chat" },
             Body = new MessageBody
             {
+                Mid = "mid.current.123",
                 Attachments = Array.Empty<Attachment>()
             }
         };
@@ -399,9 +403,10 @@ public class MessagesApiTests
         var messageId = "msg-123";
         var expectedMessage = new Message
         {
-            Id = 123,
             Text = "Test message",
-            Chat = new Chat { Id = 456 }
+            Timestamp = 1609459200000,
+            Recipient = new MessageRecipient { ChatId = 456, ChatType = "chat" },
+            Body = new MessageBody { Mid = "msg-123", Text = "Test message" }
         };
 
         var response = new Response<Message>
@@ -426,10 +431,9 @@ public class MessagesApiTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Id.Should().Be(expectedMessage.Id);
-        result.Text.Should().Be(expectedMessage.Text);
-        result.Chat.Should().NotBeNull();
-        result.Chat!.Id.Should().Be(456);
+        result.Mid.Should().Be("msg-123");
+        result.Text.Should().Be("Test message");
+        result.Recipient!.ChatId.Should().Be(456);
     }
 
     [Theory]
@@ -598,9 +602,10 @@ public class MessagesApiTests
 
         var expectedMessage = new Message
         {
-            Id = 789,
             Text = request.Text,
-            Chat = new Chat { Id = chatId }
+            Timestamp = 1609459200000,
+            Recipient = new MessageRecipient { ChatId = chatId, ChatType = "chat" },
+            Body = new MessageBody { Mid = "mid.789", Text = request.Text }
         };
 
         var response = new MessageResponse
@@ -627,8 +632,8 @@ public class MessagesApiTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Id.Should().Be(expectedMessage.Id);
-        result.Text.Should().Be(expectedMessage.Text);
+        result.Mid.Should().Be("mid.789");
+        result.Text.Should().Be(request.Text);
     }
 
     [Fact]
@@ -688,9 +693,10 @@ public class MessagesApiTests
 
         var expectedMessage = new Message
         {
-            Id = 789,
             Text = "With attachment",
-            Chat = new Chat { Id = chatId }
+            Timestamp = 1609459200000,
+            Recipient = new MessageRecipient { ChatId = chatId, ChatType = "chat" },
+            Body = new MessageBody { Mid = "mid.789", Text = "With attachment" }
         };
 
         var response = new MessageResponse
@@ -716,7 +722,7 @@ public class MessagesApiTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Id.Should().Be(expectedMessage.Id);
+        result.Mid.Should().Be("mid.789");
     }
 
     [Fact]
@@ -742,9 +748,10 @@ public class MessagesApiTests
 
         var expectedMessage = new Message
         {
-            Id = 999,
             Text = "Forwarded",
-            Chat = new Chat { Id = chatId }
+            Timestamp = 1609459200000,
+            Recipient = new MessageRecipient { ChatId = chatId, ChatType = "chat" },
+            Body = new MessageBody { Mid = "mid.999", Text = "Forwarded" }
         };
 
         var response = new MessageResponse
@@ -770,7 +777,7 @@ public class MessagesApiTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Id.Should().Be(expectedMessage.Id);
+        result.Mid.Should().Be("mid.999");
     }
 
     [Theory]
@@ -800,9 +807,10 @@ public class MessagesApiTests
 
         var expectedMessage = new Message
         {
-            Id = 999,
             Text = text,
-            Chat = new Chat { Id = chatId }
+            Timestamp = 1609459200000,
+            Recipient = new MessageRecipient { ChatId = chatId, ChatType = "chat" },
+            Body = new MessageBody { Mid = "mid.999", Text = text }
         };
 
         var response = new MessageResponse
@@ -828,7 +836,7 @@ public class MessagesApiTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Id.Should().Be(expectedMessage.Id);
+        result.Mid.Should().Be("mid.999");
         result.Text.Should().Be(text);
     }
 

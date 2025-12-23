@@ -11,7 +11,7 @@ public class CallbackQueryTests
     public void CallbackQuery_ShouldDeserialize_FromJson()
     {
         // Arrange - API format
-        var json = """{"callback_id":"cb123","user":{"user_id":123,"username":"user123","is_bot":false},"message":{"id":456,"text":"Test message","date":1234567890},"payload":"payload123","timestamp":1609459200000}""";
+        var json = """{"callback_id":"cb123","user":{"user_id":123,"username":"user123","is_bot":false},"message":{"body":{"mid":"msg456","text":"Test message"},"timestamp":1234567890000},"payload":"payload123","timestamp":1609459200000}""";
 
         // Act
         var callbackQuery = MaxJsonSerializer.Deserialize<CallbackQuery>(json);
@@ -23,7 +23,7 @@ public class CallbackQueryTests
         callbackQuery.User!.Id.Should().Be(123);
         callbackQuery.User.Username.Should().Be("user123");
         callbackQuery.Message.Should().NotBeNull();
-        callbackQuery.Message!.Id.Should().Be(456);
+        callbackQuery.Message!.Body?.Mid.Should().Be("msg456");
         callbackQuery.Message.Text.Should().Be("Test message");
         callbackQuery.Payload.Should().Be("payload123");
         callbackQuery.Timestamp.Should().Be(1609459200000);

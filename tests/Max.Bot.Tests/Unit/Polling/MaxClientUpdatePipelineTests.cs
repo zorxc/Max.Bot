@@ -1,3 +1,8 @@
+// 📁 MaxClientUpdatePipelineTests.cs - Tests for webhook pipeline dispatch
+// 🎯 Core function: Validates allowed usernames filter and handler routing.
+// 🔗 Key dependencies: MaxClient, IUpdateHandler, UpdateType parsing.
+// 💡 Usage: Ensures pipeline skips/dispatches updates correctly.
+
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,7 +44,7 @@ public class MaxClientUpdatePipelineTests
         {
             UpdateId = 1,
             UpdateTypeRaw = "message_created",
-            Message = new Message { From = new User { Username = "tester" } }
+            Message = new Message { Sender = new User { Username = "tester" } }
         };
 
         // Act
@@ -62,7 +67,7 @@ public class MaxClientUpdatePipelineTests
         {
             UpdateId = 2,
             UpdateTypeRaw = "message_created",
-            Message = new Message { From = new User { Username = "ignored" } }
+            Message = new Message { Sender = new User { Username = "ignored" } }
         };
 
         // Act

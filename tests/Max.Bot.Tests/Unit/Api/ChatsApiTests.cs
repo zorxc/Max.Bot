@@ -1,3 +1,8 @@
+﻿// рџ“Ѓ ChatsApiTests.cs - Unit tests for ChatsApi endpoints
+// рџЋЇ Core function: Verifies request paths and response mapping for chat APIs.
+// рџ”— Key dependencies: Moq IMaxHttpClient, MaxJsonSerializer, ChatsApi.
+// рџ’Ў Usage: Ensures chat endpoints follow API contract without legacy aliases.
+
 using System.Net.Http;
 using FluentAssertions;
 using Max.Bot.Api;
@@ -34,9 +39,8 @@ public class ChatsApiTests
         var chatId = 123456L;
         var expectedChat = new Chat
         {
-            Id = chatId,
-            Type = ChatType.Private,
-            Username = "test_user"
+            ChatId = chatId,
+            Type = ChatType.Dialog
         };
 
         var response = new Response<Chat>
@@ -61,9 +65,8 @@ public class ChatsApiTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Id.Should().Be(expectedChat.Id);
+        result.ChatId.Should().Be(expectedChat.ChatId);
         result.Type.Should().Be(expectedChat.Type);
-        result.Username.Should().Be(expectedChat.Username);
     }
 
     [Fact]
@@ -72,8 +75,8 @@ public class ChatsApiTests
         // Arrange
         var expectedChats = new[]
         {
-            new Chat { Id = 1, Type = ChatType.Private },
-            new Chat { Id = 2, Type = ChatType.Group }
+            new Chat { ChatId = 1, Type = ChatType.Dialog },
+            new Chat { ChatId = 2, Type = ChatType.Chat }
         };
 
         var response = new Response<Chat[]>
@@ -99,8 +102,8 @@ public class ChatsApiTests
         // Assert
         result.Should().NotBeNull();
         result.Should().HaveCount(2);
-        result[0].Id.Should().Be(1);
-        result[1].Id.Should().Be(2);
+        result[0].ChatId.Should().Be(1);
+        result[1].ChatId.Should().Be(2);
     }
 
     #region GetChatByLinkAsync Tests
@@ -112,8 +115,8 @@ public class ChatsApiTests
         var chatLink = "@test_chat";
         var expectedChat = new Chat
         {
-            Id = 123456L,
-            Type = ChatType.Group,
+            ChatId = 123456L,
+            Type = ChatType.Chat,
             Title = "Test Chat"
         };
 
@@ -139,7 +142,7 @@ public class ChatsApiTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Id.Should().Be(expectedChat.Id);
+        result.ChatId.Should().Be(expectedChat.ChatId);
         result.Title.Should().Be(expectedChat.Title);
     }
 
@@ -200,8 +203,8 @@ public class ChatsApiTests
 
         var expectedChat = new Chat
         {
-            Id = chatId,
-            Type = ChatType.Group,
+            ChatId = chatId,
+            Type = ChatType.Chat,
             Title = "Updated Title"
         };
 
@@ -227,7 +230,7 @@ public class ChatsApiTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Id.Should().Be(expectedChat.Id);
+        result.ChatId.Should().Be(expectedChat.ChatId);
         result.Title.Should().Be(expectedChat.Title);
     }
 
@@ -331,9 +334,8 @@ public class ChatsApiTests
         var chatId = 123456L;
         var expectedMessage = new Message
         {
-            Id = 789L,
-            Text = "Pinned message",
-            Type = MessageType.Text
+            Timestamp = 1609459200000,
+            Body = new MessageBody { Mid = "mid.789", Text = "Pinned message" }
         };
 
         var response = new Response<Message>
@@ -357,8 +359,8 @@ public class ChatsApiTests
 
         // Assert
         result.Should().NotBeNull();
-        result!.Id.Should().Be(expectedMessage.Id);
-        result.Text.Should().Be(expectedMessage.Text);
+        result!.Mid.Should().Be("mid.789");
+        result.Text.Should().Be("Pinned message");
     }
 
     [Fact]
@@ -475,8 +477,8 @@ public class ChatsApiTests
         var chatId = 123456L;
         var expectedChat = new Chat
         {
-            Id = chatId,
-            Type = ChatType.Group,
+            ChatId = chatId,
+            Type = ChatType.Chat,
             Title = "Test Chat"
         };
 
@@ -502,7 +504,7 @@ public class ChatsApiTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Id.Should().Be(expectedChat.Id);
+        result.ChatId.Should().Be(expectedChat.ChatId);
         result.Title.Should().Be(expectedChat.Title);
     }
 
@@ -850,4 +852,3 @@ public class ChatsApiTests
 
     #endregion
 }
-

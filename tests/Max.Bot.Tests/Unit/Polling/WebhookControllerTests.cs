@@ -1,10 +1,14 @@
+// 📁 WebhookControllerTests.cs - Tests for webhook controller behavior
+// 🎯 Core function: Ensures webhook auth and pipeline dispatch work correctly.
+// 🔗 Key dependencies: WebhookController, IUpdatePipeline, ASP.NET Core MVC.
+// 💡 Usage: Verifies webhook ingestion for message_created updates.
+
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Max.Bot.Configuration;
 using Max.Bot.Polling;
 using Max.Bot.Types;
-using Max.Bot.Types.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -91,7 +95,7 @@ public class WebhookControllerTests
         {
             UpdateId = 1,
             UpdateTypeRaw = "message_created",
-            Message = new Message { From = new User { Username = "tester" } }
+            Message = new Message { Sender = new User { Username = "tester" } }
         };
     }
 

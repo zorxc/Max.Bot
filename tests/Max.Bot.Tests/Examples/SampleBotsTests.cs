@@ -34,7 +34,7 @@ public class SampleBotsTests
                 var update = CreateMessageUpdate("Hello world");
                 await handler.HandleMessageAsync(CreateUpdateContext(harness.Api, update), CancellationToken.None);
 
-                harness.MessagesMock.Verify(m => m.SendMessageAsync(update.Message!.Chat!.Id, "Echo: Hello world", It.IsAny<CancellationToken>()), Times.Once);
+                harness.MessagesMock.Verify(m => m.SendMessageAsync(update.Message!.Recipient!.ChatId!.Value, "Echo: Hello world", It.IsAny<CancellationToken>()), Times.Once);
             })
         };
 
@@ -44,7 +44,7 @@ public class SampleBotsTests
             Scenario(async harness =>
             {
                 harness.ChatsMock.Setup(c => c.GetChatAsync(It.IsAny<long>(), It.IsAny<CancellationToken>()))
-                    .ReturnsAsync(new Chat { Id = 42, Title = "QA" });
+                    .ReturnsAsync(new Chat { ChatId = 42, Title = "QA", Type = ChatType.Chat });
 
                 var handler = await harness.StartAsync();
                 await handler.HandleMessageAsync(CreateUpdateContext(harness.Api, CreateMessageUpdate("/start")), CancellationToken.None);
@@ -162,9 +162,9 @@ public class SampleBotsTests
             UpdateTypeRaw = "message_created",
             Message = new Message
             {
-                Chat = new Chat { Id = 1337, Title = "SampleChat" },
-                Body = new MessageBody { Text = text },
-                Text = text
+                Recipient = new MessageRecipient { ChatId = 1337, ChatType = "chat" },
+                Body = new MessageBody { Mid = "mid.sample.1", Text = text },
+                Timestamp = 1609459200000
             }
         };
     }
