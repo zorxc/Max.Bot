@@ -119,8 +119,8 @@ public class MessageTests
     [Fact]
     public void Deserialize_ShouldDeserializeMessageWithLink()
     {
-        // Arrange - using official API structure: link contains a nested message object
-        var json = """{"timestamp":1609459200000,"link":{"type":"reply","chat_id":456,"message":{"body":{"mid":"mid.orig.1","text":"Original message"}}}}""";
+        // Arrange - using official API structure: link.message contains MessageBody directly (mid, seq, text)
+        var json = """{"timestamp":1609459200000,"link":{"type":"reply","chat_id":456,"sender":{"user_id":789},"message":{"mid":"mid.orig.1","seq":123456,"text":"Original message"}}}""";
 
         // Act
         var result = MaxJsonSerializer.Deserialize<Message>(json);
@@ -128,9 +128,13 @@ public class MessageTests
         // Assert
         result.Should().NotBeNull();
         result!.Link.Should().NotBeNull();
-        result.Link!.ChatId.Should().Be(456);
-        result.Link.Type.Should().Be("reply");
-        result.Link.Text.Should().Be("Original message"); // Text is computed from Message.Body.Text
+        result.Link!.Type.Should().Be("reply");
+        result.Link.ChatId.Should().Be(456);
+        result.Link.Sender.Should().NotBeNull();
+        result.Link.Sender!.Id.Should().Be(789);
+        result.Link.Mid.Should().Be("mid.orig.1");
+        result.Link.Seq.Should().Be(123456);
+        result.Link.Text.Should().Be("Original message");
     }
 
     [Fact]

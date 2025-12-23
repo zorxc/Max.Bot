@@ -10,6 +10,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Новые изменения появятся здесь._
 
+## [0.4.1-alpha] - 2025-12-23
+
+### Changed
+
+- **`LinkedMessage.Message`**: Изменён тип с `Message` на `MessageBody` для соответствия реальной структуре API
+  - В API поле `link.message` содержит только `MessageBody` (mid, seq, text), а не полный объект `Message`
+  - Добавлены convenience properties: `LinkedMessage.Mid`, `LinkedMessage.Seq` для удобного доступа
+  - Свойство `LinkedMessage.Text` продолжает работать как раньше
+
+### Fixed
+
+- **Исправлена критическая ошибка десериализации `LinkedMessage`**: теперь при получении webhook с reply/forward сообщением все поля корректно заполняются
+  - Ранее поля `LinkedMessage.Message` (mid, seq, text, sender, chat_id) оставались `null` из-за несоответствия типа данных
+  - Причина: в реальном API `link.message` содержит `MessageBody`, а не полный `Message`
+  - Теперь `link.message` корректно парсится как `MessageBody` с полями `mid`, `seq`, `text`
+  - Добавлены хелперы `Mid`, `Seq` для удобного доступа к данным связанного сообщения
+
 ## [0.4.0-alpha] - 2025-12-23
 
 ### Changed

@@ -116,17 +116,29 @@ public class LinkedMessage
     public long? ChatId { get; set; }
 
     /// <summary>
-    /// Gets or sets the message content.
+    /// Gets or sets the message body (contains mid, seq, text, attachments).
+    /// Note: In API this is called "message" but contains only MessageBody fields, not full Message.
     /// </summary>
     [JsonPropertyName("message")]
-    public Message? Message { get; set; }
+    public MessageBody? Message { get; set; }
 
     /// <summary>
     /// Gets the text content of the linked message.
-    /// Returns Message.Text if available.
     /// </summary>
     [JsonIgnore]
     public string? Text => Message?.Text;
+
+    /// <summary>
+    /// Gets the message ID of the linked message.
+    /// </summary>
+    [JsonIgnore]
+    public string? Mid => Message?.Mid;
+
+    /// <summary>
+    /// Gets the sequence number of the linked message.
+    /// </summary>
+    [JsonIgnore]
+    public long? Seq => Message?.Seq;
 }
 
 /// <summary>
