@@ -29,21 +29,42 @@ public class NewMessageLinkTests
         validationResults.Should().Contain(v => v.MemberNames.Contains("Id") && v.ErrorMessage != null && v.ErrorMessage.Contains("required", StringComparison.OrdinalIgnoreCase));
     }
 
-    [Fact]
-    public void ChatId_ShouldBeGreaterThanZero_WhenProvided()
+    [Theory]
+    [InlineData(1)]
+    [InlineData(123456)]
+    public void ChatId_ShouldAcceptPositiveValues_ForPersonalChats(long chatId)
     {
         // Arrange
         var link = new NewMessageLink
         {
             Id = "1",
-            ChatId = 0
+            ChatId = chatId
         };
 
         // Act
         var validationResults = ValidateModel(link);
 
         // Assert
-        validationResults.Should().Contain(v => v.MemberNames.Contains("ChatId") && v.ErrorMessage != null && v.ErrorMessage.Contains("greater than zero", StringComparison.OrdinalIgnoreCase));
+        validationResults.Should().NotContain(v => v.MemberNames.Contains("ChatId"));
+    }
+
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(-123456)]
+    public void ChatId_ShouldAcceptNegativeValues_ForGroupChats(long chatId)
+    {
+        // Arrange
+        var link = new NewMessageLink
+        {
+            Id = "1",
+            ChatId = chatId
+        };
+
+        // Act
+        var validationResults = ValidateModel(link);
+
+        // Assert
+        validationResults.Should().NotContain(v => v.MemberNames.Contains("ChatId"));
     }
 
     [Fact]
@@ -97,6 +118,24 @@ public class NewMessageLinkTests
         // Assert
         json.Should().Contain("\"id\":\"12345\"");
         json.Should().Contain("\"chat_id\":null");
+    }
+
+    [Fact]
+    public void ShouldSerializeCorrectly_WithNegativeChatId_ForGroupChats()
+    {
+        // Arrange
+        var link = new NewMessageLink
+        {
+            Id = "12345",
+            ChatId = -67890
+        };
+
+        // Act
+        var json = JsonSerializer.Serialize(link);
+
+        // Assert
+        json.Should().Contain("\"id\":\"12345\"");
+        json.Should().Contain("\"chat_id\":-67890");
     }
 
     private static List<ValidationResult> ValidateModel(object model)

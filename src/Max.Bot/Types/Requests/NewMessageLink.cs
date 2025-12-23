@@ -19,9 +19,9 @@ public class NewMessageLink
 
     /// <summary>
     /// Gets or sets the unique identifier of the chat containing the message.
+    /// Positive values represent personal chats, negative values represent group chats.
     /// </summary>
     /// <value>The unique identifier of the chat, or null if not specified.</value>
-    [Range(1, long.MaxValue, ErrorMessage = "Chat ID must be greater than zero.")]
     [JsonPropertyName("chat_id")]
     public long? ChatId { get; set; }
 }
