@@ -91,7 +91,7 @@ public class DocumentAttachment : Attachment
 }
 
 /// <summary>
-/// Represents a document attachment.
+/// Represents a location attachment.
 /// </summary>
 public class LocationAttachment : Attachment
 {
@@ -113,6 +113,18 @@ public class LocationAttachment : Attachment
     /// Initializes a new instance of the <see cref="LocationAttachment"/> class.
     /// </summary>
     public LocationAttachment() => Type = AttachmentTypeNames.Location;
+}
+
+/// <summary>
+/// Represents a contact attachment.
+/// </summary>
+public class ContactAttachment : Attachment
+{
+    /// <summary>
+    /// Gets or sets the contact in this attachment.
+    /// </summary>
+    [JsonPropertyName("payload")]
+    public Contact Payload { get; set; } = null!;
 }
 
 /// <summary>
@@ -146,5 +158,6 @@ internal static class AttachmentTypeNames
     public const string File = "file";
     public const string InlineKeyboard = "inline_keyboard";
     public const string Location = "location";
+    public const string Contact = "contact";
 }
 

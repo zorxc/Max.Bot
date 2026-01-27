@@ -74,6 +74,11 @@ public class AttachmentJsonConverter : JsonConverter<Attachment>
             return JsonSerializer.Deserialize<LocationAttachment>(root.GetRawText(), options);
         }
 
+        if (IsType(typeString, AttachmentTypeNames.Contact))
+        {
+            return JsonSerializer.Deserialize<ContactAttachment>(root.GetRawText(), options);
+        }
+
         // Default to document for unknown types
         return JsonSerializer.Deserialize<DocumentAttachment>(root.GetRawText(), options);
     }
@@ -98,6 +103,9 @@ public class AttachmentJsonConverter : JsonConverter<Attachment>
                 break;
             case LocationAttachment locationAttachment:
                 JsonSerializer.Serialize(writer, locationAttachment, options);
+                break;
+            case ContactAttachment contactAttachment:
+                JsonSerializer.Serialize(writer, contactAttachment, options);
                 break;
             case InlineKeyboardAttachment inlineKeyboardAttachment:
                 JsonSerializer.Serialize(writer, inlineKeyboardAttachment, options);

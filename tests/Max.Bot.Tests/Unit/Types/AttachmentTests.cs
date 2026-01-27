@@ -100,9 +100,34 @@ public class AttachmentTests
         attachment.Should().NotBeNull();
         attachment.Should().BeOfType<LocationAttachment>();
         attachment.Type.Should().Be("location");
-        var documentAttachment = (LocationAttachment)attachment;
-        documentAttachment.Latitude.Should().Be(55.75346);
-        documentAttachment.Longitude.Should().Be(37.621602);
+        var locationAttachment = (LocationAttachment)attachment;
+        locationAttachment.Latitude.Should().Be(55.75346);
+        locationAttachment.Longitude.Should().Be(37.621602);
+    }
+
+    [Fact]
+    public void ContactAttachment_ShouldDeserialize_FromJson()
+    {
+        // Arrange
+        var json = """{"type":"contact","payload":{"vcf_info":"vcf contact here","max_info":{"user_id":123,"username":"username here","first_name":"first name here","last_name":"last name here","is_bot":false,"last_activity_time":1769505660}}}""";
+
+        // Act
+        var attachment = MaxJsonSerializer.Deserialize<Attachment>(json);
+
+        // Assert
+        attachment.Should().NotBeNull();
+        attachment.Should().BeOfType<ContactAttachment>();
+        attachment.Type.Should().Be("contact");
+        var contactAttachment = (ContactAttachment)attachment;
+        contactAttachment.Payload.Should().NotBeNull();
+        contactAttachment.Payload.VcfInfo.Should().Be("vcf contact here");
+        contactAttachment.Payload.MaxInfo.Should().NotBeNull();
+        contactAttachment.Payload.MaxInfo!.Id.Should().Be(123);
+        contactAttachment.Payload.MaxInfo.Username.Should().Be("username here");
+        contactAttachment.Payload.MaxInfo.FirstName.Should().Be("first name here");
+        contactAttachment.Payload.MaxInfo.LastName.Should().Be("last name here");
+        contactAttachment.Payload.MaxInfo.IsBot.Should().Be(false);
+        contactAttachment.Payload.MaxInfo.LastActivityTime.Should().Be(1769505660);
     }
 
     [Fact]
@@ -154,22 +179,36 @@ public class AttachmentTests
     }
 
     [Fact]
-    public void LocationAttachment_ShouldSerialize_ToJson()
+    public void ContactAttachment_ShouldSerialize_ToJson()
     {
         // Arrange
-        var attachment = new LocationAttachment
+        var attachment = new ContactAttachment
         {
-            Latitude = 55.75346,
-            Longitude = 37.621602,
+            Payload = new Contact
+            {
+                VcfInfo = "vcf contact here",
+                MaxInfo = new ContactInfo
+                {
+                    Id = 123,
+                    Username = "username here",
+                    FirstName = "first name here",
+                    LastName = "last name here",
+                    IsBot = false,
+                    LastActivityTime = 1769505660,
+                },
+            },
         };
 
         // Act
         var json = MaxJsonSerializer.Serialize<Attachment>(attachment);
 
         // Assert
-        json.Should().Contain("\"type\":\"location\"");
-        json.Should().Contain("\"latitude\":55.75346");
-        json.Should().Contain("\"longitude\":37.621602");
+        json.Should().Contain("\"user_id\":123");
+        json.Should().Contain("\"username\":\"username here\"");
+        json.Should().Contain("\"first_name\":\"first name here\"");
+        json.Should().Contain("\"last_name\":\"last name here\"");
+        json.Should().Contain("\"is_bot\":false");
+        json.Should().Contain("\"last_activity_time\":1769505660");
     }
 
     [Fact]
