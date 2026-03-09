@@ -83,14 +83,14 @@ internal class FilesApi : BaseApi, IFilesApi
                 var content = new ByteArrayContent(buffer, 0, currentBytesRead);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                 // Always send Content-Range. If length unknown, use '*'
-                content.Headers.ContentRange = fileLength > 0 
+                content.Headers.ContentRange = fileLength > 0
                     ? new ContentRangeHeaderValue(currentOffset, currentOffset + currentBytesRead - 1, fileLength)
                     : new ContentRangeHeaderValue(currentOffset, currentOffset + currentBytesRead - 1);
                 return content;
             }
 
             var responseBody = await HttpClient.SendAsyncRaw(uploadUrl, CreateChunkContent, cancellationToken).ConfigureAwait(false);
-            
+
             totalBytesRead += bytesRead;
 
             // Check if this chunk's response already contains the token/result

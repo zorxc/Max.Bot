@@ -41,9 +41,9 @@ public sealed class ContactBotSample : IBotSample
         }
 
         // Check if message has attachments
-        #pragma warning disable CS8602
+#pragma warning disable CS8602
         var attachments = message.Body?.Attachments! ?? Array.Empty<Attachment>();
-        #pragma warning restore CS8602
+#pragma warning restore CS8602
         if (attachments.Length == 0)
         {
             return;

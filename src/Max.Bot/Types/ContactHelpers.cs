@@ -64,7 +64,7 @@ public static class ContactHelpers
         {
             var firstName = contactInfo.FirstName ?? string.Empty;
             var lastName = contactInfo.LastName ?? string.Empty;
-            
+
             if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
             {
                 contactInfo.FullName = $"{firstName} {lastName}";
@@ -91,7 +91,7 @@ public static class ContactHelpers
     {
         var lines = vcf.Replace("\r\n", "\n").Split('\n');
         var result = new System.Text.StringBuilder(vcf.Length);
-        
+
         foreach (var line in lines)
         {
             if (line.Length > 0 && (line[0] == ' ' || line[0] == '\t'))
@@ -108,7 +108,7 @@ public static class ContactHelpers
                 result.Append(line);
             }
         }
-        
+
         return result.ToString();
     }
 

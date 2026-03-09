@@ -91,7 +91,7 @@ public class MaxHttpClient : IMaxHttpClient
         ArgumentException.ThrowIfNullOrWhiteSpace(absoluteUrl);
 
         // SSRF Protection: only allow http/https
-        if (!Uri.TryCreate(absoluteUrl, UriKind.Absolute, out var uri) || 
+        if (!Uri.TryCreate(absoluteUrl, UriKind.Absolute, out var uri) ||
             (uri.Scheme != Uri.UriSchemeHttps && uri.Scheme != Uri.UriSchemeHttp))
         {
             throw new ArgumentException("Invalid or unsafe upload URL. Only HTTP/HTTPS are allowed.", nameof(absoluteUrl));
@@ -106,7 +106,7 @@ public class MaxHttpClient : IMaxHttpClient
             try
             {
                 using var httpRequest = new HttpRequestMessage(requestMethod, absoluteUrl);
-                
+
                 // Max API requires Authorization header even for upload URLs (often)
                 // We extract it from DefaultRequestHeaders if it was set there, or rely on options
                 // In our implementation, we don't store token in DefaultRequestHeaders, we add it per request.
@@ -115,11 +115,11 @@ public class MaxHttpClient : IMaxHttpClient
                 // we assume the token is already managed. 
                 // Correction: In MaxClient, we pass token via MaxApiRequest. 
                 // For absolute URLs, we should probably have the token accessible.
-                
+
                 // For now, let's assume if the user didn't provide a token in the URL, they might need the header.
                 // However, without access to the token here, we can't add it.
                 // Let's check where the token is stored. It's in MaxBotOptions.
-                
+
                 if (contentFactory != null)
                 {
                     httpRequest.Content = contentFactory();
@@ -153,7 +153,7 @@ public class MaxHttpClient : IMaxHttpClient
 
         if (_options.EnableDetailedLogging)
         {
-            _logger?.LogTrace("HTTP {Method} {Url} -> {StatusCode} ({ElapsedMs}ms)\nResponse: {Body}", 
+            _logger?.LogTrace("HTTP {Method} {Url} -> {StatusCode} ({ElapsedMs}ms)\nResponse: {Body}",
                 request.Method, request.RequestUri, (int)response.StatusCode, stopwatch.ElapsedMilliseconds, responseBody ?? "(null)");
         }
 
@@ -235,8 +235,8 @@ public class MaxHttpClient : IMaxHttpClient
     private bool ShouldRetry(Exception ex, int attempt, MaxApiRequest? request = null)
     {
         if (attempt >= _options.RetryCount) return false;
-        
-        if (request != null && request.Method == HttpMethod.Get && request.Endpoint.EndsWith("/updates")) 
+
+        if (request != null && request.Method == HttpMethod.Get && request.Endpoint.EndsWith("/updates"))
             return false; // Don't retry long polling timeouts
 
         return ex is MaxNetworkException || ex is MaxRateLimitException || ex is HttpRequestException || ex is TaskCanceledException;
@@ -244,7 +244,7 @@ public class MaxHttpClient : IMaxHttpClient
 
     private TimeSpan CalculateRetryDelay(Exception ex, int attempt)
     {
-        if (ex is MaxRateLimitException rex && rex.RetryAfter.HasValue) 
+        if (ex is MaxRateLimitException rex && rex.RetryAfter.HasValue)
             return rex.RetryAfter.Value > _options.MaxRetryDelay ? _options.MaxRetryDelay : rex.RetryAfter.Value;
 
         var delay = TimeSpan.FromMilliseconds(_options.RetryBaseDelay.TotalMilliseconds * Math.Pow(2, attempt - 1));

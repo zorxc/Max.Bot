@@ -63,14 +63,14 @@ public static class MaxJsonSerializer
         try
         {
             var result = JsonSerializer.Deserialize<T>(json, Options);
-            
+
             // For nullable reference types (T?), null is valid. For non-nullable types, throw.
-            if (result == null && (!typeof(T).IsGenericType || 
+            if (result == null && (!typeof(T).IsGenericType ||
                 (typeof(T).IsGenericType && typeof(T).GetGenericTypeDefinition() != typeof(Nullable<>))))
             {
                 throw new JsonException("Deserialization returned null for non-nullable type.");
             }
-            
+
             return result!;
         }
         catch (JsonException ex)
@@ -97,14 +97,14 @@ public static class MaxJsonSerializer
         try
         {
             var result = JsonSerializer.Deserialize<T>(stream, Options);
-            
+
             // For nullable reference types (T?), null is valid. For non-nullable types, throw.
-            if (result == null && (!typeof(T).IsGenericType || 
+            if (result == null && (!typeof(T).IsGenericType ||
                 (typeof(T).IsGenericType && typeof(T).GetGenericTypeDefinition() != typeof(Nullable<>))))
             {
                 throw new JsonException("Deserialization returned null for non-nullable type.");
             }
-            
+
             return result!;
         }
         catch (JsonException ex)
