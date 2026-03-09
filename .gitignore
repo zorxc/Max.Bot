@@ -406,3 +406,6 @@ test-script
 
 # Cursor IDE rules
 .cursorrules
+
+# Pi Coding Agent
+.pi/
