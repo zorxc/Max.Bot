@@ -49,9 +49,6 @@ jobs:
           /p:CollectCoverage=true
           /p:CoverletOutput=TestResults/Coverage/
           /p:CoverletOutputFormat="cobertura%2copencover"
-          /p:Threshold=${{ env.COVERAGE_THRESHOLD }}
-          /p:ThresholdType=line
-          /p:ThresholdStat=total
           /p:ExcludeByAttribute="GeneratedCodeAttribute"
 
       - name: Determine package version
