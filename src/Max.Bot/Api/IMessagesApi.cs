@@ -182,6 +182,25 @@ public interface IMessagesApi
     Task<Message> SendMessageWithAttachmentAsync(AttachmentRequest attachment, long? chatId = null, long? userId = null, string? text = null, bool? disableLinkPreview = null, bool? notify = null, TextFormat? format = null, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Sends a message with attachments to the specified chat or user.
+    /// </summary>
+    /// <param name="attachments">Attachments to include in the message.</param>
+    /// <param name="chatId">The unique identifier of the chat. Optional if userId is provided.</param>
+    /// <param name="userId">The unique identifier of the user. Optional if chatId is provided.</param>
+    /// <param name="text">The text of the message. Can be null if only attachment is sent.</param>
+    /// <param name="disableLinkPreview">If true, link previews will be disabled for links in the message text.</param>
+    /// <param name="notify">If false, participants will not be notified. Default is true.</param>
+    /// <param name="format">The text format (markdown or html).</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the sent message.</returns>
+    /// <exception cref="ArgumentException">Thrown when both chatId and userId are provided, or neither is provided, or when chatId/userId is less than or equal to zero.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when attachment is null.</exception>
+    /// <exception cref="Max.Bot.Exceptions.MaxApiException">Thrown when the API returns an error response.</exception>
+    /// <exception cref="Max.Bot.Exceptions.MaxNetworkException">Thrown when a network error occurs.</exception>
+    /// <exception cref="Max.Bot.Exceptions.MaxUnauthorizedException">Thrown when authentication fails.</exception>
+    Task<Message> SendMessageWithAttachmentsAsync(IEnumerable<AttachmentRequest> attachments, long? chatId = null, long? userId = null, string? text = null, bool? disableLinkPreview = null, bool? notify = null, TextFormat? format = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Forwards a message to the specified chat or user.
     /// </summary>
     /// <param name="messageId">The unique identifier of the message to forward.</param>

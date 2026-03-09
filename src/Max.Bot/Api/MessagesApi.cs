@@ -339,6 +339,30 @@ internal class MessagesApi : BaseApi, IMessagesApi
         return await SendMessageAsync(request, chatId, userId, disableLinkPreview, cancellationToken).ConfigureAwait(false);
     }
 
+    /// <inheritdoc/>
+    public async Task<Message> SendMessageWithAttachmentsAsync(
+        IEnumerable<AttachmentRequest> attachments,
+        long? chatId = null,
+        long? userId = null,
+        string? text = null,
+        bool? disableLinkPreview = null,
+        bool? notify = null,
+        TextFormat? format = null,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(attachments);
+
+        var request = new SendMessageRequest
+        {
+            Text = text,
+            Attachments = [.. attachments],
+            Notify = notify,
+            Format = format
+        };
+
+        return await SendMessageAsync(request, chatId, userId, disableLinkPreview, cancellationToken).ConfigureAwait(false);
+    }
+
     /// <summary>
     /// Forwards a message to the specified chat or user.
     /// </summary>

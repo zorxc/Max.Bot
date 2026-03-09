@@ -37,6 +37,24 @@ public class PhotoAttachment : Attachment
 }
 
 /// <summary>
+/// Represents an image attachment.
+/// </summary>
+public class ImageAttachment : Attachment
+{
+    /// <summary>
+    /// Gets or sets the image in this attachment.
+    /// </summary>
+    /// <value>The photo object.</value>
+    [JsonPropertyName("payload")]
+    public Image Payload { get; set; } = null!;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ImageAttachment"/> class.
+    /// </summary>
+    public ImageAttachment() => Type = AttachmentTypeNames.Image;
+}
+
+/// <summary>
 /// Represents a video attachment.
 /// </summary>
 public class VideoAttachment : Attachment
@@ -91,6 +109,43 @@ public class DocumentAttachment : Attachment
 }
 
 /// <summary>
+/// Represents a location attachment.
+/// </summary>
+public class LocationAttachment : Attachment
+{
+    /// <summary>
+    /// Gets or sets the location's latitude.
+    /// </summary>
+    /// <value>The latitude value.</value>
+    [JsonPropertyName("latitude")]
+    public double Latitude { get; set; }
+
+    /// <summary>
+    /// Gets or sets the location's longitude.
+    /// </summary>
+    /// <value>The longitude value.</value>
+    [JsonPropertyName("longitude")]
+    public double Longitude { get; set; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LocationAttachment"/> class.
+    /// </summary>
+    public LocationAttachment() => Type = AttachmentTypeNames.Location;
+}
+
+/// <summary>
+/// Represents a contact attachment.
+/// </summary>
+public class ContactAttachment : Attachment
+{
+    /// <summary>
+    /// Gets or sets the contact in this attachment.
+    /// </summary>
+    [JsonPropertyName("payload")]
+    public Contact Payload { get; set; } = null!;
+}
+
+/// <summary>
 /// Represents an inline keyboard attachment.
 /// </summary>
 public class InlineKeyboardAttachment : Attachment
@@ -120,5 +175,7 @@ internal static class AttachmentTypeNames
     public const string Image = "image";
     public const string File = "file";
     public const string InlineKeyboard = "inline_keyboard";
+    public const string Location = "location";
+    public const string Contact = "contact";
 }
 
