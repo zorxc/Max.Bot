@@ -24,6 +24,12 @@ public class MaxHttpClient : IMaxHttpClient
     private readonly MaxBotClientOptions _options;
     private readonly ILogger<MaxHttpClient>? _logger;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MaxHttpClient"/> class.
+    /// </summary>
+    /// <param name="httpClient">The HTTP client.</param>
+    /// <param name="options">The options.</param>
+    /// <param name="logger">The logger.</param>
     public MaxHttpClient(HttpClient httpClient, MaxBotClientOptions options, ILogger<MaxHttpClient>? logger = null)
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
@@ -37,6 +43,13 @@ public class MaxHttpClient : IMaxHttpClient
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
     }
 
+    /// <summary>
+    /// Sends the request and deserializes the response.
+    /// </summary>
+    /// <typeparam name="TResponse">The type of the response.</typeparam>
+    /// <param name="request">The request.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The response.</returns>
     public async Task<TResponse> SendAsync<TResponse>(MaxApiRequest request, CancellationToken cancellationToken = default)
     {
         var responseBody = await SendAsyncRaw(request, cancellationToken).ConfigureAwait(false);
@@ -51,11 +64,23 @@ public class MaxHttpClient : IMaxHttpClient
         }
     }
 
+    /// <summary>
+    /// Sends the request without deserializing the response.
+    /// </summary>
+    /// <param name="request">The request.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public async Task SendAsync(MaxApiRequest request, CancellationToken cancellationToken = default)
     {
         await SendAsyncRaw(request, cancellationToken).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Sends the request and returns the raw response body.
+    /// </summary>
+    /// <param name="request">The request.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The raw response body.</returns>
     public async Task<string> SendAsyncRaw(MaxApiRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -82,6 +107,14 @@ public class MaxHttpClient : IMaxHttpClient
         throw lastException ?? new MaxNetworkException("Request failed after retries.");
     }
 
+    /// <summary>
+    /// Sends a raw request to an absolute URL.
+    /// </summary>
+    /// <param name="absoluteUrl">The absolute URL.</param>
+    /// <param name="contentFactory">The content factory.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <param name="method">The HTTP method.</param>
+    /// <returns>The response body.</returns>
     public async Task<string> SendAsyncRaw(
         string absoluteUrl,
         Func<HttpContent?>? contentFactory = null,
