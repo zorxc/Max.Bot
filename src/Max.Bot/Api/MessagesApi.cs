@@ -185,7 +185,8 @@ internal class MessagesApi : BaseApi, IMessagesApi
         };
 
         var request = CreateRequest(HttpMethod.Get, "/messages", null, queryParams);
-        return await ExecuteRequestAsync<Message[]>(request, cancellationToken).ConfigureAwait(false);
+        var response = await ExecuteRequestAsync<GetMessagesResponse>(request, cancellationToken).ConfigureAwait(false);
+        return response.Messages;
     }
 
     /// <inheritdoc />
