@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using Max.Bot.Api;
 using Max.Bot.Configuration;
 using Max.Bot.Networking;

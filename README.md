@@ -5,7 +5,7 @@
 [![Build](https://img.shields.io/github/actions/workflow/status/MaxBotNet/MaxBotNet/ci.yml?label=CI)](https://github.com/MaxBotNet/MaxBotNet/actions)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
-Полнофункциональная библиотека для работы с [Max Messenger Bot API](https://dev.max.ru/docs-api) на .NET 9. Проект фокусируется на типобезопасности, удобстве интеграции и масштабируемости корпоративных ботов.
+Полнофункциональная библиотека для работы с [Max Messenger Bot API](https://dev.max.ru/docs-api) на .NET 8. Проект фокусируется на типобезопасности, удобстве интеграции и масштабируемости корпоративных ботов.
 
 ## 📌 Основные возможности
 
@@ -94,7 +94,7 @@ await client.Messages.SendMessageAsync(
 
 ## 📦 Установка
 
-1. Установите .NET 9 SDK.
+1. Установите .NET 8 SDK.
 2. В проекте выполните:
    ```powershell
    dotnet add package MaxMessenger.Bot
@@ -128,6 +128,6 @@ Apache License 2.0 — см. [LICENSE](LICENSE).
 
 ---
 
-**Версия:** 0.4.1-alpha  
+**Версия:** 1.5.2-alpha  
 **Статус:** Активная разработка  
 **Контакты:** issues/PR в репозитории
