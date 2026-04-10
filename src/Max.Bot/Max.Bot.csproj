@@ -5,16 +5,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
-    <PackageId>MaxMessenger.Bot</PackageId>
+    <PackageId>Max.Bot</PackageId>
     <Version>0.5.2-alpha</Version>
     <Authors>MaxBotNet Contributors</Authors>
     <Description>C# library for Max Messenger Bot API (.NET 8)</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/NanoAgents/MaxBotNet</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/NanoAgents/MaxBotNet</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/zorxc/Max.Bot</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/zorxc/Max.Bot</RepositoryUrl>
     <PackageTags>max;messenger;bot;api;csharp;dotnet;net8</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>See CHANGELOG.md for details.</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
