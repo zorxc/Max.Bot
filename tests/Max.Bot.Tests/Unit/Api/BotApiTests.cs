@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http;
 using System.Text.Json;
 using FluentAssertions;
 using Max.Bot.Api;
@@ -9,7 +8,6 @@ using Max.Bot.Networking;
 using Max.Bot.Types;
 using Max.Bot.Types.Requests;
 using Moq;
-using Xunit;
 
 namespace Max.Bot.Tests.Unit.Api;
 

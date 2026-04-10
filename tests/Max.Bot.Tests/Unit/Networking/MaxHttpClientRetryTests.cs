@@ -1,12 +1,10 @@
 using System.Diagnostics;
 using System.Net;
-using System.Net.Http;
 using System.Text;
 using FluentAssertions;
 using Max.Bot.Configuration;
 using Max.Bot.Exceptions;
 using Max.Bot.Networking;
-using Xunit;
 
 namespace Max.Bot.Tests.Unit.Networking;
 

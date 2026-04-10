@@ -3,7 +3,6 @@
 // 🔗 Key dependencies: Moq IMaxHttpClient, MaxJsonSerializer, ChatsApi.
 // 💡 Usage: Protects shared behavior across all API clients.
 
-using System.Net.Http;
 using System.Reflection;
 using FluentAssertions;
 using Max.Bot.Api;
@@ -13,7 +12,6 @@ using Max.Bot.Networking;
 using Max.Bot.Types;
 using Max.Bot.Types.Enums;
 using Moq;
-using Xunit;
 
 namespace Max.Bot.Tests.Unit.Api;
 

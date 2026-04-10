@@ -1,7 +1,6 @@
 using System.Net;
 using FluentAssertions;
 using Max.Bot.Exceptions;
-using Xunit;
 
 namespace Max.Bot.Tests.Unit.Exceptions;
 
